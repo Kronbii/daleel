@@ -13,16 +13,18 @@
     "seed": "cd ../../packages/db && pnpm seed"
   },
   "dependencies": {
+    "@auth/prisma-adapter": "^2.1.0",
     "@daleel/core": "workspace:*",
     "@daleel/db": "workspace:*",
     "@daleel/ui": "workspace:*",
-    "@auth/prisma-adapter": "^2.1.0",
+    "@headlessui/react": "^2.2.9",
+    "@heroicons/react": "^2.2.0",
+    "bcryptjs": "^2.4.3",
     "next": "^14.0.4",
     "next-auth": "^5.0.0-beta.15",
     "next-intl": "^3.5.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "bcryptjs": "^2.4.3",
     "zod": "^3.22.4"
   },
   "devDependencies": {
@@ -39,4 +41,3 @@
     "typescript": "^5.3.3"
   }
 }
-

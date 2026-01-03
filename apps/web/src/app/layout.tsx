@@ -1,12 +1,20 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { Noto_Sans_Arabic } from "next/font/google";
+import { DM_Serif_Display, Outfit, Noto_Sans_Arabic } from "next/font/google";
 import "./globals.css";
 
-// Configure fonts with fallbacks for offline/network issues
-const inter = Inter({
+// Elegant serif for headings - distinctive and authoritative
+const dmSerif = DM_Serif_Display({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-serif",
+  weight: "400",
+  display: "swap",
+  fallback: ["Georgia", "serif"],
+});
+
+// Clean geometric sans for body text
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-sans",
   display: "swap",
   fallback: ["system-ui", "-apple-system", "sans-serif"],
 });
@@ -16,7 +24,7 @@ const notoSansArabic = Noto_Sans_Arabic({
   variable: "--font-arabic",
   weight: ["400", "500", "600", "700"],
   display: "swap",
-  fallback: ["var(--font-inter)", "system-ui", "-apple-system", "sans-serif"],
+  fallback: ["var(--font-sans)", "system-ui", "-apple-system", "sans-serif"],
 });
 
 export const metadata: Metadata = {
@@ -31,7 +39,7 @@ export default function RootLayout({
 }) {
   return (
     <html suppressHydrationWarning>
-      <body className={`${inter.variable} ${notoSansArabic.variable}`}>{children}</body>
+      <body className={`${dmSerif.variable} ${outfit.variable} ${notoSansArabic.variable}`}>{children}</body>
     </html>
   );
 }
