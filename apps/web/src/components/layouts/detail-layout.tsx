@@ -1,5 +1,5 @@
 /**
- * Shared detail page layout component
+ * Shared detail page layout component (Mobile-responsive)
  * For individual item detail pages (candidate, district, list)
  */
 
@@ -39,30 +39,30 @@ export function DetailLayout({
   className = "",
 }: DetailLayoutProps) {
   return (
-    <div className="container mx-auto px-4 py-8 sm:py-12">
-        <div className={`${maxWidthClasses[maxWidth]} mx-auto ${className}`}>
-          {/* Breadcrumbs & Back Button */}
-          {(breadcrumbs || backHref) && (
-            <div className="flex items-center justify-between mb-6">
-              {breadcrumbs && <Breadcrumbs items={breadcrumbs} />}
-              {backHref && <BackButton href={backHref} />}
-            </div>
-          )}
-
-          {/* Page Header */}
-          <div className="mb-8">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <h1 className="text-3xl sm:text-4xl font-normal text-gray-900 mb-2">{title}</h1>
-                {subtitle && <div className="text-base sm:text-lg text-gray-500">{subtitle}</div>}
-              </div>
-              {headerActions && <div className="flex-shrink-0">{headerActions}</div>}
-            </div>
+    <div className="container mx-auto px-4 py-5 sm:py-8 md:py-12">
+      <div className={`${maxWidthClasses[maxWidth]} mx-auto ${className}`}>
+        {/* Breadcrumbs & Back Button */}
+        {(breadcrumbs || backHref) && (
+          <div className="flex items-center justify-between mb-4 sm:mb-6 gap-2">
+            {breadcrumbs && <Breadcrumbs items={breadcrumbs} />}
+            {backHref && <BackButton href={backHref} />}
           </div>
+        )}
 
-          {/* Page Content */}
-          {children}
+        {/* Page Header */}
+        <div className="mb-5 sm:mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
+            <div className="flex-1 min-w-0">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-normal text-gray-900 mb-1 sm:mb-2 break-words">{title}</h1>
+              {subtitle && <div className="text-sm sm:text-base md:text-lg text-gray-500">{subtitle}</div>}
+            </div>
+            {headerActions && <div className="flex-shrink-0">{headerActions}</div>}
+          </div>
         </div>
+
+        {/* Page Content */}
+        {children}
+      </div>
     </div>
   );
 }

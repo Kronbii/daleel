@@ -102,19 +102,20 @@ export function CustomSelect({
         onClick={() => !disabled && setIsOpen(!isOpen)}
         disabled={disabled}
         className={cn(
-          "w-full px-4 py-2.5 text-left rounded-xl border transition-all duration-200",
+          "w-full px-3 sm:px-4 py-2.5 sm:py-2.5 text-left rounded-xl border transition-all duration-200",
           "flex items-center justify-between gap-2",
           "bg-white/80 backdrop-blur-sm",
+          "text-sm",
           disabled
             ? "bg-gray-50 text-gray-400 cursor-not-allowed border-gray-200"
-            : "border-gray-200 hover:border-emerald-300 hover:bg-white",
+            : "border-gray-200 hover:border-emerald-300 hover:bg-white active:bg-gray-50",
           isOpen && "border-emerald-500 ring-2 ring-emerald-500/20 bg-white",
           "focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
         )}
       >
         <span
           className={cn(
-            "block truncate text-sm",
+            "block truncate",
             selectedOption ? "text-gray-900" : "text-gray-500"
           )}
         >
@@ -142,7 +143,7 @@ export function CustomSelect({
         >
           <ul
             ref={listRef}
-            className="py-2 max-h-[200px] overflow-y-auto"
+            className="py-2 max-h-[200px] sm:max-h-[240px] overflow-y-auto"
             role="listbox"
             style={{ 
               scrollbarWidth: 'thin',
@@ -157,8 +158,9 @@ export function CustomSelect({
                 onClick={() => handleSelect(option.value)}
                 onMouseEnter={() => setHighlightedIndex(index)}
                 className={cn(
-                  "px-4 py-2.5 text-sm cursor-pointer transition-colors duration-100",
+                  "px-3 sm:px-4 py-2.5 sm:py-2.5 text-sm cursor-pointer transition-colors duration-100",
                   "flex items-center gap-2",
+                  "active:bg-emerald-100",
                   option.value === value
                     ? "bg-emerald-50 text-emerald-700 font-medium"
                     : highlightedIndex === index
@@ -188,4 +190,3 @@ export function CustomSelect({
     </div>
   );
 }
-

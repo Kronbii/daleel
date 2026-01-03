@@ -1,5 +1,5 @@
 /**
- * Shared page layout component
+ * Shared page layout component (Mobile-responsive)
  * Provides consistent structure for all pages with modern design
  */
 
@@ -39,27 +39,27 @@ export function PageLayout({
   className = "",
 }: PageLayoutProps) {
   return (
-    <div className="container mx-auto px-4 py-8 sm:py-12">
-        <div className={`${maxWidthClasses[maxWidth]} mx-auto ${className}`}>
-          {/* Breadcrumbs & Back Button */}
-          {(breadcrumbs || backHref) && (
-            <div className="flex items-center justify-between mb-6">
-              {breadcrumbs && <Breadcrumbs items={breadcrumbs} />}
-              {backHref && <BackButton href={backHref} />}
-            </div>
-          )}
-
-          {/* Page Header */}
-          <div className="mb-8">
-            <h1 className="text-3xl sm:text-4xl font-normal text-gray-900 mb-3">{title}</h1>
-            {description && (
-              <p className="text-base sm:text-lg text-gray-500 leading-relaxed">{description}</p>
-            )}
+    <div className="container mx-auto px-4 py-5 sm:py-8 md:py-12">
+      <div className={`${maxWidthClasses[maxWidth]} mx-auto ${className}`}>
+        {/* Breadcrumbs & Back Button */}
+        {(breadcrumbs || backHref) && (
+          <div className="flex items-center justify-between mb-4 sm:mb-6 gap-2">
+            {breadcrumbs && <Breadcrumbs items={breadcrumbs} />}
+            {backHref && <BackButton href={backHref} />}
           </div>
+        )}
 
-          {/* Page Content */}
-          {children}
+        {/* Page Header */}
+        <div className="mb-5 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-normal text-gray-900 mb-2 sm:mb-3">{title}</h1>
+          {description && (
+            <p className="text-sm sm:text-base md:text-lg text-gray-500 leading-relaxed">{description}</p>
+          )}
         </div>
+
+        {/* Page Content */}
+        {children}
+      </div>
     </div>
   );
 }

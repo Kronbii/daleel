@@ -1,5 +1,5 @@
 /**
- * Status badge component with clean styling
+ * Status badge component with clean styling (Mobile-responsive)
  */
 
 import type { CandidateStatus, ListStatus } from "@prisma/client";
@@ -59,7 +59,7 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
   return (
     <span 
       className={cn(
-        "inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium",
+        "inline-flex items-center px-1.5 sm:px-2 py-0.5 rounded-md text-[10px] sm:text-xs font-medium",
         style.bg,
         style.text,
         className

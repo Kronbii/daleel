@@ -16,17 +16,17 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
   const locale = useLocale();
 
   return (
-    <nav className="flex items-center text-sm rtl:flex-row-reverse" aria-label="Breadcrumb">
+    <nav className="flex items-center text-xs sm:text-sm rtl:flex-row-reverse overflow-x-auto" aria-label="Breadcrumb">
       <Link 
         href={`/${locale}`} 
-        className="text-gray-500 hover:text-emerald-600 transition-colors"
+        className="text-gray-500 hover:text-emerald-600 transition-colors whitespace-nowrap flex-shrink-0"
       >
         {locale === "ar" ? "الرئيسية" : locale === "fr" ? "Accueil" : "Home"}
       </Link>
       {items.map((item, index) => (
-        <span key={index} className="flex items-center rtl:flex-row-reverse">
+        <span key={index} className="flex items-center rtl:flex-row-reverse flex-shrink-0">
           <svg 
-            className="w-4 h-4 mx-2 text-gray-300 rtl:rotate-180" 
+            className="w-3.5 h-3.5 sm:w-4 sm:h-4 mx-1.5 sm:mx-2 text-gray-300 rtl:rotate-180 flex-shrink-0" 
             fill="none" 
             viewBox="0 0 24 24" 
             strokeWidth={1.5} 
@@ -37,12 +37,12 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
           {item.href ? (
             <Link 
               href={item.href} 
-              className="text-gray-500 hover:text-emerald-600 transition-colors"
+              className="text-gray-500 hover:text-emerald-600 transition-colors whitespace-nowrap"
             >
               {item.label}
             </Link>
           ) : (
-            <span className="text-gray-900 font-medium">{item.label}</span>
+            <span className="text-gray-900 font-medium truncate max-w-[150px] sm:max-w-none">{item.label}</span>
           )}
         </span>
       ))}
