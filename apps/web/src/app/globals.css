@@ -22,13 +22,56 @@
     font-family: var(--font-arabic), var(--font-inter), system-ui, -apple-system, sans-serif;
   }
 
-  /* RTL support */
-  [dir="rtl"] {
+  /* RTL/LTR support with proper text alignment */
+  html[dir="rtl"] {
     direction: rtl;
   }
 
-  [dir="ltr"] {
+  html[dir="ltr"] {
     direction: ltr;
+  }
+
+  /* Text alignment follows direction - RTL */
+  html[dir="rtl"] body,
+  html[dir="rtl"] {
+    direction: rtl;
+  }
+
+  /* Text alignment follows direction - LTR */
+  html[dir="ltr"] body,
+  html[dir="ltr"] {
+    direction: ltr;
+  }
+
+  /* Default text alignment based on direction */
+  html[dir="rtl"] p,
+  html[dir="rtl"] h1,
+  html[dir="rtl"] h2,
+  html[dir="rtl"] h3,
+  html[dir="rtl"] h4,
+  html[dir="rtl"] h5,
+  html[dir="rtl"] h6,
+  html[dir="rtl"] div:not([class*="text-center"]):not([class*="text-left"]),
+  html[dir="rtl"] span:not([class*="text-center"]):not([class*="text-left"]),
+  html[dir="rtl"] li:not([class*="text-center"]):not([class*="text-left"]),
+  html[dir="rtl"] td:not([class*="text-center"]):not([class*="text-left"]),
+  html[dir="rtl"] th:not([class*="text-center"]):not([class*="text-left"]) {
+    text-align: right;
+  }
+
+  html[dir="ltr"] p,
+  html[dir="ltr"] h1,
+  html[dir="ltr"] h2,
+  html[dir="ltr"] h3,
+  html[dir="ltr"] h4,
+  html[dir="ltr"] h5,
+  html[dir="ltr"] h6,
+  html[dir="ltr"] div:not([class*="text-center"]):not([class*="text-right"]),
+  html[dir="ltr"] span:not([class*="text-center"]):not([class*="text-right"]),
+  html[dir="ltr"] li:not([class*="text-center"]):not([class*="text-right"]),
+  html[dir="ltr"] td:not([class*="text-center"]):not([class*="text-right"]),
+  html[dir="ltr"] th:not([class*="text-center"]):not([class*="text-right"]) {
+    text-align: left;
   }
 
   /* Smooth scrolling */

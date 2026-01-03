@@ -30,7 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ar" dir="rtl" suppressHydrationWarning>
+    <html suppressHydrationWarning>
       <body className={`${inter.variable} ${notoSansArabic.variable}`}>{children}</body>
     </html>
   );

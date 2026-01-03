@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { SUPPORTED_LOCALES, DEFAULT_LOCALE } from "@daleel/core";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { DirectionSetter } from "@/components/direction-setter";
 
 export default async function LocaleLayout({
   children,
@@ -22,13 +23,12 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider messages={messages} locale={locale}>
-      <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
-        <body className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 flex flex-col">
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </body>
-      </html>
+      <DirectionSetter />
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 flex flex-col">
+        <Navbar />
+        <main className="flex-1">{children}</main>
+        <Footer />
+      </div>
     </NextIntlClientProvider>
   );
 }
