@@ -65,9 +65,51 @@ export default async function CandidateProfilePage({
     return en;
   };
 
+  // Get district name for display
+  const districtName = getLocalized(
+    {
+      ar: candidate.district.nameAr,
+      en: candidate.district.nameEn,
+      fr: candidate.district.nameFr,
+    },
+    locale as Locale
+  );
+  const listName = candidate.currentList
+    ? getLocalized(
+        {
+          ar: candidate.currentList.nameAr,
+          en: candidate.currentList.nameEn,
+          fr: candidate.currentList.nameFr,
+        },
+        locale as Locale
+      )
+    : null;
+
   return (
     <DetailLayout
       title={name}
+      subtitle={
+        <div className="flex flex-wrap items-center gap-3 text-base text-gray-500">
+          <Link
+            href={`/${locale}/districts/${candidate.district.id}`}
+            className="text-emerald-600 hover:text-emerald-700 transition-colors"
+          >
+            {districtName}
+          </Link>
+          {listName && (
+            <>
+              <span className="text-gray-300">•</span>
+              <Link
+                href={`/${locale}/lists/${candidate.currentList!.id}`}
+                className="text-emerald-600 hover:text-emerald-700 transition-colors"
+              >
+                {listName}
+              </Link>
+            </>
+          )}
+        </div>
+      }
+      headerActions={<StatusBadge status={candidate.status} />}
       breadcrumbs={[
         { label: t("candidates"), href: `/${locale}/candidates` },
         { label: name },
@@ -77,55 +119,53 @@ export default async function CandidateProfilePage({
     >
       {/* Profile Header Card */}
       <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-gray-100 p-6 sm:p-8 mb-6 shadow-sm">
-        <div className="flex flex-col sm:flex-row items-start gap-6">
+        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
           <div className="flex-shrink-0">
             <PlaceholderPhoto
               style={candidate.placeholderPhotoStyle}
               seed={candidate.id}
-              size={140}
+              size={160}
               className="rounded-2xl shadow-md"
             />
           </div>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between gap-4 mb-4">
-              <div>
-                <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-2 font-sans">{name}</h2>
-                <StatusBadge status={candidate.status} />
-              </div>
-            </div>
-            
-            <div className="flex flex-wrap gap-4 text-sm text-gray-600">
-              <div className="flex items-center gap-2">
-                <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-                </svg>
+          <div className="flex-1 min-w-0 text-center sm:text-left">
+            {/* Quick Info Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="p-4 bg-gray-50/50 rounded-xl">
+                <div className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">
+                  {getContent("District", "الدائرة", "Circonscription")}
+                </div>
                 <Link
                   href={`/${locale}/districts/${candidate.district.id}`}
-                  className="text-emerald-600 hover:text-emerald-700 transition-colors"
+                  className="text-gray-900 font-medium hover:text-emerald-600 transition-colors"
                 >
-                  {getLocalized(candidate.district, locale as Locale)}
+                  {districtName}
                 </Link>
               </div>
               {candidate.currentList && (
-                <div className="flex items-center gap-2">
-                  <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-                  </svg>
+                <div className="p-4 bg-gray-50/50 rounded-xl">
+                  <div className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">
+                    {getContent("Electoral List", "القائمة", "Liste électorale")}
+                  </div>
                   <Link
                     href={`/${locale}/lists/${candidate.currentList.id}`}
-                    className="text-emerald-600 hover:text-emerald-700 transition-colors"
+                    className="text-gray-900 font-medium hover:text-emerald-600 transition-colors"
                   >
-                    {getLocalized(candidate.currentList, locale as Locale)}
+                    {listName}
                   </Link>
                 </div>
               )}
-              <div className="flex items-center gap-2">
-                <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                </svg>
-                <span className="text-gray-500">
-                  {getContent("Updated", "تم التحديث", "Mis à jour")}{" "}
+              <div className="p-4 bg-gray-50/50 rounded-xl">
+                <div className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">
+                  {getContent("Status", "الحالة", "Statut")}
+                </div>
+                <StatusBadge status={candidate.status} />
+              </div>
+              <div className="p-4 bg-gray-50/50 rounded-xl">
+                <div className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">
+                  {getContent("Last Updated", "آخر تحديث", "Dernière mise à jour")}
+                </div>
+                <span className="text-gray-900 font-medium">
                   {new Date(candidate.updatedAt).toLocaleDateString(
                     locale === "ar" ? "ar-LB" : locale === "fr" ? "fr-FR" : "en-US"
                   )}

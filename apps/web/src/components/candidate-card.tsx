@@ -72,12 +72,26 @@ export function CandidateCard({ candidate, locale, className }: CandidateCardPro
           <div className="space-y-1 w-full">
             {candidate.district && (
               <p className="text-xs text-gray-500 line-clamp-1">
-                {getLocalized(candidate.district, locale)}
+                {getLocalized(
+                  {
+                    ar: candidate.district.nameAr,
+                    en: candidate.district.nameEn,
+                    fr: candidate.district.nameFr,
+                  },
+                  locale
+                )}
               </p>
             )}
             {candidate.currentList && (
               <p className="text-xs text-gray-400 line-clamp-1">
-                {getLocalized(candidate.currentList, locale)}
+                {getLocalized(
+                  {
+                    ar: candidate.currentList.nameAr,
+                    en: candidate.currentList.nameEn,
+                    fr: candidate.currentList.nameFr,
+                  },
+                  locale
+                )}
               </p>
             )}
           </div>

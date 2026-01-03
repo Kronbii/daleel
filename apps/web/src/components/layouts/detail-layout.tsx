@@ -9,7 +9,7 @@ import { BackButton } from "@/components/back-button";
 
 interface DetailLayoutProps {
   title: string;
-  subtitle?: string;
+  subtitle?: ReactNode;
   breadcrumbs?: Array<{ label: string; href?: string }>;
   backHref?: string;
   headerActions?: ReactNode;
@@ -39,47 +39,7 @@ export function DetailLayout({
   className = "",
 }: DetailLayoutProps) {
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Background decorative elements */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        {/* Main gradient */}
-        <div 
-          className="absolute inset-0"
-          style={{
-            background: "linear-gradient(135deg, #f8faf9 0%, #ffffff 50%, #f0fdf4 100%)",
-          }}
-        />
-        
-        {/* Large soft circle - top right */}
-        <div 
-          className="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full opacity-30"
-          style={{
-            background: "radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, transparent 70%)",
-          }}
-        />
-        
-        {/* Medium circle - bottom left */}
-        <div 
-          className="absolute -bottom-20 -left-20 w-[400px] h-[400px] rounded-full opacity-25"
-          style={{
-            background: "radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%)",
-          }}
-        />
-
-        {/* Grid pattern overlay */}
-        <div 
-          className="absolute inset-0 opacity-[0.02]"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(0,0,0,0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(0,0,0,0.1) 1px, transparent 1px)
-            `,
-            backgroundSize: "60px 60px",
-          }}
-        />
-      </div>
-
-      <main className="relative container mx-auto px-4 py-8 sm:py-12">
+    <div className="container mx-auto px-4 py-8 sm:py-12">
         <div className={`${maxWidthClasses[maxWidth]} mx-auto ${className}`}>
           {/* Breadcrumbs & Back Button */}
           {(breadcrumbs || backHref) && (
@@ -94,16 +54,15 @@ export function DetailLayout({
             <div className="flex items-start justify-between gap-4">
               <div>
                 <h1 className="text-3xl sm:text-4xl font-normal text-gray-900 mb-2">{title}</h1>
-                {subtitle && <p className="text-base sm:text-lg text-gray-500">{subtitle}</p>}
+                {subtitle && <div className="text-base sm:text-lg text-gray-500">{subtitle}</div>}
               </div>
               {headerActions && <div className="flex-shrink-0">{headerActions}</div>}
             </div>
           </div>
 
-          {/* Page Content */}
-          {children}
-        </div>
-      </main>
+        {/* Page Content */}
+        {children}
+      </div>
     </div>
   );
 }
