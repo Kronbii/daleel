@@ -24,6 +24,16 @@ The logs will show:
 
 ### 2. Common Causes
 
+#### Prisma Query Engine Not Found (MOST COMMON ON VERCEL)
+**Error**: `PrismaClientInitializationError: Prisma Client could not locate the Query Engine for runtime "rhel-openssl-3.0.x"`
+
+**Solution**: ✅ **FIXED** - The Prisma schema now includes `binaryTargets = ["native", "rhel-openssl-3.0.x"]` which generates the Linux binary Vercel needs.
+
+If you still see this error:
+1. Regenerate Prisma client: `pnpm prisma:generate`
+2. Commit and push the changes
+3. The `postinstall` script will auto-generate it on Vercel
+
 #### Database Connection Issues
 **Error**: `Can't reach database server` or `P1001`
 

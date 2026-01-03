@@ -7,6 +7,13 @@ const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ["@daleel/ui", "@daleel/core", "@daleel/db"],
   // Security headers are set in middleware.ts
+  // Ensure Prisma binaries are included in the build
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.externals.push("@prisma/client");
+    }
+    return config;
+  },
 };
 
 export default withNextIntl(nextConfig);
