@@ -9,6 +9,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "prisma:generate": "turbo run prisma:generate",
     "prisma:migrate": "turbo run prisma:migrate",
+    "prisma:migrate:deploy": "turbo run prisma:migrate:deploy",
     "prisma:studio": "turbo run prisma:studio",
     "seed": "turbo run seed",
     "vercel:build": "pnpm install --frozen-lockfile && pnpm build",

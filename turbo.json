@@ -15,7 +15,7 @@
     },
     "prisma:generate": {
       "cache": false,
-      "outputs": ["**/prisma/generated/**"]
+      "outputs": ["node_modules/.prisma/client/**"]
     },
     "prisma:migrate": {
       "cache": false

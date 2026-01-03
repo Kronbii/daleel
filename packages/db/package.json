@@ -12,8 +12,8 @@
     "seed": "tsx --tsconfig tsconfig.json src/seed.ts"
   },
   "dependencies": {
-    "@prisma/client": "^5.7.1",
-    "prisma": "^5.7.1"
+    "@prisma/client": "^5.22.0",
+    "prisma": "^5.22.0"
   },
   "devDependencies": {
     "tsx": "^4.7.0",
