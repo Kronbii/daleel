@@ -229,7 +229,14 @@ export default async function CandidateProfilePage({
             {Object.values(statementsByTopic).map(({ topic, statements }) => (
               <div key={topic.id}>
                 <h4 className="text-sm sm:text-base font-medium text-gray-800 mb-2 sm:mb-3 pb-2 border-b border-gray-100">
-                  {getLocalized(topic, locale as Locale)}
+                  {getLocalized(
+                    {
+                      ar: topic.nameAr,
+                      en: topic.nameEn,
+                      fr: topic.nameFr,
+                    },
+                    locale as Locale
+                  )}
                 </h4>
                 <div className="space-y-2 sm:space-y-3">
                   {statements.map((stmt) => (

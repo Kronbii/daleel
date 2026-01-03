@@ -105,7 +105,14 @@ export function FilterableListsList({
               <StatusBadge status={list.status as any} />
             </div>
             <p className="text-xs sm:text-sm text-gray-500 mb-2 sm:mb-3 truncate">
-              {getLocalized(list.district, locale)}
+              {getLocalized(
+                {
+                  ar: list.district.nameAr,
+                  en: list.district.nameEn,
+                  fr: list.district.nameFr,
+                },
+                locale
+              )}
             </p>
             <p className="text-xs sm:text-sm text-gray-500 flex items-center gap-1">
               <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">

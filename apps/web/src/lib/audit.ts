@@ -3,7 +3,7 @@
  */
 
 import { prisma } from "@daleel/db";
-import type { AuditAction } from "@prisma/client";
+import type { AuditAction } from "@daleel/db";
 
 export async function logAuditEvent(params: {
   actorUserId: string;

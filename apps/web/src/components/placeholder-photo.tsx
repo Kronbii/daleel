@@ -3,7 +3,7 @@
  * Deterministic based on candidate id or slug
  */
 
-import type { PlaceholderPhotoStyle } from "@prisma/client";
+import type { PlaceholderPhotoStyle } from "@daleel/db";
 
 interface PlaceholderPhotoProps {
   style: PlaceholderPhotoStyle;

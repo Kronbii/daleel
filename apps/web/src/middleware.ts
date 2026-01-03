@@ -4,7 +4,7 @@ import type { NextRequest } from "next/server";
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES, SECURITY_HEADERS, CSP_BASELINE } from "@daleel/core";
 
 const intlMiddleware = createMiddleware({
-  locales: SUPPORTED_LOCALES as [string, ...string[]],
+  locales: [...SUPPORTED_LOCALES] as [string, ...string[]],
   defaultLocale: DEFAULT_LOCALE,
   localePrefix: "always",
   // Always use Arabic as default, ignore browser locale detection

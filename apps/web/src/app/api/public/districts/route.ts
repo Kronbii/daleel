@@ -7,7 +7,7 @@ import { NextRequest } from "next/server";
 import { prisma } from "@daleel/db";
 import { districtQuerySchema } from "@daleel/core";
 import { paginatedResponse, handleApiError, methodNotAllowedResponse } from "@/lib/api-utils";
-import type { Prisma } from "@prisma/client";
+import type { Prisma } from "@daleel/db";
 
 export async function GET(request: NextRequest) {
   try {

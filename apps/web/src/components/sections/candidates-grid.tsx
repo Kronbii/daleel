@@ -13,11 +13,11 @@ interface Candidate {
   fullNameFr: string;
   status: string;
   placeholderPhotoStyle: string;
-  district: {
+  district?: {
     nameAr: string;
     nameEn: string;
     nameFr: string;
-  };
+  } | null;
   currentList?: {
     nameAr: string;
     nameEn: string;

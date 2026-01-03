@@ -67,7 +67,14 @@ export default async function ListDetailPage({
           className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-100 p-4 text-center hover:border-emerald-200 transition-colors"
                   >
           <div className="text-sm font-medium text-emerald-600 truncate">
-                    {getLocalized(list.district, locale as Locale)}
+                    {getLocalized(
+                      {
+                        ar: list.district.nameAr,
+                        en: list.district.nameEn,
+                        fr: list.district.nameFr,
+                      },
+                      locale as Locale
+                    )}
           </div>
           <div className="text-sm text-gray-500">{getContent("District", "الدائرة", "Circonscription")}</div>
                   </Link>

@@ -2,7 +2,7 @@
  * Status badge component with clean styling (Mobile-responsive)
  */
 
-import type { CandidateStatus, ListStatus } from "@prisma/client";
+import type { CandidateStatus, ListStatus } from "@daleel/db";
 import { cn } from "@daleel/ui";
 
 interface StatusBadgeProps {

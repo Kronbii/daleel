@@ -6,7 +6,7 @@ import NextAuth, { type NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { prisma } from "@daleel/db";
 import { compare } from "bcryptjs";
-import type { UserRole } from "@prisma/client";
+import type { UserRole } from "@daleel/db";
 
 export const authConfig: NextAuthConfig = {
   providers: [
@@ -21,8 +21,11 @@ export const authConfig: NextAuthConfig = {
           return null;
         }
 
+        const email = credentials.email as string;
+        const password = credentials.password as string;
+
         const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
+          where: { email },
         });
 
         if (!user || !user.isActive) {
@@ -30,7 +33,7 @@ export const authConfig: NextAuthConfig = {
         }
 
         // Verify password
-        const isValid = await compare(credentials.password, user.passwordHash);
+        const isValid = await compare(password, user.passwordHash);
         if (!isValid) {
           return null;
         }
@@ -88,9 +91,7 @@ declare module "next-auth" {
   interface User {
     role: UserRole;
   }
-}
 
-declare module "next-auth/jwt" {
   interface JWT {
     id: string;
     role: UserRole;

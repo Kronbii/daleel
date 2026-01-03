@@ -3,7 +3,7 @@
  */
 
 import { auth } from "./auth";
-import type { UserRole } from "@prisma/client";
+import type { UserRole } from "@daleel/db";
 import { NextResponse } from "next/server";
 
 export async function requireAdminSession() {
