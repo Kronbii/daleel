@@ -19,6 +19,7 @@
     "@daleel/ui": "workspace:*",
     "@headlessui/react": "^2.2.9",
     "@heroicons/react": "^2.2.0",
+    "@prisma/client": "^5.7.1",
     "bcryptjs": "^2.4.3",
     "next": "^14.0.4",
     "next-auth": "^5.0.0-beta.15",
