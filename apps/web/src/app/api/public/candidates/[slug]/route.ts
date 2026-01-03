@@ -78,8 +78,8 @@ export async function GET(
 
     // Get all sources referenced
     const sourceIds = new Set<string>();
-    candidate.affiliations.forEach((a) => sourceIds.add(a.sourceId));
-    candidate.statements.forEach((s) => sourceIds.add(s.sourceId));
+    candidate.affiliations?.forEach((a) => sourceIds.add(a.sourceId));
+    candidate.statements?.forEach((s) => sourceIds.add(s.sourceId));
 
     const sources = await prisma.source.findMany({
       where: { id: { in: Array.from(sourceIds) } },

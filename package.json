@@ -10,7 +10,9 @@
     "prisma:generate": "turbo run prisma:generate",
     "prisma:migrate": "turbo run prisma:migrate",
     "prisma:studio": "turbo run prisma:studio",
-    "seed": "turbo run seed"
+    "seed": "turbo run seed",
+    "vercel:build": "pnpm install --frozen-lockfile && pnpm build",
+    "build:check": "pnpm install --frozen-lockfile && NODE_ENV=production pnpm build"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",

@@ -1,0 +1,34 @@
+# Optional: GitHub Actions workflow to check builds before merging
+# This runs the same checks that Vercel will run
+name: Pre-Deploy Build Check
+
+on:
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  build-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8.15.0
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Build project
+        run: pnpm build
+        env:
+          NODE_ENV: production
+          # Add any required env vars here (without secrets)
+          # DATABASE_URL: ${{ secrets.DATABASE_URL }}
+

@@ -28,15 +28,16 @@ export default async function CandidateProfilePage({
 
   // Get all sources
   const sourceIds = new Set<string>();
-  candidate.affiliations.forEach((a) => sourceIds.add(a.sourceId));
-  candidate.statements.forEach((s) => sourceIds.add(s.sourceId));
+  candidate.affiliations?.forEach((a) => sourceIds.add(a.sourceId));
+  candidate.statements?.forEach((s) => sourceIds.add(s.sourceId));
 
   const sources = await prisma.source.findMany({
     where: { id: { in: Array.from(sourceIds) } },
   });
 
   // Group statements by topic
-  const statementsByTopic = candidate.statements.reduce((acc, stmt) => {
+  const statements = candidate.statements || [];
+  const statementsByTopic = statements.reduce((acc, stmt) => {
     const key = stmt.topic.key;
     if (!acc[key]) {
       acc[key] = {
@@ -46,7 +47,7 @@ export default async function CandidateProfilePage({
     }
     acc[key].statements.push(stmt);
     return acc;
-  }, {} as Record<string, { topic: typeof candidate.statements[0]["topic"]; statements: typeof candidate.statements }>);
+  }, {} as Record<string, { topic: typeof statements[0]["topic"]; statements: typeof statements }>);
 
   const name = getLocalized(
     {
@@ -177,7 +178,7 @@ export default async function CandidateProfilePage({
       </div>
 
       {/* Affiliations */}
-      {candidate.affiliations.length > 0 && (
+      {candidate.affiliations && candidate.affiliations.length > 0 && (
         <section className="bg-white/70 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-gray-100 p-4 sm:p-6 md:p-8 mb-4 sm:mb-6 shadow-sm">
           <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4 font-sans flex items-center gap-2">
             <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
