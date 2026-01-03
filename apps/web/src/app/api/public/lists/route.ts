@@ -3,9 +3,11 @@
  * GET only
  */
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { prisma } from "@daleel/db";
 import { listQuerySchema } from "@daleel/core";
+import { paginatedResponse, handleApiError, methodNotAllowedResponse } from "@/lib/api-utils";
+import type { Prisma } from "@prisma/client";
 
 export async function GET(request: NextRequest) {
   try {
@@ -18,7 +20,7 @@ export async function GET(request: NextRequest) {
       status: searchParams.get("status") || undefined,
     });
 
-    const where: any = {};
+    const where: Prisma.ElectoralListWhereInput = {};
     if (query.cycleId) where.cycleId = query.cycleId;
     if (query.districtId) where.districtId = query.districtId;
     if (query.status) where.status = query.status;
@@ -57,24 +59,13 @@ export async function GET(request: NextRequest) {
       prisma.electoralList.count({ where }),
     ]);
 
-    return NextResponse.json({
-      success: true,
-      data: lists,
-      total,
-      page: query.page,
-      pageSize: query.pageSize,
-      totalPages: Math.ceil(total / query.pageSize),
-    });
+    return paginatedResponse(lists, total, query.page, query.pageSize);
   } catch (error) {
-    console.error("Error fetching lists:", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to fetch lists" },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }
 
 export async function POST() {
-  return NextResponse.json({ error: "Method not allowed" }, { status: 405 });
+  return methodNotAllowedResponse();
 }
 

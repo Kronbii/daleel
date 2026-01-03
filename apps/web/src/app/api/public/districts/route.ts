@@ -3,9 +3,11 @@
  * GET only
  */
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { prisma } from "@daleel/db";
 import { districtQuerySchema } from "@daleel/core";
+import { paginatedResponse, handleApiError, methodNotAllowedResponse } from "@/lib/api-utils";
+import type { Prisma } from "@prisma/client";
 
 export async function GET(request: NextRequest) {
   try {
@@ -16,7 +18,7 @@ export async function GET(request: NextRequest) {
       cycleId: searchParams.get("cycleId") || undefined,
     });
 
-    const where = query.cycleId ? { cycleId: query.cycleId } : {};
+    const where: Prisma.DistrictWhereInput = query.cycleId ? { cycleId: query.cycleId } : {};
 
     const [districts, total] = await Promise.all([
       prisma.district.findMany({
@@ -37,24 +39,13 @@ export async function GET(request: NextRequest) {
       prisma.district.count({ where }),
     ]);
 
-    return NextResponse.json({
-      success: true,
-      data: districts,
-      total,
-      page: query.page,
-      pageSize: query.pageSize,
-      totalPages: Math.ceil(total / query.pageSize),
-    });
+    return paginatedResponse(districts, total, query.page, query.pageSize);
   } catch (error) {
-    console.error("Error fetching districts:", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to fetch districts" },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }
 
 export async function POST() {
-  return NextResponse.json({ error: "Method not allowed" }, { status: 405 });
+  return methodNotAllowedResponse();
 }
 

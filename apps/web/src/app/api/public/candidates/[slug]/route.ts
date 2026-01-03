@@ -3,8 +3,9 @@
  * GET only
  */
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { prisma } from "@daleel/db";
+import { successResponse, errorResponse, handleApiError, methodNotAllowedResponse } from "@/lib/api-utils";
 
 export async function GET(
   request: NextRequest,
@@ -72,7 +73,7 @@ export async function GET(
     });
 
     if (!candidate) {
-      return NextResponse.json({ success: false, error: "Not found" }, { status: 404 });
+      return errorResponse("Not found", 404);
     }
 
     // Get all sources referenced
@@ -94,23 +95,16 @@ export async function GET(
       },
     });
 
-    return NextResponse.json({
-      success: true,
-      data: {
-        ...candidate,
-        sources,
-      },
+    return successResponse({
+      ...candidate,
+      sources,
     });
   } catch (error) {
-    console.error("Error fetching candidate:", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to fetch candidate" },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }
 
 export async function POST() {
-  return NextResponse.json({ error: "Method not allowed" }, { status: 405 });
+  return methodNotAllowedResponse();
 }
 

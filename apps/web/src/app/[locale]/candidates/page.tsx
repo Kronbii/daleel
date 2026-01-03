@@ -4,18 +4,29 @@
 
 import { Suspense } from "react";
 import { PageLayout } from "@/components/layouts/page-layout";
-import { CandidatesGrid } from "@/components/sections/candidates-grid";
+import { CandidatesPageContent } from "@/components/sections/candidates-page-content";
 import { LoadingState } from "@/components/ui/loading-state";
 import { getCandidatesList } from "@/lib/queries/candidates";
+import { getDistrictsList } from "@/lib/queries/districts";
+import { getListsList } from "@/lib/queries/lists";
 import type { Locale } from "@daleel/core";
 import { getTranslations } from "next-intl/server";
 
-async function CandidatesList({ locale }: { locale: Locale }) {
-  const candidates = await getCandidatesList(locale);
-  const emptyMessage =
-    locale === "ar" ? "لا يوجد مرشحون" : locale === "fr" ? "Aucun candidat" : "No candidates found";
+async function CandidatesPageData({ locale }: { locale: Locale }) {
+  const [candidates, districts, lists] = await Promise.all([
+    getCandidatesList(locale),
+    getDistrictsList(),
+    getListsList(),
+  ]);
 
-  return <CandidatesGrid candidates={candidates as any} locale={locale} emptyMessage={emptyMessage} />;
+  return (
+    <CandidatesPageContent
+      candidates={candidates}
+      districts={districts}
+      lists={lists}
+      locale={locale}
+    />
+  );
 }
 
 export default async function CandidatesPage({ params }: { params: Promise<{ locale: string }> }) {
@@ -36,7 +47,7 @@ export default async function CandidatesPage({ params }: { params: Promise<{ loc
       breadcrumbs={[{ label: t("candidates") }]}
     >
       <Suspense fallback={<LoadingState />}>
-        <CandidatesList locale={locale as Locale} />
+        <CandidatesPageData locale={locale as Locale} />
       </Suspense>
     </PageLayout>
   );

@@ -3,8 +3,8 @@
  * GET only
  */
 
-import { NextResponse } from "next/server";
 import { prisma } from "@daleel/db";
+import { successResponse, handleApiError, methodNotAllowedResponse } from "@/lib/api-utils";
 
 export async function GET() {
   try {
@@ -19,18 +19,14 @@ export async function GET() {
       },
     });
 
-    return NextResponse.json({ success: true, data: cycles });
+    return successResponse(cycles);
   } catch (error) {
-    console.error("Error fetching cycles:", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to fetch cycles" },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }
 
 // Block other methods
 export async function POST() {
-  return NextResponse.json({ error: "Method not allowed" }, { status: 405 });
+  return methodNotAllowedResponse();
 }
 

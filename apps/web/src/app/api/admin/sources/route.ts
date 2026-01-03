@@ -3,7 +3,7 @@
  * POST only, requires auth + role
  */
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { requireAdminRole } from "@/lib/admin-auth";
 import { createSourceSchema } from "@daleel/core";
 import { prisma } from "@daleel/db";
@@ -11,6 +11,7 @@ import { logAuditEvent, getClientInfo } from "@/lib/audit";
 import { rateLimit, getClientIdentifier } from "@/lib/rate-limit";
 import { RATE_LIMIT_CONFIG } from "@daleel/core";
 import { validateCSRFToken } from "@/lib/csrf";
+import { successResponse, errorResponse, handleApiError, methodNotAllowedResponse } from "@/lib/api-utils";
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,7 +23,7 @@ export async function POST(request: NextRequest) {
       RATE_LIMIT_CONFIG.API_ADMIN.max
     );
     if (!limit.allowed) {
-      return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
+      return errorResponse("Rate limit exceeded", 429);
     }
 
     // Auth check
@@ -36,7 +37,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const csrfToken = body.csrfToken;
     if (!(await validateCSRFToken(csrfToken))) {
-      return NextResponse.json({ error: "Invalid CSRF token" }, { status: 403 });
+      return errorResponse("Invalid CSRF token", 403);
     }
 
     // Validate input
@@ -58,17 +59,13 @@ export async function POST(request: NextRequest) {
       ...clientInfo,
     });
 
-    return NextResponse.json({ success: true, data: source }, { status: 201 });
-  } catch (error: any) {
-    if (error.name === "ZodError") {
-      return NextResponse.json({ error: "Validation error", details: error.errors }, { status: 400 });
-    }
-    console.error("Error creating source:", error);
-    return NextResponse.json({ error: "Failed to create source" }, { status: 500 });
+    return successResponse(source, 201);
+  } catch (error) {
+    return handleApiError(error);
   }
 }
 
 export async function GET() {
-  return NextResponse.json({ error: "Method not allowed" }, { status: 405 });
+  return methodNotAllowedResponse();
 }
 

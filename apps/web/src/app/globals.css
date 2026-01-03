@@ -108,6 +108,75 @@
   *:focus-visible {
     @apply outline-none ring-2 ring-blue-500 ring-offset-2;
   }
+
+  /* Select dropdown styling - ensure text is visible and dark */
+  select,
+  select * {
+    color: rgb(17, 24, 39) !important;
+    background-color: white !important;
+  }
+
+  /* Option elements - ensure they're visible with dark text */
+  select option {
+    color: rgb(17, 24, 39) !important;
+    background-color: white !important;
+    padding: 8px 12px !important;
+  }
+
+  /* Make sure option text is never white unless selected */
+  select option:not(:checked):not([selected]) {
+    color: rgb(17, 24, 39) !important;
+    background-color: white !important;
+  }
+
+  /* Selected option - white text on blue background */
+  select option:checked,
+  select option[selected] {
+    background-color: rgb(59, 130, 246) !important;
+    color: white !important;
+  }
+
+  /* Hover state for options (some browsers) */
+  select option:hover:not(:checked) {
+    background-color: rgb(239, 246, 255) !important;
+    color: rgb(17, 24, 39) !important;
+  }
+
+  /* Focus state */
+  select:focus {
+    color: rgb(17, 24, 39) !important;
+    background-color: white !important;
+  }
+
+  select:focus option:not(:checked) {
+    color: rgb(17, 24, 39) !important;
+    background-color: white !important;
+  }
+
+  /* Ensure select dropdowns work in both RTL and LTR - force dark text */
+  html[dir="rtl"] select,
+  html[dir="ltr"] select {
+    color: rgb(17, 24, 39) !important;
+    background-color: white !important;
+  }
+
+  html[dir="rtl"] select option:not(:checked):not([selected]),
+  html[dir="ltr"] select option:not(:checked):not([selected]) {
+    color: rgb(17, 24, 39) !important;
+    background-color: white !important;
+  }
+
+  /* Override any text alignment that might hide text */
+  select,
+  select option {
+    text-align: inherit !important;
+  }
+
+  /* Explicitly prevent white text on select elements */
+  select,
+  select option {
+    --tw-text-opacity: 1 !important;
+  }
 }
 
 @layer components {

@@ -1,7 +1,7 @@
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { SUPPORTED_LOCALES, DEFAULT_LOCALE } from "@daleel/core";
+import { SUPPORTED_LOCALES, type Locale } from "@daleel/core";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { DirectionSetter } from "@/components/direction-setter";
@@ -15,7 +15,7 @@ export default async function LocaleLayout({
 }) {
   const { locale } = await params;
 
-  if (!SUPPORTED_LOCALES.includes(locale as any)) {
+  if (!SUPPORTED_LOCALES.includes(locale as Locale)) {
     notFound();
   }
 

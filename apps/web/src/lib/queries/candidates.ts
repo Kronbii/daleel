@@ -34,8 +34,24 @@ export async function getCandidateBySlug(slug: string) {
   return prisma.candidate.findUnique({
     where: { slug },
     include: {
-      district: true,
-      currentList: true,
+      district: {
+        select: {
+          id: true,
+          nameAr: true,
+          nameEn: true,
+          nameFr: true,
+          seatCount: true,
+        },
+      },
+      currentList: {
+        select: {
+          id: true,
+          nameAr: true,
+          nameEn: true,
+          nameFr: true,
+          status: true,
+        },
+      },
       affiliations: {
         orderBy: { startDate: "desc" },
         include: {
@@ -51,7 +67,15 @@ export async function getCandidateBySlug(slug: string) {
       },
       statements: {
         include: {
-          topic: true,
+          topic: {
+            select: {
+              id: true,
+              key: true,
+              nameAr: true,
+              nameEn: true,
+              nameFr: true,
+            },
+          },
           source: {
             select: {
               id: true,

@@ -32,7 +32,6 @@ export default async function CandidateProfilePage({
   candidate.affiliations.forEach((a) => sourceIds.add(a.sourceId));
   candidate.statements.forEach((s) => sourceIds.add(s.sourceId));
 
-  const { prisma } = await import("@daleel/db");
   const sources = await prisma.source.findMany({
     where: { id: { in: Array.from(sourceIds) } },
   });
