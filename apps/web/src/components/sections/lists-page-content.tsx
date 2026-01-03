@@ -42,7 +42,7 @@ export function ListsPageContent({ lists, districts, locale }: ListsPageContentP
 
   const emptyMessage =
     currentLocale === "ar"
-      ? "لا توجد قوائم"
+      ? "لا توجد لوائح"
       : currentLocale === "fr"
         ? "Aucune liste"
         : "No lists found";

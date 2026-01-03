@@ -113,8 +113,8 @@ export default async function HomePage({
                   {/* Icon */}
                   <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-5 transition-all duration-300 group-hover:bg-emerald-100 group-hover:scale-105">
                     {card.icon}
-                  </div>
-                  
+          </div>
+
                   {/* Content */}
                   <h3 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-emerald-700 transition-colors font-sans">
                     {card.title}
@@ -137,7 +137,7 @@ export default async function HomePage({
                     </svg>
                   </div>
                 </div>
-              </Link>
+                </Link>
             ))}
           </div>
         </div>
@@ -161,7 +161,7 @@ export default async function HomePage({
               href={`/${locale}/legal`}
               className="inline-flex items-center gap-2 text-sm font-medium text-emerald-600 hover:text-emerald-700 transition-colors"
             >
-              {t("learnMore")}
+                  {t("learnMore")}
               <svg 
                 className={`w-4 h-4 ${isRTL ? 'rotate-180' : ''}`} 
                 fill="none" 
@@ -171,10 +171,10 @@ export default async function HomePage({
               >
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
               </svg>
-            </Link>
+                </Link>
           </div>
         </div>
       </section>
-    </div>
+      </div>
   );
 }

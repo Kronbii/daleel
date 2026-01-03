@@ -114,8 +114,8 @@ export default async function LegalPage({ params }: { params: Promise<{ locale: 
       maxWidth="6xl"
     >
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {legalPages.map((page) => (
-          <Link key={page.key} href={`/${locale}/legal/${page.key}`}>
+            {legalPages.map((page) => (
+              <Link key={page.key} href={`/${locale}/legal/${page.key}`}>
             <div className="group bg-white/70 backdrop-blur-sm rounded-xl border border-gray-100 p-5 transition-all duration-300 hover:shadow-md hover:border-gray-200 hover:-translate-y-0.5 h-full">
               <div className="flex items-start gap-3">
                 <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:bg-emerald-100 transition-colors">
@@ -123,14 +123,14 @@ export default async function LegalPage({ params }: { params: Promise<{ locale: 
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 group-hover:text-emerald-600 transition-colors">
-                    {getLocalized(page.title, locale as Locale)}
+                      {getLocalized(page.title, locale as Locale)}
                   </h3>
                 </div>
               </div>
             </div>
-          </Link>
-        ))}
-      </div>
+              </Link>
+            ))}
+          </div>
     </PageLayout>
   );
 }

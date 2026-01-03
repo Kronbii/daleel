@@ -60,23 +60,42 @@
     @apply outline-none ring-2 ring-emerald-600 ring-offset-2;
   }
 
-  /* Refined select styling */
-  select,
-  select * {
+  /* Refined select styling - ensure text is always visible */
+  select {
     color: rgb(17, 24, 39) !important;
     background-color: white !important;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
   }
 
+  /* Ensure select text is always visible in all states */
+  select,
+  select:focus,
+  select:active,
+  select:hover,
+  select:disabled {
+    color: rgb(17, 24, 39) !important;
+  }
+
+  /* Style options in dropdown */
   select option {
     color: rgb(17, 24, 39) !important;
     background-color: white !important;
     padding: 8px 12px !important;
   }
 
+  /* Highlight selected option in dropdown list */
   select option:checked,
   select option[selected] {
     background-color: hsl(163 47% 28%) !important;
     color: white !important;
+  }
+
+  /* Ensure disabled selects still show text */
+  select:disabled {
+    color: rgb(107, 114, 128) !important;
+    background-color: rgb(249, 250, 251) !important;
   }
 }
 

@@ -104,92 +104,100 @@ export function CandidateFilters({
           </svg>
           {getContent("Filter Candidates", "تصفية المرشحين", "Filtrer les candidats")}
         </h3>
-        {hasActiveFilters && (
-          <button
-            onClick={clearFilters}
+          {hasActiveFilters && (
+            <button
+              onClick={clearFilters}
             className="text-sm text-emerald-600 hover:text-emerald-700 flex items-center gap-1 transition-colors"
-          >
+            >
             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
             {getContent("Clear", "مسح", "Effacer")}
-          </button>
-        )}
-      </div>
+            </button>
+          )}
+        </div>
       
-      <div className="space-y-4">
-        {/* Search */}
-        <div>
-          <label
-            htmlFor="search-filter"
+        <div className="space-y-4">
+          {/* Search */}
+          <div>
+            <label
+              htmlFor="search-filter"
             className="block text-sm font-medium text-gray-600 mb-1.5"
-          >
+            >
             {getContent("Search", "البحث", "Recherche")}
-          </label>
-          <SearchFilter
-            value={searchQuery}
-            onChange={handleSearchChange}
+            </label>
+            <SearchFilter
+              value={searchQuery}
+              onChange={handleSearchChange}
             placeholder={getContent(
               "Search for a candidate...",
               "ابحث عن مرشح...",
               "Rechercher un candidat..."
             )}
-          />
-        </div>
+            />
+          </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          {/* District Filter */}
-          <div>
-            <label
-              htmlFor="district-filter"
+            {/* District Filter */}
+            <div>
+              <label
+                htmlFor="district-filter"
               className="block text-sm font-medium text-gray-600 mb-1.5"
-            >
+              >
               {getContent("District", "الدائرة الانتخابية", "Circonscription")}
-            </label>
-            <select
-              id="district-filter"
-              value={selectedDistrict}
-              onChange={(e) => handleDistrictChange(e.target.value)}
+              </label>
+              <select
+                id="district-filter"
+                value={selectedDistrict}
+                onChange={(e) => handleDistrictChange(e.target.value)}
               className="w-full px-3 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 bg-white text-gray-900 text-sm transition-colors"
-            >
+              >
               <option value="">
                 {getContent("All Districts", "جميع الدوائر", "Toutes les circonscriptions")}
-              </option>
-              {districts.map((district) => (
+                </option>
+                {districts.map((district) => (
                 <option key={district.id} value={district.id}>
-                  {getLocalized(district, locale)}
-                </option>
-              ))}
-            </select>
-          </div>
+                    {getLocalized({
+                      ar: district.nameAr,
+                      en: district.nameEn,
+                      fr: district.nameFr,
+                    }, locale)}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          {/* List Filter */}
-          <div>
-            <label
-              htmlFor="list-filter"
+            {/* List Filter */}
+            <div>
+              <label
+                htmlFor="list-filter"
               className="block text-sm font-medium text-gray-600 mb-1.5"
-            >
+              >
               {getContent("Electoral List", "القائمة الانتخابية", "Liste électorale")}
-            </label>
-            <select
-              id="list-filter"
-              value={selectedList}
-              onChange={(e) => handleListChange(e.target.value)}
+              </label>
+              <select
+                id="list-filter"
+                value={selectedList}
+                onChange={(e) => handleListChange(e.target.value)}
               className="w-full px-3 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 bg-white text-gray-900 text-sm disabled:bg-gray-50 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors"
-              disabled={!selectedDistrict && districts.length > 0}
-            >
+                disabled={!selectedDistrict && districts.length > 0}
+              >
               <option value="">
-                {getContent("All Lists", "جميع القوائم", "Toutes les listes")}
-              </option>
-              {filteredLists.map((list) => (
-                <option key={list.id} value={list.id}>
-                  {getLocalized(list, locale)}
+                {getContent("All Lists", "جميع اللوائح", "Toutes les listes")}
                 </option>
-              ))}
-            </select>
+                {filteredLists.map((list) => (
+                <option key={list.id} value={list.id}>
+                    {getLocalized({
+                      ar: list.nameAr,
+                      en: list.nameEn,
+                      fr: list.nameFr,
+                    }, locale)}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
-      </div>
     </div>
   );
 }

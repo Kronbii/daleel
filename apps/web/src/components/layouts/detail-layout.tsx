@@ -60,9 +60,9 @@ export function DetailLayout({
             </div>
           </div>
 
-        {/* Page Content */}
-        {children}
-      </div>
+          {/* Page Content */}
+          {children}
+        </div>
     </div>
   );
 }

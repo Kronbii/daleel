@@ -76,17 +76,17 @@ export function FilterableDistrictsList({
         <Link key={district.id} href={`/${locale}/districts/${district.id}`} className="block group">
           <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-100 p-5 transition-all duration-300 hover:shadow-md hover:border-gray-200 hover:-translate-y-0.5 h-full">
             <h3 className="font-semibold text-gray-900 group-hover:text-emerald-600 transition-colors mb-2">
-              {getLocalized(
-                {
-                  ar: district.nameAr,
-                  en: district.nameEn,
-                  fr: district.nameFr,
-                },
-                locale
-              )}
+                {getLocalized(
+                  {
+                    ar: district.nameAr,
+                    en: district.nameEn,
+                    fr: district.nameFr,
+                  },
+                  locale
+                )}
             </h3>
             <p className="text-sm text-gray-500 mb-3">
-              {district.cycle.year} • {district.seatCount}{" "}
+                {district.cycle.year} • {district.seatCount}{" "}
               {getContent("seats", "مقعد", "sièges")}
             </p>
             <div className="flex items-center gap-4 text-sm text-gray-500">

@@ -121,12 +121,12 @@ export default async function CandidateProfilePage({
       <div className="bg-white/70 backdrop-blur-sm rounded-2xl border border-gray-100 p-6 sm:p-8 mb-6 shadow-sm">
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
           <div className="flex-shrink-0">
-            <PlaceholderPhoto
-              style={candidate.placeholderPhotoStyle}
-              seed={candidate.id}
+                <PlaceholderPhoto
+                  style={candidate.placeholderPhotoStyle}
+                  seed={candidate.id}
               size={160}
               className="rounded-2xl shadow-md"
-            />
+                />
           </div>
           <div className="flex-1 min-w-0 text-center sm:text-left">
             {/* Quick Info Grid */}
@@ -135,26 +135,26 @@ export default async function CandidateProfilePage({
                 <div className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">
                   {getContent("District", "الدائرة", "Circonscription")}
                 </div>
-                <Link
-                  href={`/${locale}/districts/${candidate.district.id}`}
+                    <Link
+                      href={`/${locale}/districts/${candidate.district.id}`}
                   className="text-gray-900 font-medium hover:text-emerald-600 transition-colors"
-                >
+                    >
                   {districtName}
-                </Link>
+                    </Link>
               </div>
-              {candidate.currentList && (
+                  {candidate.currentList && (
                 <div className="p-4 bg-gray-50/50 rounded-xl">
                   <div className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">
                     {getContent("Electoral List", "القائمة", "Liste électorale")}
                   </div>
-                  <Link
-                    href={`/${locale}/lists/${candidate.currentList.id}`}
+                      <Link
+                        href={`/${locale}/lists/${candidate.currentList.id}`}
                     className="text-gray-900 font-medium hover:text-emerald-600 transition-colors"
-                  >
+                      >
                     {listName}
-                  </Link>
+                      </Link>
                 </div>
-              )}
+                  )}
               <div className="p-4 bg-gray-50/50 rounded-xl">
                 <div className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">
                   {getContent("Status", "الحالة", "Statut")}
@@ -173,11 +173,11 @@ export default async function CandidateProfilePage({
               </div>
             </div>
           </div>
-        </div>
-      </div>
+                  </div>
+                </div>
 
-      {/* Affiliations */}
-      {candidate.affiliations.length > 0 && (
+          {/* Affiliations */}
+          {candidate.affiliations.length > 0 && (
         <section className="bg-white/70 backdrop-blur-sm rounded-2xl border border-gray-100 p-6 sm:p-8 mb-6 shadow-sm">
           <h3 className="text-lg font-semibold text-gray-900 mb-4 font-sans flex items-center gap-2">
             <svg className="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -185,39 +185,39 @@ export default async function CandidateProfilePage({
             </svg>
             {getContent("Political Affiliations", "الانتماءات السياسية", "Affiliations politiques")}
           </h3>
-          <div className="space-y-4">
-            {candidate.affiliations.map((aff) => (
+                <div className="space-y-4">
+                  {candidate.affiliations.map((aff) => (
               <div key={aff.id} className="pb-4 border-b border-gray-100 last:border-b-0 last:pb-0">
                 <div className="font-medium text-gray-900">
-                  {getLocalized(
-                    { ar: aff.nameAr, en: aff.nameEn, fr: aff.nameFr },
-                    locale as Locale
+                        {getLocalized(
+                          { ar: aff.nameAr, en: aff.nameEn, fr: aff.nameFr },
+                          locale as Locale
                   )}
                   <span className="text-gray-500 font-normal ml-2 text-sm">({aff.type})</span>
-                </div>
+                      </div>
                 <div className="text-sm text-gray-500 mt-1">
-                  {new Date(aff.startDate).toLocaleDateString(locale)}
-                  {aff.endDate && ` - ${new Date(aff.endDate).toLocaleDateString(locale)}`}
-                </div>
-                <a
-                  href={aff.source.archivedUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                        {new Date(aff.startDate).toLocaleDateString(locale)}
+                        {aff.endDate && ` - ${new Date(aff.endDate).toLocaleDateString(locale)}`}
+                      </div>
+                      <a
+                        href={aff.source.archivedUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
                   className="inline-flex items-center gap-1 text-sm text-emerald-600 hover:text-emerald-700 mt-1"
-                >
+                      >
                   <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
                   </svg>
                   {aff.source.title}
-                </a>
-              </div>
-            ))}
-          </div>
+                      </a>
+                    </div>
+                  ))}
+                </div>
         </section>
-      )}
+          )}
 
-      {/* Daleel-collected content by topic */}
-      {Object.keys(statementsByTopic).length > 0 && (
+          {/* Daleel-collected content by topic */}
+          {Object.keys(statementsByTopic).length > 0 && (
         <section className="bg-white/70 backdrop-blur-sm rounded-2xl border border-gray-100 p-6 sm:p-8 mb-6 shadow-sm">
           <h3 className="text-lg font-semibold text-gray-900 mb-4 font-sans flex items-center gap-2">
             <svg className="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -226,38 +226,38 @@ export default async function CandidateProfilePage({
             {getContent("Collected Content", "المحتوى المجمع", "Contenu collecté")}
           </h3>
           <div className="space-y-6">
-            {Object.values(statementsByTopic).map(({ topic, statements }) => (
-              <div key={topic.id}>
+                  {Object.values(statementsByTopic).map(({ topic, statements }) => (
+                    <div key={topic.id}>
                 <h4 className="text-base font-medium text-gray-800 mb-3 pb-2 border-b border-gray-100">
-                  {getLocalized(topic, locale as Locale)}
+                        {getLocalized(topic, locale as Locale)}
                 </h4>
                 <div className="space-y-3">
-                  {statements.map((stmt) => (
+                        {statements.map((stmt) => (
                     <div key={stmt.id} className="border-l-2 border-emerald-200 pl-4 py-1">
-                      {stmt.summaryAr || stmt.summaryEn || stmt.summaryFr ? (
+                            {stmt.summaryAr || stmt.summaryEn || stmt.summaryFr ? (
                         <p className="text-gray-700 text-sm leading-relaxed">
-                          {getLocalized(
-                            {
-                              ar: stmt.summaryAr || "",
-                              en: stmt.summaryEn || "",
-                              fr: stmt.summaryFr || "",
-                            },
-                            locale as Locale
-                          )}
+                                {getLocalized(
+                                  {
+                                    ar: stmt.summaryAr || "",
+                                    en: stmt.summaryEn || "",
+                                    fr: stmt.summaryFr || "",
+                                  },
+                                  locale as Locale
+                                )}
                         </p>
-                      ) : null}
+                            ) : null}
                       <div className="flex items-center gap-3 mt-2 text-xs text-gray-500">
                         {stmt.occurredAt && (
                           <span>{new Date(stmt.occurredAt).toLocaleDateString(locale)}</span>
                         )}
-                        <a
-                          href={stmt.source.archivedUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                            <a
+                              href={stmt.source.archivedUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
                           className="text-emerald-600 hover:text-emerald-700"
-                        >
+                            >
                           {stmt.source.title}
-                        </a>
+                            </a>
                       </div>
                     </div>
                   ))}
@@ -266,10 +266,10 @@ export default async function CandidateProfilePage({
             ))}
           </div>
         </section>
-      )}
+          )}
 
-      {/* Candidate-submitted content */}
-      {candidate.submissions.length > 0 && (
+          {/* Candidate-submitted content */}
+          {candidate.submissions.length > 0 && (
         <section className="bg-white/70 backdrop-blur-sm rounded-2xl border border-gray-100 p-6 sm:p-8 mb-6 shadow-sm">
           <h3 className="text-lg font-semibold text-gray-900 mb-2 font-sans flex items-center gap-2">
             <svg className="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -284,30 +284,30 @@ export default async function CandidateProfilePage({
               "Contenu soumis directement par le candidat"
             )}
           </p>
-          <div className="space-y-4">
-            {candidate.submissions.map((sub) => (
+                <div className="space-y-4">
+                  {candidate.submissions.map((sub) => (
               <div key={sub.id} className="border-l-2 border-blue-200 pl-4 py-2">
                 <div className="text-gray-700 text-sm whitespace-pre-line leading-relaxed">
-                  {getLocalized(
-                    {
-                      ar: sub.contentAr,
-                      en: sub.contentEn,
-                      fr: sub.contentFr,
-                    },
-                    locale as Locale
-                  )}
-                </div>
+                        {getLocalized(
+                          {
+                            ar: sub.contentAr,
+                            en: sub.contentEn,
+                            fr: sub.contentFr,
+                          },
+                          locale as Locale
+                        )}
+                      </div>
                 <div className="text-xs text-gray-500 mt-2">
                   {getContent("Submitted", "تم التقديم", "Soumis")} {new Date(sub.submittedAt).toLocaleDateString(locale)}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              </div>
-            ))}
-          </div>
         </section>
-      )}
+          )}
 
-      {/* Right of reply */}
-      {candidate.rightOfReplies.length > 0 && (
+          {/* Right of reply */}
+          {candidate.rightOfReplies.length > 0 && (
         <section className="bg-white/70 backdrop-blur-sm rounded-2xl border border-gray-100 p-6 sm:p-8 mb-6 shadow-sm">
           <h3 className="text-lg font-semibold text-gray-900 mb-4 font-sans flex items-center gap-2">
             <svg className="w-5 h-5 text-green-600" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -315,30 +315,30 @@ export default async function CandidateProfilePage({
             </svg>
             {getContent("Right of Reply", "حق الرد", "Droit de réponse")}
           </h3>
-          <div className="space-y-4">
-            {candidate.rightOfReplies.map((reply) => (
+                <div className="space-y-4">
+                  {candidate.rightOfReplies.map((reply) => (
               <div key={reply.id} className="border-l-2 border-green-200 pl-4 py-2">
                 <div className="text-gray-700 text-sm whitespace-pre-line leading-relaxed">
-                  {getLocalized(
-                    {
-                      ar: reply.contentAr,
-                      en: reply.contentEn,
-                      fr: reply.contentFr,
-                    },
-                    locale as Locale
-                  )}
-                </div>
+                        {getLocalized(
+                          {
+                            ar: reply.contentAr,
+                            en: reply.contentEn,
+                            fr: reply.contentFr,
+                          },
+                          locale as Locale
+                        )}
+                      </div>
                 <div className="text-xs text-gray-500 mt-2">
                   {getContent("Published", "نُشر", "Publié")} {new Date(reply.submittedAt).toLocaleDateString(locale)}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              </div>
-            ))}
-          </div>
         </section>
-      )}
+          )}
 
-      {/* Sources */}
-      {sources.length > 0 && (
+          {/* Sources */}
+          {sources.length > 0 && (
         <section className="bg-white/70 backdrop-blur-sm rounded-2xl border border-gray-100 p-6 sm:p-8 shadow-sm">
           <h3 className="text-lg font-semibold text-gray-900 mb-4 font-sans flex items-center gap-2">
             <svg className="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -347,30 +347,30 @@ export default async function CandidateProfilePage({
             {getContent("Sources", "المصادر", "Sources")}
           </h3>
           <ul className="space-y-3">
-            {sources.map((source) => (
+                  {sources.map((source) => (
               <li key={source.id} className="flex items-start gap-3">
                 <svg className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
                 </svg>
                 <div>
-                  <a
-                    href={source.archivedUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                      <a
+                        href={source.archivedUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
                     className="text-emerald-600 hover:text-emerald-700 text-sm font-medium"
-                  >
+                      >
                     {source.title}
                   </a>
                   <span className="text-gray-500 text-sm ml-1">({source.publisher})</span>
                   <div className="text-xs text-gray-400 mt-0.5">
                     {getContent("Archived", "مؤرشف", "Archivé")} {new Date(source.archivedAt).toLocaleDateString(locale)} • {source.archiveMethod}
                   </div>
-                </div>
-              </li>
-            ))}
-          </ul>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
         </section>
-      )}
+          )}
     </DetailLayout>
   );
 }

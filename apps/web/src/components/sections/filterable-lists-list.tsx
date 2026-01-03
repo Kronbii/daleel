@@ -105,15 +105,15 @@ export function FilterableListsList({
               <StatusBadge status={list.status as any} />
             </div>
             <p className="text-sm text-gray-500 mb-3 truncate">
-              {getLocalized(list.district, locale)}
+                {getLocalized(list.district, locale)}
             </p>
             <p className="text-sm text-gray-500 flex items-center gap-1">
               <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
               </svg>
               {list._count.candidates} {getContent("candidates", "مرشح", "candidats")}
-            </p>
-          </div>
+                </p>
+              </div>
         </Link>
       ))}
     </div>

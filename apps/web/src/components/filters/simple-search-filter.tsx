@@ -40,11 +40,11 @@ export function SimpleSearchFilter({
         </svg>
         {title || defaultTitle}
       </h3>
-      <SearchFilter
-        value={searchQuery}
-        onChange={onSearchChange}
-        placeholder={placeholder || defaultPlaceholder}
-      />
+        <SearchFilter
+          value={searchQuery}
+          onChange={onSearchChange}
+          placeholder={placeholder || defaultPlaceholder}
+        />
     </div>
   );
 }

@@ -57,9 +57,9 @@ export function PageLayout({
             )}
           </div>
 
-        {/* Page Content */}
-        {children}
-      </div>
+          {/* Page Content */}
+          {children}
+        </div>
     </div>
   );
 }

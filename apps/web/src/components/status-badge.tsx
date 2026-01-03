@@ -55,7 +55,7 @@ const statusStyles: Record<string, { bg: string; text: string; label?: Record<st
 
 export function StatusBadge({ status, className }: StatusBadgeProps) {
   const style = statusStyles[status] || { bg: "bg-gray-100", text: "text-gray-600" };
-  
+
   return (
     <span 
       className={cn(

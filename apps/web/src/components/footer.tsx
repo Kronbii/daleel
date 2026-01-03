@@ -33,45 +33,45 @@ export function Footer() {
                   "مبادرة مدنية مستقلة تقدم معلومات عامة عن الانتخابات النيابية اللبنانية.",
                   "Initiative civique indépendante fournissant des informations publiques sur les élections parlementaires libanaises."
                 )}
-              </p>
-            </div>
+            </p>
+          </div>
 
             {/* Links */}
             <div className="flex gap-12 sm:gap-16">
-              <div>
+          <div>
                 <h4 className="text-sm font-semibold text-gray-900 mb-3">
                   {getContent("Explore", "استكشف", "Explorer")}
                 </h4>
                 <ul className="space-y-2">
-                  <li>
+              <li>
                     <Link href={`/${locale}/candidates`} className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
-                      {t("candidates")}
-                    </Link>
-                  </li>
-                  <li>
+                  {t("candidates")}
+                </Link>
+              </li>
+              <li>
                     <Link href={`/${locale}/districts`} className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
-                      {t("districts")}
-                    </Link>
-                  </li>
-                  <li>
+                  {t("districts")}
+                </Link>
+              </li>
+              <li>
                     <Link href={`/${locale}/lists`} className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
-                      {t("lists")}
-                    </Link>
-                  </li>
-                </ul>
-              </div>
+                  {t("lists")}
+                </Link>
+              </li>
+            </ul>
+          </div>
 
-              <div>
+          <div>
                 <h4 className="text-sm font-semibold text-gray-900 mb-3">
                   {getContent("About", "حول", "À propos")}
                 </h4>
                 <ul className="space-y-2">
-                  <li>
+              <li>
                     <Link href={`/${locale}/legal`} className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
                       {t("legal")}
-                    </Link>
-                  </li>
-                </ul>
+                </Link>
+              </li>
+            </ul>
               </div>
             </div>
           </div>

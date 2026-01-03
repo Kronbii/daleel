@@ -25,10 +25,10 @@ export default async function ListsPage({
   const t = await getTranslations("common");
 
   const title =
-    locale === "ar" ? "القوائم الانتخابية" : locale === "fr" ? "Listes électorales" : "Electoral Lists";
+    locale === "ar" ? "اللوائح الانتخابية" : locale === "fr" ? "Listes électorales" : "Electoral Lists";
   const description =
     locale === "ar"
-      ? "شاهد جميع القوائم الانتخابية"
+      ? "شاهد جميع اللوائح الانتخابية"
       : locale === "fr"
         ? "Voir toutes les listes électorales"
         : "View all electoral lists";
