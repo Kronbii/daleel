@@ -4,37 +4,29 @@
 
 import { Suspense } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@daleel/ui";
+import { PageLayout } from "@/components/layouts/page-layout";
+import { LoadingState } from "@/components/ui/loading-state";
+import { EmptyState } from "@/components/ui/empty-state";
+import { getDistrictsList } from "@/lib/queries/districts";
 import Link from "next/link";
 import { getLocalized } from "@daleel/core";
 import type { Locale } from "@daleel/core";
-import { prisma } from "@daleel/db";
+import { getTranslations } from "next-intl/server";
 
 async function DistrictsList({ locale }: { locale: Locale }) {
-  const districts = await prisma.district.findMany({
-    take: 50,
-    orderBy: { nameAr: "asc" },
-    include: {
-      cycle: {
-        select: {
-          id: true,
-          name: true,
-          year: true,
-        },
-      },
-      _count: {
-        select: {
-          candidates: true,
-          lists: true,
-        },
-      },
-    },
-  });
+  const districts = await getDistrictsList();
+
+  if (districts.length === 0) {
+    const emptyMessage =
+      locale === "ar" ? "لا توجد دوائر" : locale === "fr" ? "Aucune circonscription" : "No districts found";
+    return <EmptyState message={emptyMessage} />;
+  }
 
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {districts.map((district) => (
         <Link key={district.id} href={`/${locale}/districts/${district.id}`}>
-          <Card className="hover:shadow-lg transition-shadow">
+          <Card className="card-hover h-full">
             <CardHeader>
               <CardTitle className="text-lg">
                 {getLocalized(
@@ -47,12 +39,15 @@ async function DistrictsList({ locale }: { locale: Locale }) {
                 )}
               </CardTitle>
               <CardDescription>
-                {district.cycle.year} • {district.seatCount} seats
+                {district.cycle.year} • {district.seatCount}{" "}
+                {locale === "ar" ? "مقعد" : locale === "fr" ? "sièges" : "seats"}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-gray-600">
-                {district._count.candidates} candidates • {district._count.lists} lists
+                {district._count.candidates}{" "}
+                {locale === "ar" ? "مرشح" : locale === "fr" ? "candidats" : "candidates"} • {district._count.lists}{" "}
+                {locale === "ar" ? "قائمة" : locale === "fr" ? "listes" : "lists"}
               </p>
             </CardContent>
           </Card>
@@ -68,16 +63,25 @@ export default async function DistrictsPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  const t = await getTranslations("common");
+
+  const description =
+    locale === "ar"
+      ? "استكشف جميع الدوائر الانتخابية"
+      : locale === "fr"
+        ? "Explorez toutes les circonscriptions électorales"
+        : "Explore all electoral districts";
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <main className="container mx-auto px-4 py-12">
-        <h1 className="text-3xl font-bold mb-8">Districts</h1>
-        <Suspense fallback={<div>Loading districts...</div>}>
-          <DistrictsList locale={locale as Locale} />
-        </Suspense>
-      </main>
-    </div>
+    <PageLayout
+      title={t("districts")}
+      description={description}
+      breadcrumbs={[{ label: t("districts") }]}
+    >
+      <Suspense fallback={<LoadingState />}>
+        <DistrictsList locale={locale as Locale} />
+      </Suspense>
+    </PageLayout>
   );
 }
 

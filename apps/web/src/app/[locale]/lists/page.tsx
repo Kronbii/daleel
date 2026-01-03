@@ -4,38 +4,30 @@
 
 import { Suspense } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@daleel/ui";
+import { PageLayout } from "@/components/layouts/page-layout";
+import { LoadingState } from "@/components/ui/loading-state";
+import { EmptyState } from "@/components/ui/empty-state";
+import { getListsList } from "@/lib/queries/lists";
 import Link from "next/link";
 import { getLocalized } from "@daleel/core";
 import type { Locale } from "@daleel/core";
-import { prisma } from "@daleel/db";
 import { StatusBadge } from "@/components/status-badge";
+import { getTranslations } from "next-intl/server";
 
 async function ListsList({ locale }: { locale: Locale }) {
-  const lists = await prisma.electoralList.findMany({
-    take: 50,
-    orderBy: { nameAr: "asc" },
-    include: {
-      district: {
-        select: {
-          id: true,
-          nameAr: true,
-          nameEn: true,
-          nameFr: true,
-        },
-      },
-      _count: {
-        select: {
-          candidates: true,
-        },
-      },
-    },
-  });
+  const lists = await getListsList();
+
+  if (lists.length === 0) {
+    const emptyMessage =
+      locale === "ar" ? "لا توجد قوائم" : locale === "fr" ? "Aucune liste" : "No lists found";
+    return <EmptyState message={emptyMessage} />;
+  }
 
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {lists.map((list) => (
         <Link key={list.id} href={`/${locale}/lists/${list.id}`}>
-          <Card className="hover:shadow-lg transition-shadow">
+          <Card className="card-hover h-full">
             <CardHeader>
               <CardTitle className="text-lg">
                 {getLocalized(
@@ -47,14 +39,17 @@ async function ListsList({ locale }: { locale: Locale }) {
                   locale
                 )}
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="truncate">
                 {getLocalized(list.district, locale)}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-between">
                 <StatusBadge status={list.status} />
-                <p className="text-sm text-gray-600">{list._count.candidates} candidates</p>
+                <p className="text-sm text-gray-600">
+                  {list._count.candidates}{" "}
+                  {locale === "ar" ? "مرشح" : locale === "fr" ? "candidats" : "candidates"}
+                </p>
               </div>
             </CardContent>
           </Card>
@@ -70,16 +65,23 @@ export default async function ListsPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  const t = await getTranslations("common");
+
+  const title =
+    locale === "ar" ? "القوائم الانتخابية" : locale === "fr" ? "Listes électorales" : "Electoral Lists";
+  const description =
+    locale === "ar"
+      ? "شاهد جميع القوائم الانتخابية"
+      : locale === "fr"
+        ? "Voir toutes les listes électorales"
+        : "View all electoral lists";
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <main className="container mx-auto px-4 py-12">
-        <h1 className="text-3xl font-bold mb-8">Electoral Lists</h1>
-        <Suspense fallback={<div>Loading lists...</div>}>
-          <ListsList locale={locale as Locale} />
-        </Suspense>
-      </main>
-    </div>
+    <PageLayout title={title} description={description} breadcrumbs={[{ label: t("lists") }]}>
+      <Suspense fallback={<LoadingState />}>
+        <ListsList locale={locale as Locale} />
+      </Suspense>
+    </PageLayout>
   );
 }
 

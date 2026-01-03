@@ -79,11 +79,15 @@ export default async function HomePage({
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {features.map((feature) => (
               <Link key={feature.href} href={feature.href}>
-                <Card className="group relative h-full overflow-hidden border-2 border-gray-200 transition-all duration-300 hover:border-gray-300 hover:shadow-xl">
-                  <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 transition-opacity duration-300 group-hover:opacity-5`} />
+                <Card className="group relative h-full overflow-hidden border-2 border-gray-200/80 transition-all duration-300 hover:border-gray-300 hover:shadow-2xl card-hover">
+                  <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 transition-opacity duration-300 group-hover:opacity-10`} />
                   <CardHeader className="relative">
-                    <div className="mb-4 text-4xl">{feature.icon}</div>
-                    <CardTitle className="text-2xl">{feature.title}</CardTitle>
+                    <div className="mb-4 text-5xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
+                      {feature.icon}
+                    </div>
+                    <CardTitle className="text-2xl group-hover:text-blue-600 transition-colors duration-300">
+                      {feature.title}
+                    </CardTitle>
                     <CardDescription className="mt-2 text-base">
                       {feature.description}
                     </CardDescription>
@@ -91,13 +95,13 @@ export default async function HomePage({
                   <CardContent>
                     <Button
                       variant="default"
-                      className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+                      className="w-full group-hover:scale-105 transition-transform duration-300"
                     >
                       {locale === "ar" ? `${t("explore")} ←` : `${t("explore")} →`}
                     </Button>
                   </CardContent>
-                </Card>
-              </Link>
+            </Card>
+                </Link>
             ))}
           </div>
         </div>
@@ -117,8 +121,8 @@ export default async function HomePage({
               <Link href={`/${locale}/legal`}>
                 <Button variant="outline" size="lg">
                   {t("learnMore")}
-                </Button>
-              </Link>
+                  </Button>
+                </Link>
             </div>
           </div>
         </div>

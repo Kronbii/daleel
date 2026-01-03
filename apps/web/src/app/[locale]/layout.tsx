@@ -3,6 +3,7 @@ import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { SUPPORTED_LOCALES, DEFAULT_LOCALE } from "@daleel/core";
 import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
 
 export default async function LocaleLayout({
   children,
@@ -22,9 +23,10 @@ export default async function LocaleLayout({
   return (
     <NextIntlClientProvider messages={messages} locale={locale}>
       <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
-        <body className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
+        <body className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 flex flex-col">
           <Navbar />
-          <main>{children}</main>
+          <main className="flex-1">{children}</main>
+          <Footer />
         </body>
       </html>
     </NextIntlClientProvider>

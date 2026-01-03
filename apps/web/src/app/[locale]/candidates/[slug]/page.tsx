@@ -3,12 +3,16 @@
  */
 
 import { notFound } from "next/navigation";
+import { getCandidateBySlug } from "@/lib/queries/candidates";
+import { DetailLayout } from "@/components/layouts/detail-layout";
 import { prisma } from "@daleel/db";
 import { PlaceholderPhoto } from "@/components/placeholder-photo";
 import { StatusBadge } from "@/components/status-badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, Separator } from "@daleel/ui";
 import { getLocalized } from "@daleel/core";
 import type { Locale } from "@daleel/core";
+import { getTranslations } from "next-intl/server";
+import Link from "next/link";
 
 export default async function CandidateProfilePage({
   params,
@@ -17,48 +21,7 @@ export default async function CandidateProfilePage({
 }) {
   const { locale, slug } = await params;
 
-  const candidate = await prisma.candidate.findUnique({
-    where: { slug },
-    include: {
-      district: true,
-      currentList: true,
-      affiliations: {
-        orderBy: { startDate: "desc" },
-        include: {
-          source: {
-            select: {
-              id: true,
-              title: true,
-              archivedUrl: true,
-              archivedAt: true,
-            },
-          },
-        },
-      },
-      statements: {
-        include: {
-          topic: true,
-          source: {
-            select: {
-              id: true,
-              title: true,
-              archivedUrl: true,
-              archivedAt: true,
-            },
-          },
-        },
-        orderBy: { occurredAt: "desc" },
-      },
-      submissions: {
-        where: { status: "APPROVED" },
-        orderBy: { submittedAt: "desc" },
-      },
-      rightOfReplies: {
-        where: { status: "PUBLISHED" },
-        orderBy: { submittedAt: "desc" },
-      },
-    },
-  });
+  const candidate = await getCandidateBySlug(slug);
 
   if (!candidate) {
     notFound();
@@ -69,6 +32,7 @@ export default async function CandidateProfilePage({
   candidate.affiliations.forEach((a) => sourceIds.add(a.sourceId));
   candidate.statements.forEach((s) => sourceIds.add(s.sourceId));
 
+  const { prisma } = await import("@daleel/db");
   const sources = await prisma.source.findMany({
     where: { id: { in: Array.from(sourceIds) } },
   });
@@ -95,12 +59,20 @@ export default async function CandidateProfilePage({
     locale as Locale
   );
 
+  const t = await getTranslations("common");
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <main className="container mx-auto px-4 py-12">
-        <div className="max-w-4xl mx-auto">
-          {/* Header */}
-          <Card className="mb-8">
+    <DetailLayout
+      title={name}
+      breadcrumbs={[
+        { label: t("candidates"), href: `/${locale}/candidates` },
+        { label: name },
+      ]}
+      backHref={`/${locale}/candidates`}
+      maxWidth="4xl"
+    >
+      {/* Header */}
+      <Card className="mb-8 card-hover">
             <CardHeader>
               <div className="flex items-start gap-6">
                 <PlaceholderPhoto
@@ -112,12 +84,32 @@ export default async function CandidateProfilePage({
                   <CardTitle className="text-3xl mb-2">{name}</CardTitle>
                   <StatusBadge status={candidate.status} className="mb-4" />
                   <CardDescription>
-                    {getLocalized(candidate.district, locale as Locale)} • Last updated:{" "}
-                    {new Date(candidate.updatedAt).toLocaleDateString(locale)}
+                    <Link
+                      href={`/${locale}/districts/${candidate.district.id}`}
+                      className="text-blue-600 hover:text-blue-800"
+                    >
+                      {getLocalized(candidate.district, locale as Locale)}
+                    </Link>
+                    {" • "}
+                    {locale === "ar"
+                      ? "آخر تحديث"
+                      : locale === "fr"
+                        ? "Dernière mise à jour"
+                        : "Last updated"}
+                    {" "}
+                    {new Date(candidate.updatedAt).toLocaleDateString(
+                        locale === "ar" ? "ar-LB" : locale === "fr" ? "fr-FR" : "en-US"
+                      )}
                   </CardDescription>
                   {candidate.currentList && (
                     <CardDescription className="mt-2">
-                      List: {getLocalized(candidate.currentList, locale as Locale)}
+                      {locale === "ar" ? "القائمة" : locale === "fr" ? "Liste" : "List"}:{" "}
+                      <Link
+                        href={`/${locale}/lists/${candidate.currentList.id}`}
+                        className="text-blue-600 hover:text-blue-800"
+                      >
+                        {getLocalized(candidate.currentList, locale as Locale)}
+                      </Link>
                     </CardDescription>
                   )}
                 </div>
@@ -126,24 +118,46 @@ export default async function CandidateProfilePage({
           </Card>
 
           {/* Basic Info */}
-          <Card className="mb-8">
+          <Card className="mb-8 card-hover">
             <CardHeader>
-              <CardTitle>Basic Information</CardTitle>
+              <CardTitle>
+                {locale === "ar" ? "المعلومات الأساسية" : locale === "fr" ? "Informations de base" : "Basic Information"}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <dt className="font-semibold">District</dt>
-                  <dd>{getLocalized(candidate.district, locale as Locale)}</dd>
+                  <dt className="font-semibold">
+                    {locale === "ar" ? "الدائرة" : locale === "fr" ? "Circonscription" : "District"}
+                  </dt>
+                  <dd>
+                    <Link
+                      href={`/${locale}/districts/${candidate.district.id}`}
+                      className="text-blue-600 hover:text-blue-800"
+                    >
+                      {getLocalized(candidate.district, locale as Locale)}
+                    </Link>
+                  </dd>
                 </div>
                 {candidate.currentList && (
                   <div>
-                    <dt className="font-semibold">List</dt>
-                    <dd>{getLocalized(candidate.currentList, locale as Locale)}</dd>
+                    <dt className="font-semibold">
+                      {locale === "ar" ? "القائمة" : locale === "fr" ? "Liste" : "List"}
+                    </dt>
+                    <dd>
+                      <Link
+                        href={`/${locale}/lists/${candidate.currentList.id}`}
+                        className="text-blue-600 hover:text-blue-800"
+                      >
+                        {getLocalized(candidate.currentList, locale as Locale)}
+                      </Link>
+                    </dd>
                   </div>
                 )}
                 <div>
-                  <dt className="font-semibold">Status</dt>
+                  <dt className="font-semibold">
+                    {locale === "ar" ? "الحالة" : locale === "fr" ? "Statut" : "Status"}
+                  </dt>
                   <dd>
                     <StatusBadge status={candidate.status} />
                   </dd>
@@ -156,7 +170,13 @@ export default async function CandidateProfilePage({
           {candidate.affiliations.length > 0 && (
             <Card className="mb-8">
               <CardHeader>
-                <CardTitle>Political Affiliations & Alliances</CardTitle>
+                <CardTitle>
+                  {locale === "ar"
+                    ? "الانتماءات السياسية والتحالفات"
+                    : locale === "fr"
+                      ? "Affiliations politiques et alliances"
+                      : "Political Affiliations & Alliances"}
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -192,7 +212,13 @@ export default async function CandidateProfilePage({
           {Object.keys(statementsByTopic).length > 0 && (
             <Card className="mb-8">
               <CardHeader>
-                <CardTitle>Daleel-Collected Content</CardTitle>
+                <CardTitle>
+                  {locale === "ar"
+                    ? "المحتوى المجمع من دليل"
+                    : locale === "fr"
+                      ? "Contenu collecté par Daleel"
+                      : "Daleel-Collected Content"}
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-8">
@@ -242,9 +268,19 @@ export default async function CandidateProfilePage({
           {candidate.submissions.length > 0 && (
             <Card className="mb-8">
               <CardHeader>
-                <CardTitle>Candidate-Submitted Content</CardTitle>
+                <CardTitle>
+                  {locale === "ar"
+                    ? "المحتوى المقدم من المرشح"
+                    : locale === "fr"
+                      ? "Contenu soumis par le candidat"
+                      : "Candidate-Submitted Content"}
+                </CardTitle>
                 <CardDescription>
-                  This content was submitted directly by the candidate
+                  {locale === "ar"
+                    ? "تم تقديم هذا المحتوى مباشرة من قبل المرشح"
+                    : locale === "fr"
+                      ? "Ce contenu a été soumis directement par le candidat"
+                      : "This content was submitted directly by the candidate"}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -275,7 +311,9 @@ export default async function CandidateProfilePage({
           {candidate.rightOfReplies.length > 0 && (
             <Card className="mb-8">
               <CardHeader>
-                <CardTitle>Right of Reply</CardTitle>
+                <CardTitle>
+                  {locale === "ar" ? "حق الرد" : locale === "fr" ? "Droit de réponse" : "Right of Reply"}
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -305,7 +343,9 @@ export default async function CandidateProfilePage({
           {sources.length > 0 && (
             <Card className="mb-8">
               <CardHeader>
-                <CardTitle>Sources & Archived Sources</CardTitle>
+                <CardTitle>
+                  {locale === "ar" ? "المصادر والمصادر المؤرشفة" : locale === "fr" ? "Sources et sources archivées" : "Sources & Archived Sources"}
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2">
@@ -329,9 +369,7 @@ export default async function CandidateProfilePage({
               </CardContent>
             </Card>
           )}
-        </div>
-      </main>
-    </div>
+    </DetailLayout>
   );
 }
 
