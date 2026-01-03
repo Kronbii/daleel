@@ -1,0 +1,33 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "back": "Back",
+    "home": "Home",
+    "candidates": "Candidates",
+    "districts": "Districts",
+    "lists": "Lists",
+    "legal": "Legal",
+    "archive": "Archive",
+    "candidatesDesc": "Browse all candidates",
+    "districtsDesc": "Explore electoral districts",
+    "listsDesc": "See electoral lists",
+    "explore": "Explore",
+    "learnMore": "Learn More About Our Methodology",
+    "tagline": "Transparent. Neutral. Independent.",
+    "description": "Daleel is committed to providing accurate, archived, and verifiable information about Lebanese parliamentary elections. All content is sourced from publicly available materials and properly archived for transparency."
+  },
+  "candidate": {
+    "status": "Status",
+    "district": "District",
+    "list": "List",
+    "basicInfo": "Basic Information",
+    "affiliations": "Political Affiliations",
+    "content": "Content",
+    "submittedContent": "Candidate-Submitted Content",
+    "rightOfReply": "Right of Reply",
+    "sources": "Sources",
+    "profileHistory": "Profile History"
+  }
+}
+

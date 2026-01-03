@@ -1,0 +1,406 @@
+// Prisma Schema for Daleel
+// Security: Append-only versioning, no cascading deletes, strict validation
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// AUTHENTICATION & AUTHORIZATION
+// ============================================================================
+
+enum UserRole {
+  ADMIN
+  EDITOR
+  REVIEWER
+}
+
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  passwordHash String
+  role         UserRole  @default(REVIEWER)
+  isActive     Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  // Relations
+  auditLogs          AuditLog[]        @relation("ActorUser")
+  profileVersions    ProfileVersion[]
+
+  @@index([email])
+  @@index([role])
+  @@index([isActive])
+}
+
+// ============================================================================
+// AUDIT & VERSIONING
+// ============================================================================
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+  PUBLISH
+  REJECT
+  APPROVE
+  REVIEW
+}
+
+model AuditLog {
+  id         String      @id @default(uuid())
+  actorUserId String
+  action     AuditAction
+  entityType String // e.g., "Candidate", "Statement", "Source"
+  entityId   String?
+  metadata   Json? // Additional context as JSON
+  ip         String?
+  userAgent  String?
+  createdAt  DateTime    @default(now())
+
+  actorUser User @relation("ActorUser", fields: [actorUserId], references: [id], onDelete: Restrict)
+
+  @@index([actorUserId])
+  @@index([entityType, entityId])
+  @@index([createdAt])
+  @@index([action])
+}
+
+enum ProfilePublishStatus {
+  DRAFT
+  REVIEWED
+  PUBLISHED
+}
+
+model ProfileVersion {
+  id           String              @id @default(uuid())
+  candidateId  String
+  versionNumber Int
+  createdAt    DateTime            @default(now())
+  createdByUserId String
+  publishStatus ProfilePublishStatus @default(DRAFT)
+  snapshot     Json // Full candidate profile state at this version
+  changeNote   String?
+
+  candidate   Candidate @relation(fields: [candidateId], references: [id], onDelete: Restrict)
+  createdBy   User      @relation(fields: [createdByUserId], references: [id], onDelete: Restrict)
+
+  @@unique([candidateId, versionNumber])
+  @@index([candidateId])
+  @@index([publishStatus])
+  @@index([createdAt])
+}
+
+// ============================================================================
+// ELECTION STRUCTURE
+// ============================================================================
+
+model ElectionCycle {
+  id        String   @id @default(uuid())
+  name      String
+  year      Int      @unique
+  isActive  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  districts District[]
+  lists     ElectoralList[]
+  candidates Candidate[]
+
+  @@index([year])
+  @@index([isActive])
+}
+
+model District {
+  id        String   @id @default(uuid())
+  cycleId   String
+  nameAr    String
+  nameEn    String
+  nameFr    String
+  seatCount Int
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cycle      ElectionCycle  @relation(fields: [cycleId], references: [id], onDelete: Restrict)
+  lists      ElectoralList[]
+  candidates Candidate[]
+
+  @@index([cycleId])
+  @@index([cycleId, nameAr])
+  @@unique([cycleId, nameAr])
+}
+
+model ElectoralList {
+  id         String              @id @default(uuid())
+  cycleId    String
+  districtId String
+  nameAr     String
+  nameEn     String
+  nameFr     String
+  status     ListStatus          @default(DRAFT)
+  announcedAt DateTime?
+  notes      String?
+  createdAt  DateTime            @default(now())
+  updatedAt  DateTime            @updatedAt
+
+  cycle      ElectionCycle @relation(fields: [cycleId], references: [id], onDelete: Restrict)
+  district   District      @relation(fields: [districtId], references: [id], onDelete: Restrict)
+  candidates Candidate[]
+
+  @@index([cycleId])
+  @@index([districtId])
+  @@index([status])
+  @@index([cycleId, districtId])
+}
+
+enum ListStatus {
+  DRAFT
+  ANNOUNCED
+  OFFICIAL
+  WITHDRAWN
+}
+
+// ============================================================================
+// CANDIDATES
+// ============================================================================
+
+enum CandidateStatus {
+  POTENTIAL
+  OFFICIAL
+  WITHDRAWN
+  DISQUALIFIED
+}
+
+enum PlaceholderPhotoStyle {
+  GEOMETRIC
+  INITIALS
+  SILHOUETTE
+}
+
+model Candidate {
+  id                 String               @id @default(uuid())
+  cycleId            String
+  districtId         String
+  currentListId      String?
+  fullNameAr         String
+  fullNameEn         String
+  fullNameFr         String
+  slug               String               @unique
+  status             CandidateStatus      @default(POTENTIAL)
+  placeholderPhotoStyle PlaceholderPhotoStyle @default(GEOMETRIC)
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+
+  cycle              ElectionCycle        @relation(fields: [cycleId], references: [id], onDelete: Restrict)
+  district           District             @relation(fields: [districtId], references: [id], onDelete: Restrict)
+  currentList        ElectoralList?       @relation(fields: [currentListId], references: [id], onDelete: SetNull)
+  affiliations       Affiliation[]
+  statements         Statement[]
+  submissions        CandidateSubmission[]
+  rightOfReplies     RightOfReply[]
+  profileVersions    ProfileVersion[]
+
+  @@index([cycleId])
+  @@index([districtId])
+  @@index([currentListId])
+  @@index([status])
+  @@index([cycleId, districtId])
+  // Note: slug has @unique constraint which automatically creates an index
+}
+
+// ============================================================================
+// CONTENT & SOURCES
+// ============================================================================
+
+enum AffiliationType {
+  PARTY
+  BLOC
+  LIST
+  ROLE
+  ALLIANCE
+}
+
+model Affiliation {
+  id        String          @id @default(uuid())
+  candidateId String
+  type      AffiliationType
+  nameAr    String
+  nameEn    String
+  nameFr    String
+  startDate DateTime
+  endDate   DateTime?
+  notes     String?
+  sourceId  String // REQUIRED: must have archived source
+  createdAt DateTime        @default(now())
+
+  candidate Candidate @relation(fields: [candidateId], references: [id], onDelete: Restrict)
+  source    Source    @relation(fields: [sourceId], references: [id], onDelete: Restrict)
+
+  @@index([candidateId])
+  @@index([type])
+  @@index([startDate])
+  @@index([sourceId])
+}
+
+model Topic {
+  id     String @id @default(uuid())
+  key    String @unique
+  nameAr String
+  nameEn String
+  nameFr String
+
+  statements Statement[]
+}
+
+enum StatementKind {
+  QUOTE
+  INTERVIEW
+  VOTE
+  PROGRAM
+  OTHER
+}
+
+model Statement {
+  id         String        @id @default(uuid())
+  candidateId String
+  topicId    String
+  kind       StatementKind
+  summaryAr  String?
+  summaryEn  String?
+  summaryFr  String?
+  occurredAt DateTime?     // Date when the statement/event occurred
+  sourceId   String // REQUIRED: must have archived source
+  createdAt  DateTime      @default(now())
+
+  candidate Candidate @relation(fields: [candidateId], references: [id], onDelete: Restrict)
+  topic     Topic     @relation(fields: [topicId], references: [id], onDelete: Restrict)
+  source    Source    @relation(fields: [sourceId], references: [id], onDelete: Restrict)
+
+  @@index([candidateId])
+  @@index([topicId])
+  @@index([sourceId])
+  @@index([occurredAt])
+  @@index([candidateId, topicId])
+}
+
+enum ArchiveMethod {
+  WAYBACK
+  PDF
+  SCREENSHOT
+  VIDEO_DOWNLOAD
+  MANUAL
+}
+
+model Source {
+  id           String        @id @default(uuid())
+  title        String
+  publisher    String
+  originalUrl  String
+  archivedUrl  String // REQUIRED: must exist before publish
+  archivedAt   DateTime // REQUIRED: must exist before publish
+  archiveMethod ArchiveMethod // REQUIRED: must exist before publish
+  contentType  String? // e.g., "article", "video", "social_media"
+  checksum     String? // Optional: for integrity verification
+  notes        String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  affiliations Affiliation[]
+  statements    Statement[]
+
+  @@index([originalUrl])
+  @@index([archivedUrl])
+  @@index([archivedAt])
+  @@index([archiveMethod])
+}
+
+// ============================================================================
+// USER-SUBMITTED CONTENT
+// ============================================================================
+
+enum SubmissionStatus {
+  RECEIVED
+  APPROVED
+  REJECTED
+}
+
+model CandidateSubmission {
+  id           String            @id @default(uuid())
+  candidateId  String
+  submittedAt  DateTime          @default(now())
+  contentAr    String
+  contentEn    String
+  contentFr    String
+  links        Json? // Array of URLs
+  status       SubmissionStatus  @default(RECEIVED)
+  decisionNotes String?
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  candidate Candidate @relation(fields: [candidateId], references: [id], onDelete: Restrict)
+
+  @@index([candidateId])
+  @@index([status])
+  @@index([submittedAt])
+}
+
+enum RightOfReplyStatus {
+  RECEIVED
+  PUBLISHED
+  REJECTED
+}
+
+model RightOfReply {
+  id           String                @id @default(uuid())
+  candidateId  String
+  submittedAt  DateTime              @default(now())
+  contentAr    String
+  contentEn    String
+  contentFr    String
+  status       RightOfReplyStatus    @default(RECEIVED)
+  decisionNotes String?
+  createdAt    DateTime              @default(now())
+  updatedAt    DateTime              @updatedAt
+
+  candidate Candidate @relation(fields: [candidateId], references: [id], onDelete: Restrict)
+
+  @@index([candidateId])
+  @@index([status])
+  @@index([submittedAt])
+}
+
+// ============================================================================
+// CORRECTIONS
+// ============================================================================
+
+enum CorrectionStatus {
+  RECEIVED
+  IN_REVIEW
+  RESOLVED
+  REJECTED
+}
+
+model CorrectionRequest {
+  id             String            @id @default(uuid())
+  requesterName  String?
+  requesterEmail String?
+  candidateId    String?
+  message        String
+  supportingLinks Json? // Array of URLs
+  status         CorrectionStatus  @default(RECEIVED)
+  resolutionNote String?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  @@index([candidateId])
+  @@index([status])
+  @@index([createdAt])
+}
+

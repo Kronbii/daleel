@@ -1,0 +1,13 @@
+AI Usage & Limitations
+
+Daleel uses artificial intelligence tools solely as an assistive mechanism for:
+
+Transcribing public audio or video
+
+Organizing large volumes of public information
+
+Drafting neutral summaries for human review
+
+AI systems do not make editorial decisions, judgments, or evaluations. All published content is reviewed by human editors.
+
+While efforts are made to ensure accuracy, automated tools may contain errors. Daleel continuously reviews and improves its processes.

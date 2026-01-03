@@ -1,0 +1,42 @@
+{
+  "name": "@daleel/web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "prisma:generate": "cd ../../packages/db && pnpm prisma:generate",
+    "prisma:migrate": "cd ../../packages/db && pnpm prisma:migrate",
+    "prisma:studio": "cd ../../packages/db && pnpm prisma:studio",
+    "seed": "cd ../../packages/db && pnpm seed"
+  },
+  "dependencies": {
+    "@daleel/core": "workspace:*",
+    "@daleel/db": "workspace:*",
+    "@daleel/ui": "workspace:*",
+    "@auth/prisma-adapter": "^2.1.0",
+    "next": "^14.0.4",
+    "next-auth": "^5.0.0-beta.15",
+    "next-intl": "^3.5.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "bcryptjs": "^2.4.3",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^20.10.0",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.55.0",
+    "eslint-config-next": "^14.0.4",
+    "postcss": "^8.4.32",
+    "tailwindcss": "^3.4.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  }
+}
+

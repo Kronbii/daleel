@@ -1,0 +1,33 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur s'est produite",
+    "back": "Retour",
+    "home": "Accueil",
+    "candidates": "Candidats",
+    "districts": "Circonscriptions",
+    "lists": "Listes",
+    "legal": "Légal",
+    "archive": "Archive",
+    "candidatesDesc": "Parcourir tous les candidats",
+    "districtsDesc": "Explorer les circonscriptions électorales",
+    "listsDesc": "Voir les listes électorales",
+    "explore": "Explorer",
+    "learnMore": "En savoir plus sur notre méthodologie",
+    "tagline": "Transparent. Neutre. Indépendant.",
+    "description": "Daleel s'engage à fournir des informations précises, archivées et vérifiables sur les élections parlementaires libanaises. Tout le contenu provient de documents publics et est correctement archivé pour la transparence."
+  },
+  "candidate": {
+    "status": "Statut",
+    "district": "Circonscription",
+    "list": "Liste",
+    "basicInfo": "Informations de base",
+    "affiliations": "Affiliations politiques",
+    "content": "Contenu",
+    "submittedContent": "Contenu soumis par le candidat",
+    "rightOfReply": "Droit de réponse",
+    "sources": "Sources",
+    "profileHistory": "Historique du profil"
+  }
+}
+
