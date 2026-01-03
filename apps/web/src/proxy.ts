@@ -1,5 +1,4 @@
 import createMiddleware from "next-intl/middleware";
-import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES, SECURITY_HEADERS, CSP_BASELINE } from "@daleel/core";
 
@@ -11,7 +10,7 @@ const intlMiddleware = createMiddleware({
   localeDetection: false,
 });
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   // Apply internationalization first
   const response = intlMiddleware(request);
 

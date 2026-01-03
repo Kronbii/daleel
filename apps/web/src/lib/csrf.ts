@@ -10,10 +10,11 @@ const CSRF_TOKEN_EXPIRY = 60 * 60 * 1000; // 1 hour
 
 export async function generateCSRFToken(): Promise<string> {
   const token = randomBytes(32).toString("hex");
-  const expires = Date.now() + CSRF_TOKEN_EXPIRY;
 
   // Set in cookie (httpOnly, secure in production)
-  cookies().set(CSRF_TOKEN_NAME, token, {
+  // In Next.js 16, cookies() returns a Promise
+  const cookieStore = await cookies();
+  cookieStore.set(CSRF_TOKEN_NAME, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
@@ -29,7 +30,9 @@ export async function validateCSRFToken(token: string | null | undefined): Promi
     return false;
   }
 
-  const cookieToken = cookies().get(CSRF_TOKEN_NAME)?.value;
+  // In Next.js 16, cookies() returns a Promise
+  const cookieStore = await cookies();
+  const cookieToken = cookieStore.get(CSRF_TOKEN_NAME)?.value;
   if (!cookieToken || cookieToken !== token) {
     return false;
   }
@@ -38,6 +41,8 @@ export async function validateCSRFToken(token: string | null | undefined): Promi
 }
 
 export async function getCSRFToken(): Promise<string | null> {
-  return cookies().get(CSRF_TOKEN_NAME)?.value ?? null;
+  // In Next.js 16, cookies() returns a Promise
+  const cookieStore = await cookies();
+  return cookieStore.get(CSRF_TOKEN_NAME)?.value ?? null;
 }
 
