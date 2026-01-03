@@ -18,22 +18,23 @@ export default async function CandidateProfilePage({
 }: {
   params: Promise<{ locale: string; slug: string }>;
 }) {
-  const { locale, slug } = await params;
+  try {
+    const { locale, slug } = await params;
 
-  const candidate = await getCandidateBySlug(slug);
+    const candidate = await getCandidateBySlug(slug);
 
-  if (!candidate) {
-    notFound();
-  }
+    if (!candidate) {
+      notFound();
+    }
 
-  // Get all sources
-  const sourceIds = new Set<string>();
-  candidate.affiliations?.forEach((a) => sourceIds.add(a.sourceId));
-  candidate.statements?.forEach((s) => sourceIds.add(s.sourceId));
+    // Get all sources
+    const sourceIds = new Set<string>();
+    candidate.affiliations?.forEach((a) => sourceIds.add(a.sourceId));
+    candidate.statements?.forEach((s) => sourceIds.add(s.sourceId));
 
-  const sources = await prisma.source.findMany({
-    where: { id: { in: Array.from(sourceIds) } },
-  });
+    const sources = await prisma.source.findMany({
+      where: { id: { in: Array.from(sourceIds) } },
+    });
 
   // Group statements by topic
   const statements = candidate.statements || [];
@@ -381,4 +382,12 @@ export default async function CandidateProfilePage({
       )}
     </DetailLayout>
   );
+  } catch (error) {
+    // Log error for debugging
+    console.error("Error in CandidateProfilePage:", error);
+    
+    // In production, you might want to redirect to an error page
+    // or show a user-friendly error message
+    throw error; // Re-throw to let Next.js handle it with error.tsx
+  }
 }
