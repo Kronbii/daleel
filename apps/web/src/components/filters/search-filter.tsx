@@ -26,41 +26,39 @@ export function SearchFilter({ value, onChange, placeholder, className = "" }: S
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder || defaultPlaceholder}
-        className="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+        className="w-full px-4 py-2.5 pl-10 rtl:pl-4 rtl:pr-10 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 bg-white text-gray-900 text-sm transition-colors placeholder:text-gray-400"
       />
-      <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+      <div className="absolute left-3 rtl:left-auto rtl:right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">
         <svg
-          className="h-5 w-5"
+          className="h-4 w-4"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
+          strokeWidth={1.5}
         >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
-            strokeWidth={2}
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
           />
         </svg>
       </div>
       {value && (
         <button
           onClick={() => onChange("")}
-          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+          className="absolute right-3 rtl:right-auto rtl:left-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
         >
           <svg
-            className="h-5 w-5"
+            className="h-4 w-4"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
+            strokeWidth={1.5}
           >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
+              d="M6 18 18 6M6 6l12 12"
             />
           </svg>
         </button>
@@ -68,4 +66,3 @@ export function SearchFilter({ value, onChange, placeholder, className = "" }: S
     </div>
   );
 }
-

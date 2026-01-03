@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@daleel/ui";
 import { getLocalized } from "@daleel/core";
 import type { Locale } from "@daleel/core";
 import Link from "next/link";
@@ -53,42 +52,60 @@ export function FilterableDistrictsList({
     });
   }, [districts, searchQuery]);
 
+  const getContent = (en: string, ar: string, fr: string) => {
+    if (locale === "ar") return ar;
+    if (locale === "fr") return fr;
+    return en;
+  };
+
   if (filteredDistricts.length === 0) {
-    return <div className="text-center py-12 text-gray-500">{emptyMessage || "No districts found"}</div>;
+    return (
+      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-100 p-12 text-center">
+        <svg className="w-12 h-12 text-gray-300 mx-auto mb-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+        </svg>
+        <p className="text-gray-500">{emptyMessage || "No districts found"}</p>
+      </div>
+    );
   }
 
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {filteredDistricts.map((district) => (
-        <Link key={district.id} href={`/${locale}/districts/${district.id}`}>
-          <Card className="card-hover h-full">
-            <CardHeader>
-              <CardTitle className="text-lg">
-                {getLocalized(
-                  {
-                    ar: district.nameAr,
-                    en: district.nameEn,
-                    fr: district.nameFr,
-                  },
-                  locale
-                )}
-              </CardTitle>
-              <CardDescription>
-                {district.cycle.year} • {district.seatCount}{" "}
-                {locale === "ar" ? "مقعد" : locale === "fr" ? "sièges" : "seats"}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-gray-600">
-                {district._count.candidates}{" "}
-                {locale === "ar" ? "مرشح" : locale === "fr" ? "candidats" : "candidates"} • {district._count.lists}{" "}
-                {locale === "ar" ? "قائمة" : locale === "fr" ? "listes" : "lists"}
-              </p>
-            </CardContent>
-          </Card>
+        <Link key={district.id} href={`/${locale}/districts/${district.id}`} className="block group">
+          <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-100 p-5 transition-all duration-300 hover:shadow-md hover:border-gray-200 hover:-translate-y-0.5 h-full">
+            <h3 className="font-semibold text-gray-900 group-hover:text-emerald-600 transition-colors mb-2">
+              {getLocalized(
+                {
+                  ar: district.nameAr,
+                  en: district.nameEn,
+                  fr: district.nameFr,
+                },
+                locale
+              )}
+            </h3>
+            <p className="text-sm text-gray-500 mb-3">
+              {district.cycle.year} • {district.seatCount}{" "}
+              {getContent("seats", "مقعد", "sièges")}
+            </p>
+            <div className="flex items-center gap-4 text-sm text-gray-500">
+              <span className="flex items-center gap-1">
+                <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                </svg>
+                {district._count.candidates}
+              </span>
+              <span className="flex items-center gap-1">
+                <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                </svg>
+                {district._count.lists}
+              </span>
+            </div>
+          </div>
         </Link>
       ))}
     </div>
   );
 }
-

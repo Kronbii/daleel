@@ -2,16 +2,14 @@
 
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
-import { Button } from "@daleel/ui";
 
 interface BackButtonProps {
   href?: string;
   label?: string;
-  variant?: "default" | "ghost" | "link" | "outline";
   className?: string;
 }
 
-export function BackButton({ href, label, variant = "ghost", className = "" }: BackButtonProps) {
+export function BackButton({ href, label, className = "" }: BackButtonProps) {
   const router = useRouter();
   const locale = useLocale();
   const isRTL = locale === "ar";
@@ -32,39 +30,28 @@ export function BackButton({ href, label, variant = "ghost", className = "" }: B
   };
 
   return (
-    <Button
-      variant={variant}
+    <button
       onClick={handleClick}
-      className={`group flex items-center gap-2 ${className}`}
+      className={`group inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-emerald-600 transition-colors ${className}`}
     >
       <svg
         className={`h-4 w-4 transition-transform duration-200 ${
           isRTL
-            ? "group-hover:translate-x-1"
-            : "group-hover:-translate-x-1"
+            ? "group-hover:translate-x-0.5 rotate-180"
+            : "group-hover:-translate-x-0.5"
         }`}
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
+        strokeWidth={1.5}
       >
-        {isRTL ? (
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M9 5l7 7-7 7"
-          />
-        ) : (
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M15 19l-7-7 7-7"
-          />
-        )}
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+        />
       </svg>
       <span>{label || defaultLabel}</span>
-    </Button>
+    </button>
   );
 }
-

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@daleel/ui";
 import { SearchFilter } from "./search-filter";
 import { getLocalized } from "@daleel/core";
 import type { Locale } from "@daleel/core";
@@ -41,106 +40,77 @@ export function ListFilters({ districts, onFilterChange, locale }: ListFiltersPr
 
   const hasActiveFilters = searchQuery || selectedDistrict;
 
-  return (
-    <Card className="mb-6">
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-lg">
-            {locale === "ar"
-              ? "تصفية القوائم"
-              : locale === "fr"
-                ? "Filtrer les listes"
-                : "Filter Lists"}
-          </CardTitle>
-          {hasActiveFilters && (
-            <button
-              onClick={clearFilters}
-              className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1"
-            >
-              <svg
-                className="h-4 w-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-              {locale === "ar" ? "مسح" : locale === "fr" ? "Effacer" : "Clear"}
-            </button>
-          )}
-        </div>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          <div>
-            <label
-              htmlFor="search-filter"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              {locale === "ar"
-                ? "البحث"
-                : locale === "fr"
-                  ? "Recherche"
-                  : "Search"}
-            </label>
-            <SearchFilter
-              value={searchQuery}
-              onChange={handleSearchChange}
-              placeholder={
-                locale === "ar"
-                  ? "ابحث عن قائمة..."
-                  : locale === "fr"
-                    ? "Rechercher une liste..."
-                    : "Search for a list..."
-              }
-            />
-          </div>
+  const getContent = (en: string, ar: string, fr: string) => {
+    if (locale === "ar") return ar;
+    if (locale === "fr") return fr;
+    return en;
+  };
 
-          <div>
-            <label
-              htmlFor="district-filter"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              {locale === "ar"
-                ? "الدائرة الانتخابية"
-                : locale === "fr"
-                  ? "Circonscription"
-                  : "District"}
-            </label>
-            <select
-              id="district-filter"
-              value={selectedDistrict}
-              onChange={(e) => handleDistrictChange(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
-              style={{ color: 'rgb(17, 24, 39)' }}
-            >
-              <option value="" style={{ color: 'rgb(17, 24, 39)', backgroundColor: 'white' }}>
-                {locale === "ar"
-                  ? "جميع الدوائر"
-                  : locale === "fr"
-                    ? "Toutes les circonscriptions"
-                    : "All Districts"}
-              </option>
-              {districts.map((district) => (
-                <option
-                  key={district.id}
-                  value={district.id}
-                  style={{ color: 'rgb(17, 24, 39)', backgroundColor: 'white' }}
-                >
-                  {getLocalized(district, locale)}
-                </option>
-              ))}
-            </select>
-          </div>
+  return (
+    <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-100 p-5 mb-6">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+          <svg className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
+          </svg>
+          {getContent("Filter Lists", "تصفية القوائم", "Filtrer les listes")}
+        </h3>
+        {hasActiveFilters && (
+          <button
+            onClick={clearFilters}
+            className="text-sm text-emerald-600 hover:text-emerald-700 flex items-center gap-1 transition-colors"
+          >
+            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            {getContent("Clear", "مسح", "Effacer")}
+          </button>
+        )}
+      </div>
+      
+      <div className="space-y-4">
+        <div>
+          <label
+            htmlFor="search-filter"
+            className="block text-sm font-medium text-gray-600 mb-1.5"
+          >
+            {getContent("Search", "البحث", "Recherche")}
+          </label>
+          <SearchFilter
+            value={searchQuery}
+            onChange={handleSearchChange}
+            placeholder={getContent(
+              "Search for a list...",
+              "ابحث عن قائمة...",
+              "Rechercher une liste..."
+            )}
+          />
         </div>
-      </CardContent>
-    </Card>
+
+        <div>
+          <label
+            htmlFor="district-filter"
+            className="block text-sm font-medium text-gray-600 mb-1.5"
+          >
+            {getContent("District", "الدائرة الانتخابية", "Circonscription")}
+          </label>
+          <select
+            id="district-filter"
+            value={selectedDistrict}
+            onChange={(e) => handleDistrictChange(e.target.value)}
+            className="w-full px-3 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 bg-white text-gray-900 text-sm transition-colors"
+          >
+            <option value="">
+              {getContent("All Districts", "جميع الدوائر", "Toutes les circonscriptions")}
+            </option>
+            {districts.map((district) => (
+              <option key={district.id} value={district.id}>
+                {getLocalized(district, locale)}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+    </div>
   );
 }
-

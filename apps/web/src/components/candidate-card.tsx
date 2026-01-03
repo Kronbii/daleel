@@ -1,9 +1,8 @@
 /**
- * Candidate card component with glassmorphism style
+ * Candidate card component with clean modern design
  */
 
 import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle } from "@daleel/ui";
 import { PlaceholderPhoto } from "@/components/placeholder-photo";
 import { StatusBadge } from "@/components/status-badge";
 import { getLocalized } from "@daleel/core";
@@ -36,54 +35,54 @@ interface CandidateCardProps {
 
 export function CandidateCard({ candidate, locale, className }: CandidateCardProps) {
   return (
-    <Link href={`/${locale}/candidates/${candidate.slug}`} className={cn("block", className)}>
-      <div className="candidate-card">
-        <div className="candidate-card-content">
-          <div className="flex flex-col items-center text-center h-full justify-between">
-            {/* Photo Section */}
-            <div className="flex-shrink-0 mb-4">
-              <PlaceholderPhoto
-                style={candidate.placeholderPhotoStyle as any}
-                seed={candidate.id}
-                size={140}
-                className="candidate-photo"
-              />
-            </div>
+    <Link 
+      href={`/${locale}/candidates/${candidate.slug}`} 
+      className={cn("block group w-full max-w-[200px]", className)}
+    >
+      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-100 p-4 transition-all duration-300 hover:shadow-md hover:border-gray-200 hover:-translate-y-0.5 h-full">
+        <div className="flex flex-col items-center text-center">
+          {/* Photo */}
+          <div className="mb-3 relative">
+            <PlaceholderPhoto
+              style={candidate.placeholderPhotoStyle as any}
+              seed={candidate.id}
+              size={100}
+              className="rounded-xl shadow-sm group-hover:shadow-md transition-shadow"
+            />
+          </div>
 
-            {/* Text Content Section */}
-            <div className="flex flex-col items-center text-center flex-1 w-full px-2">
-              <h3 className="font-bold text-lg mb-3 leading-tight line-clamp-2 min-h-[3.5rem] flex items-center justify-center">
-                {getLocalized(
-                  {
-                    ar: candidate.fullNameAr,
-                    en: candidate.fullNameEn,
-                    fr: candidate.fullNameFr,
-                  },
-                  locale
-                )}
-              </h3>
-              
-              <div className="mb-3">
-                <StatusBadge status={candidate.status as any} />
-              </div>
+          {/* Name */}
+          <h3 className="font-semibold text-gray-900 text-sm mb-2 leading-tight line-clamp-2 min-h-[2.5rem] flex items-center justify-center group-hover:text-emerald-600 transition-colors">
+            {getLocalized(
+              {
+                ar: candidate.fullNameAr,
+                en: candidate.fullNameEn,
+                fr: candidate.fullNameFr,
+              },
+              locale
+            )}
+          </h3>
+          
+          {/* Status Badge */}
+          <div className="mb-2">
+            <StatusBadge status={candidate.status as any} />
+          </div>
 
-              <div className="space-y-1.5 w-full">
-                {candidate.district && (
-                  <p className="text-sm text-gray-700 font-medium line-clamp-1">
-                    {getLocalized(candidate.district, locale)}
-                  </p>
-                )}
-                {candidate.currentList && (
-                  <p className="text-xs text-gray-600 line-clamp-1">
-                    {getLocalized(candidate.currentList, locale)}
-                  </p>
-                )}
-              </div>
-            </div>
+          {/* District & List Info */}
+          <div className="space-y-1 w-full">
+            {candidate.district && (
+              <p className="text-xs text-gray-500 line-clamp-1">
+                {getLocalized(candidate.district, locale)}
+              </p>
+            )}
+            {candidate.currentList && (
+              <p className="text-xs text-gray-400 line-clamp-1">
+                {getLocalized(candidate.currentList, locale)}
+              </p>
+            )}
           </div>
         </div>
       </div>
     </Link>
   );
 }
-

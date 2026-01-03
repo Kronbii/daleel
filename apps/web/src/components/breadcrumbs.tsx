@@ -16,15 +16,29 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
   const locale = useLocale();
 
   return (
-    <nav className="flex items-center space-x-2 text-sm text-gray-600 rtl:space-x-reverse mb-4" aria-label="Breadcrumb">
-      <Link href={`/${locale}`} className="hover:text-gray-900">
+    <nav className="flex items-center text-sm rtl:flex-row-reverse" aria-label="Breadcrumb">
+      <Link 
+        href={`/${locale}`} 
+        className="text-gray-500 hover:text-emerald-600 transition-colors"
+      >
         {locale === "ar" ? "الرئيسية" : locale === "fr" ? "Accueil" : "Home"}
       </Link>
       {items.map((item, index) => (
-        <span key={index} className="flex items-center">
-          <span className="mx-2">/</span>
+        <span key={index} className="flex items-center rtl:flex-row-reverse">
+          <svg 
+            className="w-4 h-4 mx-2 text-gray-300 rtl:rotate-180" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            strokeWidth={1.5} 
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+          </svg>
           {item.href ? (
-            <Link href={item.href} className="hover:text-gray-900">
+            <Link 
+              href={item.href} 
+              className="text-gray-500 hover:text-emerald-600 transition-colors"
+            >
               {item.label}
             </Link>
           ) : (
@@ -35,4 +49,3 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
     </nav>
   );
 }
-

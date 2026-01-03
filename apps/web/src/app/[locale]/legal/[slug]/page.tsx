@@ -4,9 +4,7 @@
 
 import { notFound } from "next/navigation";
 import { legalContent } from "@/lib/legal-content";
-import { Card, CardContent, CardHeader, CardTitle } from "@daleel/ui";
-import { Breadcrumbs } from "@/components/breadcrumbs";
-import { BackButton } from "@/components/back-button";
+import { DetailLayout } from "@/components/layouts/detail-layout";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 
@@ -23,40 +21,41 @@ export default async function LegalSlugPage({
     notFound();
   }
 
+  const getContent = (en: string, ar: string, fr: string) => {
+    if (locale === "ar") return ar;
+    if (locale === "fr") return fr;
+    return en;
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
-      <main className="container mx-auto px-4 py-12">
-        <div className="max-w-3xl mx-auto">
-          <div className="flex items-center justify-between mb-6">
-            <Breadcrumbs
-              items={[
-                { label: t("legal"), href: `/${locale}/legal` },
-                { label: content.title },
-              ]}
-            />
-            <BackButton href={`/${locale}/legal`} />
+    <DetailLayout
+      title={content.title}
+      breadcrumbs={[
+        { label: t("legal"), href: `/${locale}/legal` },
+        { label: content.title },
+      ]}
+      backHref={`/${locale}/legal`}
+      maxWidth="2xl"
+    >
+      <article className="bg-white/70 backdrop-blur-sm rounded-2xl border border-gray-100 p-6 sm:p-8 shadow-sm">
+        <div className="prose prose-gray max-w-none">
+          <div className="whitespace-pre-line text-gray-700 leading-relaxed text-sm sm:text-base">
+            {content.content}
           </div>
-          <Card className="card-hover">
-            <CardHeader>
-              <CardTitle className="text-3xl">{content.title}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="prose max-w-none whitespace-pre-line text-gray-700 leading-relaxed">
-                {content.content}
-              </div>
-              <div className="mt-8 pt-6 border-t">
-                <Link
-                  href={`/${locale}/legal`}
-                  className="text-blue-600 hover:text-blue-800"
-                >
-                  ← {locale === "ar" ? "العودة إلى الصفحات القانونية" : locale === "fr" ? "Retour aux pages légales" : "Back to Legal Pages"}
-                </Link>
-              </div>
-            </CardContent>
-          </Card>
         </div>
-      </main>
-    </div>
+        
+        <div className="mt-8 pt-6 border-t border-gray-100">
+          <Link
+            href={`/${locale}/legal`}
+            className="inline-flex items-center gap-2 text-emerald-600 hover:text-emerald-700 transition-colors text-sm font-medium"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+            </svg>
+            {getContent("Back to Legal Pages", "العودة إلى الصفحات القانونية", "Retour aux pages légales")}
+          </Link>
+        </div>
+      </article>
+    </DetailLayout>
   );
 }
-
