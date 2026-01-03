@@ -54,17 +54,60 @@ export default async function HomePage({
   };
 
   return (
-    <div className="min-h-screen bg-pattern">
-      {/* Hero Section */}
-      <section className="relative">
-        {/* Subtle gradient overlay */}
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Background decorative elements */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        {/* Main gradient */}
         <div 
-          className="absolute inset-0 pointer-events-none"
+          className="absolute inset-0"
           style={{
-            background: "radial-gradient(ellipse 80% 50% at 50% -20%, rgba(16, 185, 129, 0.08), transparent)",
+            background: "linear-gradient(135deg, #f8faf9 0%, #ffffff 50%, #f0fdf4 100%)",
           }}
         />
         
+        {/* Large soft circle - top right */}
+        <div 
+          className="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full opacity-40"
+          style={{
+            background: "radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 70%)",
+          }}
+        />
+        
+        {/* Medium circle - bottom left */}
+        <div 
+          className="absolute -bottom-20 -left-20 w-[400px] h-[400px] rounded-full opacity-30"
+          style={{
+            background: "radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, transparent 70%)",
+          }}
+        />
+        
+        {/* Small accent circle - mid right */}
+        <div 
+          className="absolute top-1/2 -right-10 w-[200px] h-[200px] rounded-full opacity-20"
+          style={{
+            background: "radial-gradient(circle, rgba(5, 150, 105, 0.2) 0%, transparent 70%)",
+          }}
+        />
+
+        {/* Grid pattern overlay */}
+        <div 
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(0,0,0,0.1) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(0,0,0,0.1) 1px, transparent 1px)
+            `,
+            backgroundSize: "60px 60px",
+          }}
+        />
+
+        {/* Decorative lines */}
+        <div className="absolute top-1/4 left-0 w-32 h-px bg-gradient-to-r from-transparent via-emerald-200 to-transparent opacity-50" />
+        <div className="absolute top-3/4 right-0 w-40 h-px bg-gradient-to-r from-transparent via-emerald-200 to-transparent opacity-40" />
+      </div>
+
+      {/* Hero Section */}
+      <section className="relative">
         <div className="container mx-auto px-4 pt-20 pb-16 sm:pt-28 sm:pb-20">
           <div className="max-w-3xl mx-auto text-center">
             {/* Logo/Title */}
@@ -102,7 +145,7 @@ export default async function HomePage({
       </section>
 
       {/* Navigation Cards Section */}
-      <section className="container mx-auto px-4 pb-24">
+      <section className="relative container mx-auto px-4 pb-24">
         <div className="max-w-4xl mx-auto">
           {/* Section label */}
           <p className="fade-in fade-in-2 text-center text-sm font-medium text-gray-400 uppercase tracking-wider mb-8">
@@ -117,7 +160,7 @@ export default async function HomePage({
                 href={card.href}
                 className={`fade-in fade-in-${index + 2}`}
               >
-                <div className="nav-card group h-full">
+                <div className="nav-card group h-full backdrop-blur-sm bg-white/70">
                   {/* Icon */}
                   <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-5 transition-all duration-300 group-hover:bg-emerald-100 group-hover:scale-105">
                     {card.icon}
@@ -152,7 +195,7 @@ export default async function HomePage({
       </section>
 
       {/* About Section */}
-      <section className="border-t border-gray-100">
+      <section className="relative border-t border-gray-100 bg-white/50 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-16 sm:py-20">
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="text-2xl sm:text-3xl font-normal text-gray-900 mb-4">
