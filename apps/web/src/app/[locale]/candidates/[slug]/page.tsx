@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { getCandidateBySlug } from "@/lib/queries/candidates";
 import { DetailLayout } from "@/components/layouts/detail-layout";
 import { prisma } from "@daleel/db";
+import type { Affiliation, Statement } from "@daleel/db";
 import { PlaceholderPhoto } from "@/components/placeholder-photo";
 import { StatusBadge } from "@/components/status-badge";
 import { getLocalized } from "@daleel/core";
@@ -29,8 +30,8 @@ export default async function CandidateProfilePage({
 
     // Get all sources
     const sourceIds = new Set<string>();
-    candidate.affiliations?.forEach((a) => sourceIds.add(a.sourceId));
-    candidate.statements?.forEach((s) => sourceIds.add(s.sourceId));
+    candidate.affiliations?.forEach((a: Affiliation) => sourceIds.add(a.sourceId));
+    candidate.statements?.forEach((s: Statement) => sourceIds.add(s.sourceId));
 
     const sources = await prisma.source.findMany({
       where: { id: { in: Array.from(sourceIds) } },
