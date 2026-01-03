@@ -43,35 +43,60 @@
     direction: ltr;
   }
 
-  /* Default text alignment based on direction */
-  html[dir="rtl"] p,
-  html[dir="rtl"] h1,
-  html[dir="rtl"] h2,
-  html[dir="rtl"] h3,
-  html[dir="rtl"] h4,
-  html[dir="rtl"] h5,
-  html[dir="rtl"] h6,
-  html[dir="rtl"] div:not([class*="text-center"]):not([class*="text-left"]),
-  html[dir="rtl"] span:not([class*="text-center"]):not([class*="text-left"]),
-  html[dir="rtl"] li:not([class*="text-center"]):not([class*="text-left"]),
-  html[dir="rtl"] td:not([class*="text-center"]):not([class*="text-left"]),
-  html[dir="rtl"] th:not([class*="text-center"]):not([class*="text-left"]) {
+  /* Default text alignment based on direction - apply to all text elements */
+  html[dir="rtl"] p:not(.text-center):not([class*="text-center"]):not([class*="text-left"]),
+  html[dir="rtl"] h1:not(.text-center):not([class*="text-center"]):not([class*="text-left"]),
+  html[dir="rtl"] h2:not(.text-center):not([class*="text-center"]):not([class*="text-left"]),
+  html[dir="rtl"] h3:not(.text-center):not([class*="text-center"]):not([class*="text-left"]),
+  html[dir="rtl"] h4:not(.text-center):not([class*="text-center"]):not([class*="text-left"]),
+  html[dir="rtl"] h5:not(.text-center):not([class*="text-center"]):not([class*="text-left"]),
+  html[dir="rtl"] h6:not(.text-center):not([class*="text-center"]):not([class*="text-left"]),
+  html[dir="rtl"] span:not(.text-center):not([class*="text-center"]):not([class*="text-left"]),
+  html[dir="rtl"] li:not(.text-center):not([class*="text-center"]):not([class*="text-left"]),
+  html[dir="rtl"] td:not(.text-center):not([class*="text-center"]):not([class*="text-left"]),
+  html[dir="rtl"] th:not(.text-center):not([class*="text-center"]):not([class*="text-left"]),
+  html[dir="rtl"] div:not(.text-center):not([class*="text-center"]):not([class*="text-left"]) {
     text-align: right;
   }
 
-  html[dir="ltr"] p,
-  html[dir="ltr"] h1,
-  html[dir="ltr"] h2,
-  html[dir="ltr"] h3,
-  html[dir="ltr"] h4,
-  html[dir="ltr"] h5,
-  html[dir="ltr"] h6,
-  html[dir="ltr"] div:not([class*="text-center"]):not([class*="text-right"]),
-  html[dir="ltr"] span:not([class*="text-center"]):not([class*="text-right"]),
-  html[dir="ltr"] li:not([class*="text-center"]):not([class*="text-right"]),
-  html[dir="ltr"] td:not([class*="text-center"]):not([class*="text-right"]),
-  html[dir="ltr"] th:not([class*="text-center"]):not([class*="text-right"]) {
+  html[dir="ltr"] p:not(.text-center):not([class*="text-center"]):not([class*="text-right"]),
+  html[dir="ltr"] h1:not(.text-center):not([class*="text-center"]):not([class*="text-right"]),
+  html[dir="ltr"] h2:not(.text-center):not([class*="text-center"]):not([class*="text-right"]),
+  html[dir="ltr"] h3:not(.text-center):not([class*="text-center"]):not([class*="text-right"]),
+  html[dir="ltr"] h4:not(.text-center):not([class*="text-center"]):not([class*="text-right"]),
+  html[dir="ltr"] h5:not(.text-center):not([class*="text-center"]):not([class*="text-right"]),
+  html[dir="ltr"] h6:not(.text-center):not([class*="text-center"]):not([class*="text-right"]),
+  html[dir="ltr"] span:not(.text-center):not([class*="text-center"]):not([class*="text-right"]),
+  html[dir="ltr"] li:not(.text-center):not([class*="text-center"]):not([class*="text-right"]),
+  html[dir="ltr"] td:not(.text-center):not([class*="text-center"]):not([class*="text-right"]),
+  html[dir="ltr"] th:not(.text-center):not([class*="text-center"]):not([class*="text-right"]),
+  html[dir="ltr"] div:not(.text-center):not([class*="text-center"]):not([class*="text-right"]) {
     text-align: left;
+  }
+
+  /* Force text alignment in cards and content areas */
+  html[dir="rtl"] [class*="rounded"] p:not(.text-center):not([class*="text-center"]),
+  html[dir="rtl"] [class*="rounded"] h1:not(.text-center):not([class*="text-center"]),
+  html[dir="rtl"] [class*="rounded"] h2:not(.text-center):not([class*="text-center"]),
+  html[dir="rtl"] [class*="rounded"] h3:not(.text-center):not([class*="text-center"]),
+  html[dir="rtl"] [class*="rounded"] h4:not(.text-center):not([class*="text-center"]),
+  html[dir="rtl"] [class*="rounded"] h5:not(.text-center):not([class*="text-center"]),
+  html[dir="rtl"] [class*="rounded"] h6:not(.text-center):not([class*="text-center"]),
+  html[dir="rtl"] [class*="rounded"] span:not(.text-center):not([class*="text-center"]),
+  html[dir="rtl"] [class*="rounded"] div:not(.text-center):not([class*="text-center"]) {
+    text-align: right !important;
+  }
+
+  html[dir="ltr"] [class*="rounded"] p:not(.text-center):not([class*="text-center"]),
+  html[dir="ltr"] [class*="rounded"] h1:not(.text-center):not([class*="text-center"]),
+  html[dir="ltr"] [class*="rounded"] h2:not(.text-center):not([class*="text-center"]),
+  html[dir="ltr"] [class*="rounded"] h3:not(.text-center):not([class*="text-center"]),
+  html[dir="ltr"] [class*="rounded"] h4:not(.text-center):not([class*="text-center"]),
+  html[dir="ltr"] [class*="rounded"] h5:not(.text-center):not([class*="text-center"]),
+  html[dir="ltr"] [class*="rounded"] h6:not(.text-center):not([class*="text-center"]),
+  html[dir="ltr"] [class*="rounded"] span:not(.text-center):not([class*="text-center"]),
+  html[dir="ltr"] [class*="rounded"] div:not(.text-center):not([class*="text-center"]) {
+    text-align: left !important;
   }
 
   /* Smooth scrolling */

@@ -97,7 +97,7 @@ export default async function HomePage({
                       variant="default"
                       className="w-full group-hover:scale-105 transition-transform duration-300"
                     >
-                      {locale === "ar" ? `${t("explore")} ←` : `${t("explore")} →`}
+                      {locale === "ar" ? `${t("explore")}` : `${t("explore")}`}
                     </Button>
                   </CardContent>
             </Card>
