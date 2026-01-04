@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useTransition } from "react";
+import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { CustomSelect } from "@/components/ui/custom-select";
 import { getLocalized } from "@daleel/shared";
@@ -53,7 +53,6 @@ export function CentersPageContent({
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
   const [isLoadingLocation, setIsLoadingLocation] = useState(false);
-  const [isPending, startTransition] = useTransition();
   const currentLocale = useLocale();
 
   // Filter centers based on selected district
@@ -61,7 +60,7 @@ export function CentersPageContent({
     ? centers.filter((center) => center.district.id === selectedDistrictId)
     : centers;
 
-  // Get user location - completely non-blocking approach
+  // Get user location
   const handleGetLocation = () => {
     // Prevent multiple simultaneous requests
     if (isLoadingLocation) {
@@ -80,86 +79,67 @@ export function CentersPageContent({
       return;
     }
 
-    // Set loading state immediately - this is synchronous and fast
+    // Set loading state and clear errors
     setIsLoadingLocation(true);
     setLocationError(null);
 
-    // Use MessageChannel to post the geolocation call to the next event loop
-    // This ensures the UI is completely responsive
-    const channel = new MessageChannel();
-    
-    channel.port1.onmessage = () => {
-      // Now call geolocation - this happens after UI has updated
+    // Use setTimeout to allow UI to update before calling geolocation
+    setTimeout(() => {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          // Update state in a transition to prevent blocking
-          startTransition(() => {
-            setUserLocation({
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
-            });
-            setIsLoadingLocation(false);
-            setLocationError(null);
+          setUserLocation({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
           });
+          setIsLoadingLocation(false);
+          setLocationError(null);
         },
         (error) => {
           setIsLoadingLocation(false);
           let errorMessage = "";
-          try {
-            switch (error.code) {
-              case error.PERMISSION_DENIED:
-                errorMessage =
-                  currentLocale === "ar"
-                    ? "تم رفض طلب الموقع. يرجى النقر على أيقونة القفل في شريط العنوان والسماح بالوصول إلى الموقع، ثم إعادة المحاولة."
-                    : currentLocale === "fr"
-                      ? "Accès à la position refusé. Veuillez cliquer sur l'icône de cadenas dans la barre d'adresse, autoriser l'accès à la position, puis réessayer."
-                      : "Location access denied. Please click the lock icon in the address bar, allow location access, then try again.";
-                break;
-              case error.POSITION_UNAVAILABLE:
-                errorMessage =
-                  currentLocale === "ar"
-                    ? "معلومات الموقع غير متاحة"
-                    : currentLocale === "fr"
-                      ? "Les informations de position ne sont pas disponibles"
-                      : "Location information unavailable";
-                break;
-              case error.TIMEOUT:
-                errorMessage =
-                  currentLocale === "ar"
-                    ? "انتهت مهلة طلب الموقع. يرجى المحاولة مرة أخرى."
-                    : currentLocale === "fr"
-                      ? "La demande de position a expiré. Veuillez réessayer."
-                      : "Location request timed out. Please try again.";
-                break;
-              default:
-                errorMessage =
-                  currentLocale === "ar"
-                    ? "فشل في الحصول على موقعك"
-                    : currentLocale === "fr"
-                      ? "Échec de l'obtention de votre position"
-                      : "Failed to get your location";
-                break;
-            }
-          } catch (err) {
-            errorMessage =
-              currentLocale === "ar"
-                ? "حدث خطأ غير متوقع"
-                : currentLocale === "fr"
-                  ? "Une erreur inattendue s'est produite"
-                  : "An unexpected error occurred";
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              errorMessage =
+                currentLocale === "ar"
+                  ? "تم رفض طلب الموقع. يرجى النقر على أيقونة القفل في شريط العنوان والسماح بالوصول إلى الموقع، ثم إعادة المحاولة."
+                  : currentLocale === "fr"
+                    ? "Accès à la position refusé. Veuillez cliquer sur l'icône de cadenas dans la barre d'adresse, autoriser l'accès à la position, puis réessayer."
+                    : "Location access denied. Please click the lock icon in the address bar, allow location access, then try again.";
+              break;
+            case error.POSITION_UNAVAILABLE:
+              errorMessage =
+                currentLocale === "ar"
+                  ? "معلومات الموقع غير متاحة"
+                  : currentLocale === "fr"
+                    ? "Les informations de position ne sont pas disponibles"
+                    : "Location information unavailable";
+              break;
+            case error.TIMEOUT:
+              errorMessage =
+                currentLocale === "ar"
+                  ? "انتهت مهلة طلب الموقع. يرجى المحاولة مرة أخرى."
+                  : currentLocale === "fr"
+                    ? "La demande de position a expiré. Veuillez réessayer."
+                    : "Location request timed out. Please try again.";
+              break;
+            default:
+              errorMessage =
+                currentLocale === "ar"
+                  ? "فشل في الحصول على موقعك"
+                  : currentLocale === "fr"
+                    ? "Échec de l'obtention de votre position"
+                    : "Failed to get your location";
+              break;
           }
           setLocationError(errorMessage);
         },
         {
           enableHighAccuracy: false,
-          timeout: 8000,
-          maximumAge: 60000,
+          timeout: 10000,
+          maximumAge: 300000,
         }
       );
-    };
-    
-    // Post message to defer geolocation call
-    channel.port2.postMessage(null);
+    }, 0);
   };
 
   const getContent = (en: string, ar: string, fr: string) => {
@@ -210,7 +190,7 @@ export function CentersPageContent({
           <div>
             <button
               onClick={handleGetLocation}
-              disabled={isLoadingLocation || isPending}
+              disabled={isLoadingLocation}
               className="w-full sm:w-auto px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm font-medium"
             >
               {isLoadingLocation ? (
