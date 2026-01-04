@@ -43,6 +43,7 @@ export function Navbar() {
     { href: `/${locale}/candidates`, label: t("candidates") },
     { href: `/${locale}/districts`, label: t("districts") },
     { href: `/${locale}/lists`, label: t("lists") },
+    { href: `/${locale}/centers`, label: t("centers") },
     { href: `/${locale}/legal`, label: t("legal") },
   ];
 
