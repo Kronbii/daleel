@@ -6,6 +6,14 @@
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
+    "@daleel/db#build": {
+      "dependsOn": ["prisma:generate"],
+      "outputs": ["dist/**"]
+    },
+    "@daleel/web#build": {
+      "dependsOn": ["@daleel/db#build", "@daleel/db#prisma:generate"],
+      "outputs": [".next/**", "!.next/cache/**"]
+    },
     "dev": {
       "cache": false,
       "persistent": true
