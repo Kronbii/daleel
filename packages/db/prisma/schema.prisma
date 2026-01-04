@@ -133,6 +133,7 @@ model District {
   cycle      ElectionCycle  @relation(fields: [cycleId], references: [id], onDelete: Restrict)
   lists      ElectoralList[]
   candidates Candidate[]
+  centers    ElectoralCenter[]
 
   @@index([cycleId])
   @@index([cycleId, nameAr])
@@ -167,6 +168,31 @@ enum ListStatus {
   ANNOUNCED
   OFFICIAL
   WITHDRAWN
+}
+
+// ============================================================================
+// ELECTORAL CENTERS
+// ============================================================================
+
+model ElectoralCenter {
+  id        String   @id @default(uuid())
+  districtId String
+  nameAr    String
+  nameEn    String
+  nameFr    String
+  latitude  Float
+  longitude Float
+  addressAr String?
+  addressEn String?
+  addressFr String?
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  district District @relation(fields: [districtId], references: [id], onDelete: Restrict)
+
+  @@index([districtId])
+  @@index([latitude, longitude])
 }
 
 // ============================================================================

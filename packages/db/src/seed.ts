@@ -535,13 +535,139 @@ async function main() {
     console.log(`Created right of reply for ${candidate.fullNameAr}`);
   }
 
-  console.log("\n✅ Seed completed successfully!");
+  // Generate ~1000 electoral centers distributed across all districts
+  console.log("\nGenerating electoral centers...");
+  
+  // Delete existing centers to avoid duplicates
+  const deletedCount = await prisma.electoralCenter.deleteMany({});
+  console.log(`Deleted ${deletedCount.count} existing electoral centers`);
+  
+  // Lebanese coordinate ranges by region (covering entire Lebanon with safe margins)
+  // Lebanon boundaries: Lat 33.05-34.69°N, Lng 35.10-36.61°E
+  // Expanded ranges to cover full Lebanon while maintaining safe margins from borders
+  const regionCoordinates: Record<string, { lat: [number, number], lng: [number, number] }> = {
+    beirut: { lat: [33.80, 33.95], lng: [35.40, 35.60] }, // Beirut and surrounding area
+    mountLebanon: { lat: [33.70, 34.15], lng: [35.45, 35.90] }, // Mount Lebanon - expanded range
+    north: { lat: [34.20, 34.55], lng: [35.70, 36.05] }, // North Lebanon - expanded (Tripoli area)
+    south: { lat: [33.20, 33.70], lng: [35.20, 35.50] }, // South Lebanon - expanded (Sidon, Tyre area)
+    bekaa: { lat: [33.65, 34.25], lng: [35.85, 36.15] }, // Bekaa Valley - expanded (Zahle, Baalbek area)
+  };
+
+  // Center name templates
+  const centerNameTemplates = [
+    { ar: "مدرسة", en: "School", fr: "École" },
+    { ar: "معهد", en: "Institute", fr: "Institut" },
+    { ar: "جامعة", en: "University", fr: "Université" },
+    { ar: "قاعة", en: "Hall", fr: "Salle" },
+    { ar: "مركز", en: "Center", fr: "Centre" },
+    { ar: "مستوصف", en: "Clinic", fr: "Clinique" },
+    { ar: "بلدية", en: "Municipality", fr: "Municipalité" },
+    { ar: "نادي", en: "Club", fr: "Club" },
+    { ar: "كنيسة", en: "Church", fr: "Église" },
+    { ar: "مسجد", en: "Mosque", fr: "Mosquée" },
+  ];
+
+  const locationNames = [
+    { ar: "الشهداء", en: "Martyrs", fr: "Martyrs" },
+    { ar: "الحرية", en: "Freedom", fr: "Liberté" },
+    { ar: "الوحدة", en: "Unity", fr: "Unité" },
+    { ar: "النهضة", en: "Renaissance", fr: "Renaissance" },
+    { ar: "الكرامة", en: "Dignity", fr: "Dignité" },
+    { ar: "العدالة", en: "Justice", fr: "Justice" },
+    { ar: "السلام", en: "Peace", fr: "Paix" },
+    { ar: "الاستقلال", en: "Independence", fr: "Indépendance" },
+    { ar: "التحرير", en: "Liberation", fr: "Libération" },
+    { ar: "النهار", en: "Day", fr: "Jour" },
+    { ar: "القديس", en: "Saint", fr: "Saint" },
+    { ar: "الأنبياء", en: "Prophets", fr: "Prophètes" },
+    { ar: "المخلص", en: "Savior", fr: "Sauveur" },
+    { ar: "القديسة", en: "Saint", fr: "Sainte" },
+    { ar: "الرسول", en: "Apostle", fr: "Apôtre" },
+  ];
+
+  const streetNames = [
+    { ar: "شارع الحمراء", en: "Hamra Street", fr: "Rue Hamra" },
+    { ar: "شارع الحمراء", en: "Hamra Street", fr: "Rue Hamra" },
+    { ar: "شارع الكورنيش", en: "Corniche", fr: "Corniche" },
+    { ar: "شارع المكحول", en: "Makdisi Street", fr: "Rue Makdisi" },
+    { ar: "شارع بلس", en: "Bliss Street", fr: "Rue Bliss" },
+    { ar: "شارع الجميزة", en: "Gemmayzeh Street", fr: "Rue Gemmayzeh" },
+    { ar: "شارع مار مخايل", en: "Mar Mikhael Street", fr: "Rue Mar Mikhael" },
+    { ar: "شارع الحمراء", en: "Hamra Street", fr: "Rue Hamra" },
+  ];
+
+  const totalCenters = 1000;
+  const centersPerDistrict = Math.ceil(totalCenters / districts.length);
+  let centerCount = 0;
+
+  for (const district of districts) {
+    // Determine region based on district name
+    let region: keyof typeof regionCoordinates = "mountLebanon";
+    const districtNameLower = district.nameAr.toLowerCase();
+    if (districtNameLower.includes("بيروت")) region = "beirut";
+    else if (districtNameLower.includes("الشمال")) region = "north";
+    else if (districtNameLower.includes("الجنوب")) region = "south";
+    else if (districtNameLower.includes("البقاع")) region = "bekaa";
+    else region = "mountLebanon";
+
+    const coords = regionCoordinates[region];
+    
+    for (let i = 0; i < centersPerDistrict && centerCount < totalCenters; i++) {
+      // Generate random coordinates within the region
+      const lat = coords.lat[0] + Math.random() * (coords.lat[1] - coords.lat[0]);
+      const lng = coords.lng[0] + Math.random() * (coords.lng[1] - coords.lng[0]);
+
+      // Generate center name
+      const template = centerNameTemplates[centerCount % centerNameTemplates.length];
+      const location = locationNames[Math.floor(centerCount / 10) % locationNames.length];
+      const number = (centerCount % 50) + 1;
+
+      const nameAr = `${template.ar} ${location.ar} ${number}`;
+      const nameEn = `${location.en} ${template.en} ${number}`;
+      const nameFr = `${template.fr} ${location.fr} ${number}`;
+
+      // Generate address (70% chance)
+      let addressAr: string | undefined;
+      let addressEn: string | undefined;
+      let addressFr: string | undefined;
+
+      if (Math.random() > 0.3) {
+        const street = streetNames[centerCount % streetNames.length];
+        const buildingNumber = Math.floor(Math.random() * 200) + 1;
+        addressAr = `${street.ar}، مبنى ${buildingNumber}`;
+        addressEn = `${street.en}, Building ${buildingNumber}`;
+        addressFr = `${street.fr}, Bâtiment ${buildingNumber}`;
+      }
+
+      await prisma.electoralCenter.create({
+        data: {
+          districtId: district.id,
+          nameAr,
+          nameEn,
+          nameFr,
+          latitude: lat,
+          longitude: lng,
+          addressAr,
+          addressEn,
+          addressFr,
+        },
+      });
+
+      centerCount++;
+      if (centerCount % 100 === 0) {
+        console.log(`Created ${centerCount} electoral centers...`);
+      }
+    }
+  }
+
+  console.log(`\n✅ Seed completed successfully!`);
   console.log(`Created:`);
   console.log(`- ${districts.length} districts`);
   console.log(`- ${topics.length} topics`);
   console.log(`- ${sources.length} sources`);
   console.log(`- ${lists.length} electoral lists`);
   console.log(`- ${candidates.length} candidates`);
+  console.log(`- ${centerCount} electoral centers`);
 }
 
 main()
