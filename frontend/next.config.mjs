@@ -14,6 +14,21 @@ const nextConfig = {
   turbopack: {
     root: path.resolve(__dirname, ".."),
   },
+  // Webpack config to handle backend imports (for non-Turbopack builds)
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      // Add parent directory to module resolution for backend imports
+      config.resolve.modules = [
+        ...(config.resolve.modules || []),
+        path.resolve(__dirname, ".."),
+      ];
+    }
+    return config;
+  },
+  // Experimental: Enable server components external packages
+  experimental: {
+    serverComponentsExternalPackages: [],
+  },
 };
 
 export default withNextIntl(nextConfig);

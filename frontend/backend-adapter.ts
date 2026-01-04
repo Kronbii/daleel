@@ -7,7 +7,9 @@ import type { NextRequest, NextResponse } from "next/server";
 import type { Request, Response, NextFunction } from "express";
 import { IncomingMessage, ServerResponse } from "http";
 import { Readable } from "stream";
-import app from "../backend/src/server.js";
+// Import backend Express app from compiled output
+// Backend is built before frontend, so we can import from dist
+import app from "../backend/dist/server.js";
 
 /**
  * Convert Next.js Request to Express-compatible Request
