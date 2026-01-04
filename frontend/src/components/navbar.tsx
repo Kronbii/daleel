@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
 import { SUPPORTED_LOCALES } from "@daleel/shared";
 import { useState, useEffect } from "react";
@@ -14,6 +15,7 @@ const localeNames: Record<string, { name: string; native: string }> = {
 export function Navbar() {
   const t = useTranslations("common");
   const locale = useLocale();
+  const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Close menu on route change or resize
@@ -67,15 +69,22 @@ export function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="px-3 lg:px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-lg transition-colors duration-200"
-              >
-                {link.label}
-              </Link>
-            ))}
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href || pathname.startsWith(`${link.href}/`);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`px-3 lg:px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${
+                    isActive
+                      ? "bg-emerald-50 text-emerald-700"
+                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
           </div>
 
           {/* Language Switcher & Mobile Menu Button */}
@@ -147,16 +156,23 @@ export function Navbar() {
       >
         <div className="container mx-auto px-4 py-4">
           <div className="flex flex-col gap-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-4 py-3.5 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-colors active:bg-gray-100"
-              >
-                {link.label}
-              </Link>
-            ))}
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href || pathname.startsWith(`${link.href}/`);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`px-4 py-3.5 text-base font-medium rounded-xl transition-colors active:bg-gray-100 ${
+                    isActive
+                      ? "bg-emerald-50 text-emerald-700"
+                      : "text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
             
             {/* Language Switcher - Mobile */}
             <div className="mt-4 pt-4 border-t border-gray-100">
