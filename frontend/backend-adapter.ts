@@ -15,8 +15,21 @@ let appPromise: Promise<any> | null = null;
 
 async function getBackendApp() {
   if (!appPromise) {
-    // Path from frontend/backend-adapter.ts to backend/dist/server.js
-    appPromise = import("../backend/dist/server.js").then((mod) => mod.default);
+    // Path resolution: Since Turbopack root is set to repo root (parent of frontend/)
+    // and we're in frontend/backend-adapter.ts, we need to go up to repo root
+    // From frontend/backend-adapter.ts: ../backend/dist/server.js
+    // But Turbopack resolves from its root, so: backend/dist/server.js
+    const backendPath = "backend/dist/server.js";
+    
+    appPromise = import(backendPath).then((mod) => mod.default).catch((err: any) => {
+      // Fallback: try relative path from current file location
+      console.warn("Failed to load backend from Turbopack root, trying relative path:", err.message);
+      return import("../backend/dist/server.js").then((mod) => mod.default);
+    }).catch((err: any) => {
+      console.error("Failed to load backend app from all paths:", err);
+      console.error("Current working directory:", process.cwd());
+      throw err;
+    });
   }
   return appPromise;
 }
