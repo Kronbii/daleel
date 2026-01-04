@@ -66,14 +66,21 @@ openssl rand -base64 32
 
 1. Go to https://vercel.com/new
 2. Import your Git repository
-3. Configure project:
-   - **Framework Preset**: Next.js (auto-detected)
-   - **Root Directory**: Leave empty (root)
-   - **Build Command**: `npm run build:frontend` (or leave default)
-   - **Output Directory**: `frontend/.next` (or leave default)
+3. **IMPORTANT**: Configure project settings:
+   - **Framework Preset**: Next.js (you may need to select this manually)
+   - **Root Directory**: **Leave empty or set to `/` (repo root)** - DO NOT set to `backend` or `frontend`
+     - Vercel may auto-detect `backend` - you MUST change this to root (`/`)
+     - The root directory must be the repo root because:
+       - The `api/` folder (serverless functions) must be at root level
+       - The `frontend/` folder contains the Next.js app
+       - The `vercel.json` config file is at root
+   - **Build Command**: `cd frontend && npm run build` (or use the one from vercel.json)
+   - **Output Directory**: `frontend/.next` (or use the one from vercel.json)
    - **Install Command**: `npm install` (or leave default)
 4. Add all environment variables
 5. Click "Deploy"
+
+**Note**: If Vercel shows "Root Directory" as `backend`, click on it and change it to `/` (root) or leave it empty.
 
 #### Option B: Via Vercel CLI
 

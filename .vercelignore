@@ -1,0 +1,37 @@
+# Files and directories to ignore during Vercel deployment
+
+# Development files
+*.log
+.env.local
+.env.development
+.env.test
+
+# Build artifacts (will be regenerated)
+backend/dist
+frontend/.next
+node_modules
+
+# Documentation (not needed in deployment)
+docs/
+*.md
+!README.md
+
+# Scripts (not needed in deployment)
+scripts/
+
+# Test files
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Misc
+.DS_Store
+random_points.csv
+
