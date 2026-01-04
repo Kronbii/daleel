@@ -1,7 +1,7 @@
 /**
  * API client for fetching data from the backend
  * 
- * In production (Vercel), uses VERCEL_URL or NEXT_PUBLIC_API_URL for server-side requests.
+ * In production (Vercel), uses VERCEL_URL for server-side requests.
  * Client-side requests can use relative URLs.
  * In development, defaults to http://localhost:3000
  */
@@ -20,6 +20,10 @@ const getApiUrl = () => {
     if (process.env.VERCEL_URL) {
       return `https://${process.env.VERCEL_URL}`;
     }
+    // VERCEL_PROJECT_PRODUCTION_URL for production deployments
+    if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
+      return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+    }
     // Fallback for local production testing
     return "http://localhost:3000";
   }
@@ -27,8 +31,6 @@ const getApiUrl = () => {
   // Client-side: can use relative URLs (empty string)
   return "";
 };
-
-const API_URL = getApiUrl();
 
 type RequestOptions = {
   method?: "GET" | "POST" | "PUT" | "DELETE";
@@ -70,7 +72,9 @@ async function request<T>(
     fetchOptions.next = next;
   }
 
-  const response = await fetch(`${API_URL}${endpoint}`, fetchOptions);
+  // Get API URL at request time (not module load time) for proper Vercel env detection
+  const apiUrl = getApiUrl();
+  const response = await fetch(`${apiUrl}${endpoint}`, fetchOptions);
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({ error: "Request failed" }));
