@@ -11,8 +11,8 @@ echo ""
 # Step 1: Get Neon DATABASE_URL
 if [ -z "$NEON_DATABASE_URL" ]; then
   echo "📋 Step 1: Get your Neon DATABASE_URL"
-  echo "   Go to: Vercel Dashboard → Your Project → Settings → Environment Variables"
-  echo "   Copy the DATABASE_URL value"
+  echo "   Go to: https://console.neon.tech"
+  echo "   Copy the connection string from your project"
   echo ""
   read -p "Paste your Neon DATABASE_URL here: " NEON_DATABASE_URL
   echo ""
@@ -20,9 +20,9 @@ fi
 
 # Step 2: Run migrations on Neon
 echo "📤 Step 2: Running migrations on Neon..."
-cd packages/db
-DATABASE_URL="$NEON_DATABASE_URL" pnpm prisma:migrate:deploy
-cd ../..
+cd backend
+DATABASE_URL="$NEON_DATABASE_URL" npm run prisma:migrate:deploy
+cd ..
 
 if [ $? -ne 0 ]; then
   echo "❌ Failed to run migrations"
@@ -40,8 +40,8 @@ if [ "$migrate_data" = "yes" ]; then
   echo "📦 Step 3: Exporting local database..."
   
   # Check for local DATABASE_URL
-  if [ -f .env ]; then
-    LOCAL_DB=$(grep "^DATABASE_URL=" .env | cut -d '=' -f2- | tr -d '"' | tr -d "'" | xargs)
+  if [ -f backend/.env ]; then
+    LOCAL_DB=$(grep "^DATABASE_URL=" backend/.env | cut -d '=' -f2- | tr -d '"' | tr -d "'" | xargs)
   fi
   
   if [ -z "$LOCAL_DB" ]; then
@@ -59,7 +59,7 @@ if [ "$migrate_data" = "yes" ]; then
   LOCAL_PASS=$(echo "$LOCAL_CONN" | cut -d ':' -f2 | cut -d '@' -f1)
   LOCAL_HOST=$(echo "$LOCAL_CONN" | cut -d '@' -f2 | cut -d ':' -f1)
   LOCAL_PORT=$(echo "$LOCAL_CONN" | cut -d ':' -f3 | cut -d '/' -f1)
-  LOCAL_DBNAME=$(echo "$LOCAL_CONN" | cut -d '/' -f2)
+  LOCAL_DBNAME=$(echo "$LOCAL_CONN" | cut -d '/' -f2 | cut -d '?' -f1)
   
   PGPASSWORD="$LOCAL_PASS" pg_dump -h "$LOCAL_HOST" -p "${LOCAL_PORT:-5432}" -U "$LOCAL_USER" -d "$LOCAL_DBNAME" --no-owner --no-acl --data-only > "$BACKUP_FILE"
   
@@ -93,8 +93,7 @@ fi
 echo "✨ Migration complete!"
 echo ""
 echo "Next steps:"
-echo "1. Verify DATABASE_URL is set in Vercel (should be auto-set by Neon)"
-echo "2. Redeploy your app on Vercel"
-echo "3. Test your production site"
+echo "1. Set DATABASE_URL in your production environment (Vercel, etc.)"
+echo "2. Redeploy your backend application"
+echo "3. Test your production API endpoints"
 echo ""
-

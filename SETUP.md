@@ -1,216 +1,406 @@
 # Setup Guide
 
-## Quick Setup Steps
+Complete guide to set up the Daleel repository for local development.
 
-### 1. Install PostgreSQL (if not already installed)
+## Prerequisites
 
-**macOS (using Homebrew):**
+Before you begin, ensure you have the following installed:
+
+- **Node.js 18+** - [Download](https://nodejs.org/)
+- **npm** - Comes with Node.js
+- **PostgreSQL 14+** - [Download](https://www.postgresql.org/download/)
+- **Git** - [Download](https://git-scm.com/)
+
+### Verify Installation
+
 ```bash
-brew install postgresql@14
-brew services start postgresql@14
+node --version  # Should be 18.0.0 or higher
+npm --version   # Should be 9.0.0 or higher
+psql --version  # Should be 14.0 or higher
 ```
 
-**Ubuntu/Debian:**
+## Step 1: Clone the Repository
+
+```bash
+git clone <repository-url>
+cd daleel
+```
+
+## Step 2: Install PostgreSQL
+
+### macOS
+
+```bash
+# Using Homebrew
+brew install postgresql@14
+brew services start postgresql@14
+
+# Verify it's running
+psql postgres -c "SELECT version();"
+```
+
+### Ubuntu/Debian
+
 ```bash
 sudo apt update
 sudo apt install postgresql postgresql-contrib
 sudo systemctl start postgresql
+sudo systemctl enable postgresql
+
+# Verify it's running
+sudo systemctl status postgresql
 ```
 
-**Windows:**
-Download and install from https://www.postgresql.org/download/windows/
+### Windows
 
-### 2. Create the Database
+1. Download PostgreSQL from https://www.postgresql.org/download/windows/
+2. Run the installer
+3. Remember the password you set for the `postgres` user
+4. PostgreSQL service should start automatically
 
-Open PostgreSQL command line:
+## Step 3: Create the Database
+
+### Option A: Using psql Command Line
+
 ```bash
-# macOS/Linux
+# Connect to PostgreSQL
 psql postgres
 
-# Or if you have a specific user
-psql -U your_username postgres
-```
-
-Then create the database:
-```sql
+# Create database
 CREATE DATABASE daleel;
+
+# Create a user (optional, you can use postgres user)
+CREATE USER daleel_user WITH PASSWORD 'your_password';
+GRANT ALL PRIVILEGES ON DATABASE daleel TO daleel_user;
+
+# Exit psql
 \q
 ```
 
-### 3. Get Your PostgreSQL Connection String
+### Option B: Using createdb Command
 
-Your `DATABASE_URL` follows this format:
-```
-postgresql://USERNAME:PASSWORD@HOST:PORT/DATABASE_NAME
-```
-
-**Common examples:**
-
-- **Default PostgreSQL user with password:**
-  ```
-  postgresql://postgres:mypassword@localhost:5432/daleel
-  ```
-
-- **Custom user:**
-  ```
-  postgresql://myuser:mypassword@localhost:5432/daleel
-  ```
-
-- **No password (not recommended, but common in dev):**
-  ```
-  postgresql://postgres@localhost:5432/daleel
-  ```
-
-**To find your PostgreSQL username:**
 ```bash
-# On macOS/Linux
-whoami
-
-# Or check PostgreSQL users
-psql postgres -c "\du"
+createdb daleel
 ```
 
-**Default PostgreSQL settings:**
-- Host: `localhost`
-- Port: `5432` (default)
-- Database: `daleel` (you create this)
+### Verify Database Creation
 
-### 4. Generate NEXTAUTH_SECRET
+```bash
+psql -l | grep daleel
+```
 
-**Option 1: Using OpenSSL (recommended)**
+## Step 4: Install Dependencies
+
+Install all dependencies (root, backend, and frontend):
+
+```bash
+npm run install:all
+```
+
+This command will:
+1. Install root dependencies (dev tools like TypeScript, Prettier)
+2. Install backend dependencies (Express, Prisma, etc.)
+3. Install frontend dependencies (Next.js, React, etc.)
+
+### Manual Installation (Alternative)
+
+If you prefer to install manually:
+
+```bash
+# Root dependencies
+npm install
+
+# Backend dependencies
+cd backend
+npm install
+cd ..
+
+# Frontend dependencies
+cd frontend
+npm install
+cd ..
+```
+
+## Step 5: Configure Environment Variables
+
+### Backend Environment Variables
+
+Create `backend/.env`:
+
+```bash
+cd backend
+cp .env.example .env  # If .env.example exists, or create manually
+```
+
+Edit `backend/.env`:
+
+```env
+# Database
+DATABASE_URL="postgresql://postgres:your_password@localhost:5432/daleel"
+
+# Server
+PORT=4000
+NODE_ENV=development
+
+# Frontend URL (for CORS)
+FRONTEND_URL="http://localhost:3000"
+```
+
+**Important:** Replace `your_password` with your PostgreSQL password.
+
+### Frontend Environment Variables
+
+Create `frontend/.env.local`:
+
+```bash
+cd frontend
+cp .env.example .env.local  # If .env.example exists, or create manually
+```
+
+Edit `frontend/.env.local`:
+
+```env
+# Backend API URL
+API_URL="http://localhost:4000"
+
+# NextAuth
+NEXTAUTH_SECRET="generate-with-openssl-rand-base64-32"
+NEXTAUTH_URL="http://localhost:3000"
+```
+
+**Generate NEXTAUTH_SECRET:**
+
 ```bash
 openssl rand -base64 32
 ```
 
-**Option 2: Using Node.js**
-```bash
-node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
-```
-
-**Option 3: Using Python**
-```bash
-python3 -c "import secrets; print(secrets.token_urlsafe(32))"
-```
-
-Copy the output - this is your `NEXTAUTH_SECRET`.
-
-### 5. Create .env File
+## Step 6: Generate Prisma Client
 
 ```bash
-cp .env.example .env
+npm run prisma:generate
 ```
 
-Then edit `.env` and replace:
-- `DATABASE_URL` with your actual PostgreSQL connection string
-- `NEXTAUTH_SECRET` with the generated secret
-
-**Example `.env` file:**
-```env
-DATABASE_URL="postgresql://postgres:mypassword@localhost:5432/daleel"
-NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SECRET="your-generated-secret-here-min-32-chars-long"
-NODE_ENV="development"
-```
-
-### 6. Install Dependencies
+Or manually:
 
 ```bash
-pnpm install
+cd backend
+npm run prisma:generate
 ```
 
-### 7. Run Database Migrations
+This generates the Prisma Client based on your schema.
 
-This creates all the tables in your database:
-```bash
-pnpm prisma:migrate
-```
-
-When prompted, give it a migration name like `init`.
-
-### 8. Generate Prisma Client
+## Step 7: Run Database Migrations
 
 ```bash
-pnpm prisma:generate
+npm run prisma:migrate
 ```
 
-### 9. Seed the Database
-
-This creates a test admin user and sample data:
-```bash
-pnpm seed
-```
-
-**Default admin credentials:**
-- Email: `admin@daleel.test`
-- Password: `admin123`
-
-### 10. Start Development Server
+Or manually:
 
 ```bash
-pnpm dev
+cd backend
+npm run prisma:migrate
 ```
 
-Visit http://localhost:3000 (defaults to Arabic locale)
+This will:
+1. Create all database tables
+2. Set up relationships and constraints
+3. Apply any pending migrations
+
+### Verify Migrations
+
+```bash
+cd backend
+npm run prisma:studio
+```
+
+This opens Prisma Studio in your browser where you can view your database schema.
+
+## Step 8: Seed the Database (Optional)
+
+To populate the database with sample data:
+
+```bash
+npm run seed
+```
+
+Or manually:
+
+```bash
+cd backend
+npm run seed
+```
+
+This creates:
+- Test admin user: `admin@daleel.test` / `admin123`
+- Default election cycle (2022)
+- Sample districts, lists, candidates
+- Sample topics and sources
+
+See [SEEDING.md](./SEEDING.md) for more details.
+
+## Step 9: Start Development Servers
+
+### Start Both Servers (Recommended)
+
+```bash
+npm run dev
+```
+
+This starts:
+- **Backend**: http://localhost:4000
+- **Frontend**: http://localhost:3000
+
+### Start Servers Separately
+
+**Terminal 1 - Backend:**
+```bash
+npm run dev:backend
+# or
+cd backend && npm run dev
+```
+
+**Terminal 2 - Frontend:**
+```bash
+npm run dev:frontend
+# or
+cd frontend && npm run dev
+```
+
+## Step 10: Verify Installation
+
+1. **Backend Health Check:**
+   ```bash
+   curl http://localhost:4000/health
+   ```
+   Should return: `{"status":"ok","timestamp":"..."}`
+
+2. **Frontend:**
+   Open http://localhost:3000 in your browser
+   - Should see the Daleel homepage
+   - Default locale is Arabic
+
+3. **Admin Login:**
+   - Navigate to http://localhost:3000/ar/admin/login
+   - Use: `admin@daleel.test` / `admin123` (if you seeded the database)
 
 ## Troubleshooting
 
-### "database does not exist"
-Make sure you created the database:
-```sql
-CREATE DATABASE daleel;
-```
+### Database Connection Issues
 
-### "password authentication failed"
-Check your PostgreSQL password in the `DATABASE_URL`. You might need to reset it:
+**Error: "Connection refused"**
+- Ensure PostgreSQL is running:
+  ```bash
+  # macOS
+  brew services list | grep postgresql
+  
+  # Linux
+  sudo systemctl status postgresql
+  ```
+
+**Error: "password authentication failed"**
+- Check your `DATABASE_URL` in `backend/.env`
+- Verify PostgreSQL user and password
+- Try connecting manually:
+  ```bash
+  psql -U postgres -d daleel
+  ```
+
+**Error: "database does not exist"**
+- Create the database (see Step 3)
+- Verify database name in `DATABASE_URL`
+
+### Port Already in Use
+
+**Error: "Port 3000 already in use"**
 ```bash
-# macOS/Linux - reset postgres password
-psql postgres
-ALTER USER postgres PASSWORD 'newpassword';
+# Find process using port 3000
+lsof -ti:3000
+
+# Kill it
+kill -9 $(lsof -ti:3000)
+
+# Or use a different port
+cd frontend
+PORT=3001 npm run dev
 ```
 
-### "connection refused"
-Make sure PostgreSQL is running:
+**Error: "Port 4000 already in use"**
 ```bash
-# macOS (Homebrew)
-brew services start postgresql@14
+# Find process using port 4000
+lsof -ti:4000
 
-# Linux
-sudo systemctl start postgresql
+# Kill it
+kill -9 $(lsof -ti:4000)
 
-# Check status
-sudo systemctl status postgresql
+# Or use a different port
+cd backend
+PORT=4001 npm run dev
 ```
 
-### Can't find psql command
-Add PostgreSQL to your PATH:
+### Prisma Issues
+
+**Error: "Prisma Client not generated"**
 ```bash
-# macOS (Homebrew)
-export PATH="/opt/homebrew/opt/postgresql@14/bin:$PATH"
-
-# Add to ~/.zshrc or ~/.bashrc to make permanent
+cd backend
+npm run prisma:generate
 ```
 
-## Verification
+**Error: "Migration failed"**
+```bash
+# Reset database (WARNING: Deletes all data)
+cd backend
+npm run prisma:migrate reset
 
-After setup, verify everything works:
+# Or manually drop and recreate
+psql postgres -c "DROP DATABASE daleel;"
+psql postgres -c "CREATE DATABASE daleel;"
+npm run prisma:migrate
+```
 
-1. **Check database connection:**
-   ```bash
-   pnpm prisma:studio
-   ```
-   This should open Prisma Studio showing your database tables.
+### Module Not Found Errors
 
-2. **Test login:**
-   - Go to http://localhost:3000/ar/admin/login
-   - Use: `admin@daleel.test` / `admin123`
+**Error: "Cannot find module"**
+```bash
+# Reinstall dependencies
+npm run install:all
 
-3. **View seeded data:**
-   - Check http://localhost:3000/ar/candidates
-   - (Will be empty initially, but the page should load)
+# Or manually
+rm -rf node_modules backend/node_modules frontend/node_modules
+npm run install:all
+```
 
 ## Next Steps
 
-- Change the default admin password in production
-- Add more candidates, districts, and lists via the admin panel
-- Configure environment variables for production deployment
+- Read [SEEDING.md](./SEEDING.md) to learn about database seeding
+- Read [MIGRATE_TO_NEON.md](./MIGRATE_TO_NEON.md) to migrate to production
+- Check [README.md](./README.md) for development guidelines
+
+## Quick Reference
+
+```bash
+# Install dependencies
+npm run install:all
+
+# Generate Prisma client
+npm run prisma:generate
+
+# Run migrations
+npm run prisma:migrate
+
+# Seed database
+npm run seed
+
+# Start development
+npm run dev
+
+# Start backend only
+npm run dev:backend
+
+# Start frontend only
+npm run dev:frontend
+
+# Open Prisma Studio
+npm run prisma:studio
+```
 

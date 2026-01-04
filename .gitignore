@@ -11,6 +11,11 @@ coverage/
 out/
 build/
 dist/
+next-env.d.ts
+.swc/
+
+# TypeScript
+*.tsbuildinfo
 
 # Production
 *.log
@@ -40,7 +45,15 @@ yarn-error.log*
 .turbo
 
 # Prisma
-packages/db/prisma/migrations/
+# Note: Migrations are typically tracked, but uncomment if you don't want to track them
+# backend/prisma/migrations/
+
+# SQL backups (but keep migration files)
+*.sql
+!**/migrations/**/*.sql
+
+# Build caches
+.cache/
 
 # IDE
 .vscode/
@@ -52,4 +65,5 @@ packages/db/prisma/migrations/
 # OS
 Thumbs.db
 
+# Neon
 *.neon*

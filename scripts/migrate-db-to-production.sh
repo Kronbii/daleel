@@ -20,11 +20,11 @@ if [ -z "$DATABASE_URL" ]; then
   exit 1
 fi
 
-# Check if local DATABASE_URL exists in .env
-if [ -f .env ]; then
-  LOCAL_DB=$(grep "^DATABASE_URL=" .env | cut -d '=' -f2- | tr -d '"' | tr -d "'")
+# Check if local DATABASE_URL exists in backend/.env
+if [ -f backend/.env ]; then
+  LOCAL_DB=$(grep "^DATABASE_URL=" backend/.env | cut -d '=' -f2- | tr -d '"' | tr -d "'")
   if [ -n "$LOCAL_DB" ]; then
-    echo "📋 Found local DATABASE_URL in .env"
+    echo "📋 Found local DATABASE_URL in backend/.env"
     echo ""
   fi
 fi
@@ -53,7 +53,7 @@ LOCAL_USER=$(echo "$LOCAL_CONN" | cut -d ':' -f1)
 LOCAL_PASS=$(echo "$LOCAL_CONN" | cut -d ':' -f2 | cut -d '@' -f1)
 LOCAL_HOST=$(echo "$LOCAL_CONN" | cut -d '@' -f2 | cut -d ':' -f1)
 LOCAL_PORT=$(echo "$LOCAL_CONN" | cut -d ':' -f3 | cut -d '/' -f1)
-LOCAL_DBNAME=$(echo "$LOCAL_CONN" | cut -d '/' -f2)
+LOCAL_DBNAME=$(echo "$LOCAL_CONN" | cut -d '/' -f2 | cut -d '?' -f1)
 
 # Export local database
 echo "Exporting from: $LOCAL_HOST:$LOCAL_PORT/$LOCAL_DBNAME"
@@ -68,9 +68,9 @@ echo "✅ Local database exported to /tmp/daleel_local_backup.sql"
 echo ""
 
 echo "📤 Step 2: Applying schema migrations to production..."
-cd packages/db
-DATABASE_URL="$DATABASE_URL" pnpm prisma:migrate:deploy
-cd ../..
+cd backend
+DATABASE_URL="$DATABASE_URL" npm run prisma:migrate:deploy
+cd ..
 
 if [ $? -ne 0 ]; then
   echo "❌ Failed to run migrations"
@@ -87,7 +87,7 @@ PROD_USER=$(echo "$PROD_CONN" | cut -d ':' -f1)
 PROD_PASS=$(echo "$PROD_CONN" | cut -d ':' -f2 | cut -d '@' -f1)
 PROD_HOST=$(echo "$PROD_CONN" | cut -d '@' -f2 | cut -d ':' -f1)
 PROD_PORT=$(echo "$PROD_CONN" | cut -d ':' -f3 | cut -d '/' -f1)
-PROD_DBNAME=$(echo "$PROD_CONN" | cut -d '/' -f2)
+PROD_DBNAME=$(echo "$PROD_CONN" | cut -d '/' -f2 | cut -d '?' -f1)
 
 echo "Importing to: $PROD_HOST:${PROD_PORT:-5432}/$PROD_DBNAME"
 PGPASSWORD="$PROD_PASS" psql -h "$PROD_HOST" -p "${PROD_PORT:-5432}" -U "$PROD_USER" -d "$PROD_DBNAME" < /tmp/daleel_local_backup.sql
@@ -107,7 +107,7 @@ echo ""
 echo "✨ Your local database has been migrated to production!"
 echo ""
 echo "Next steps:"
-echo "1. Set DATABASE_URL in Vercel environment variables"
-echo "2. Redeploy your app"
+echo "1. Set DATABASE_URL in your production environment"
+echo "2. Redeploy your backend application"
 echo "3. Verify data appears on your production site"
-
+echo ""

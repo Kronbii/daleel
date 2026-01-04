@@ -1,30 +1,36 @@
 # Daleel - دليل
 
-**Security-first, web-first monorepo for Lebanese parliamentary election information**
+**Security-first, web-first application for Lebanese parliamentary election information**
 
 Daleel is an independent civic initiative providing public, educational information about Lebanese parliamentary elections (الانتخابات النيابية).
 
 ## 🏗️ Architecture
 
-This is a **Turborepo monorepo** with the following structure:
+This is a **single repository** with clear separation between frontend and backend:
 
 ```
 /
-├── apps/
-│   └── web/          # Next.js 14+ App Router (public + admin + API)
-├── packages/
-│   ├── db/           # Prisma schema, migrations, DB utilities
-│   ├── core/         # Shared types, Zod schemas, constants
-│   └── ui/           # Shared UI components (shadcn)
+├── frontend/         # Next.js 14+ App Router (UI only, no database access)
+├── backend/          # Standalone Express server (API, auth, database)
+├── shared/           # Plain TypeScript shared code (types, schemas, constants)
+├── docs/             # Documentation
+├── scripts/          # Utility scripts
 └── legal/            # Legal content (AR/EN/FR)
 ```
+
+### Key Architectural Decisions
+
+- **Frontend**: Next.js App Router, purely UI-focused. Fetches data from backend via HTTP.
+- **Backend**: Standalone Express server with its own entry point. Contains all API routes, authentication, database access.
+- **Shared**: Plain TypeScript files (no build system). Imported by both frontend and backend via relative paths.
+- **No monorepo tooling**: No Turborepo, pnpm workspaces, or internal packages.
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
 - Node.js 18+
-- pnpm 8+
+- npm (comes with Node.js)
 - PostgreSQL 14+
 
 ### Setup
@@ -47,30 +53,49 @@ This is a **Turborepo monorepo** with the following structure:
    ```
 
 3. **Set up environment variables:**
+   
+   **Backend** (`backend/.env`):
    ```bash
-   cp .env.example .env
+   cp backend/.env.example backend/.env
    ```
    
-   Edit `.env` and set:
+   Edit `backend/.env` and set:
    - **`DATABASE_URL`**: Your PostgreSQL connection string
      - Format: `postgresql://USERNAME:PASSWORD@localhost:5432/daleel`
      - Example: `postgresql://postgres:mypassword@localhost:5432/daleel`
+   - **`PORT`**: Backend server port (default: 4000)
+   - **`FRONTEND_URL`**: Frontend URL (default: `http://localhost:3000`)
+   - **`NODE_ENV`**: `development`
+   
+   **Frontend** (`frontend/.env.local`):
+   ```bash
+   cp frontend/.env.example frontend/.env.local
+   ```
+   
+   Edit `frontend/.env.local` and set:
+   - **`API_URL`**: Backend API URL (default: `http://localhost:4000`)
    - **`NEXTAUTH_SECRET`**: Generate with: `openssl rand -base64 32`
    - **`NEXTAUTH_URL`**: `http://localhost:3000` (for local dev)
 
-3. **Generate Prisma client:**
+4. **Install dependencies:**
    ```bash
-   pnpm prisma:generate
+   npm run install:all
+   ```
+   This installs dependencies in root, backend, and frontend.
+
+5. **Generate Prisma client:**
+   ```bash
+   npm run prisma:generate
    ```
 
-4. **Run database migrations:**
+6. **Run database migrations:**
    ```bash
-   pnpm prisma:migrate
+   npm run prisma:migrate
    ```
 
-5. **Seed database:**
+7. **Seed database:**
    ```bash
-   pnpm seed
+   npm run seed
    ```
    This creates:
    - Test admin user: `admin@daleel.test` / `admin123`
@@ -78,11 +103,15 @@ This is a **Turborepo monorepo** with the following structure:
    - Sample districts
    - Sample topics
 
-6. **Start development server:**
+8. **Start development servers:**
    ```bash
-   pnpm dev
+   npm run dev
    ```
-
+   
+   This starts both:
+   - **Backend**: http://localhost:4000
+   - **Frontend**: http://localhost:3000
+   
    Open [http://localhost:3000](http://localhost:3000) (default locale: Arabic)
 
 ## 🔒 Security Model
@@ -92,7 +121,7 @@ This is a **Turborepo monorepo** with the following structure:
 - **Immutable models**: `Statement`, `Affiliation`, `Source`, `AuditLog`, `ProfileVersion`
 - These models **cannot be deleted or directly updated** after creation
 - Updates require creating new records or using the versioning system
-- Enforced via Prisma middleware in `packages/db/src/middleware.ts`
+- Enforced via Prisma middleware in `backend/src/db/middleware.ts`
 
 ### Source Archiving Enforcement
 
@@ -106,10 +135,11 @@ This is a **Turborepo monorepo** with the following structure:
 
 ### Admin Authentication
 
-- **Auth.js (NextAuth)** with Credentials provider
+- **NextAuth.js** in frontend for session management (JWT)
+- **Backend API** validates credentials and manages sessions
 - Password hashing with bcryptjs
-- Role-based access control: `ADMIN`, `EDITOR`, `REVIEWER`
-- Session-based authentication (JWT)
+- Role-based access control: `ADMIN`, `EDITOR`, `VIEWER`
+- Session-based authentication
 
 ### Security Headers
 
@@ -123,6 +153,7 @@ This is a **Turborepo monorepo** with the following structure:
 
 - CSRF tokens required for all admin POST requests
 - Tokens stored in httpOnly cookies
+- Validated on backend API routes
 
 ### Rate Limiting
 
@@ -133,7 +164,7 @@ This is a **Turborepo monorepo** with the following structure:
 
 ### Input Validation
 
-- **Zod schemas** for all API inputs
+- **Zod schemas** for all API inputs (in `shared/schemas.ts`)
 - URL and slug sanitization
 - No raw SQL (Prisma only, parameterized queries)
 
@@ -166,7 +197,7 @@ This is a **Turborepo monorepo** with the following structure:
 
 ## 🌐 Routing
 
-### Public Routes
+### Public Routes (Frontend)
 
 - `/[locale]/` - Home
 - `/[locale]/candidates` - Candidate index
@@ -175,12 +206,14 @@ This is a **Turborepo monorepo** with the following structure:
 - `/[locale]/districts/[id]` - District detail
 - `/[locale]/lists` - Lists index
 - `/[locale]/lists/[id]` - List detail
+- `/[locale]/centers` - Electoral centers map
 - `/[locale]/legal` - Legal hub
 - `/[locale]/legal/*` - Legal pages (disclaimer, neutrality, methodology, etc.)
 
-### Admin Routes (Protected)
+### Admin Routes (Protected, Frontend)
 
 - `/[locale]/admin` - Admin dashboard
+- `/[locale]/admin/login` - Admin login
 - `/[locale]/admin/candidates` - Manage candidates
 - `/[locale]/admin/lists` - Manage lists
 - `/[locale]/admin/districts` - Manage districts
@@ -191,7 +224,7 @@ This is a **Turborepo monorepo** with the following structure:
 - `/[locale]/admin/corrections` - Handle corrections
 - `/[locale]/admin/audit` - Audit log viewer
 
-### API Routes
+### API Routes (Backend)
 
 **Public (GET only):**
 - `GET /api/public/cycles`
@@ -199,6 +232,13 @@ This is a **Turborepo monorepo** with the following structure:
 - `GET /api/public/lists?districtId=&cycleId=`
 - `GET /api/public/candidates?districtId=&listId=&status=&q=`
 - `GET /api/public/candidates/[slug]`
+- `GET /api/public/centers?districtId=`
+
+**Auth:**
+- `POST /api/auth/login` - Login
+- `POST /api/auth/logout` - Logout
+- `GET /api/auth/session` - Get current session
+- `GET /api/auth/csrf` - Get CSRF token
 
 **Admin (POST, requires auth + CSRF):**
 - `POST /api/admin/sources`
@@ -222,8 +262,11 @@ This is a **Turborepo monorepo** with the following structure:
 - `title`, `publisher`, `originalUrl`
 - `archivedUrl`, `archivedAt`, `archiveMethod` (REQUIRED)
 
-```typescript
-POST /api/admin/sources
+```bash
+POST http://localhost:4000/api/admin/sources
+Content-Type: application/json
+Cookie: daleel-session=...
+
 {
   "title": "...",
   "publisher": "...",
@@ -237,8 +280,11 @@ POST /api/admin/sources
 
 ### 2. Add a Candidate
 
-```typescript
-POST /api/admin/candidates
+```bash
+POST http://localhost:4000/api/admin/candidates
+Content-Type: application/json
+Cookie: daleel-session=...
+
 {
   "cycleId": "...",
   "districtId": "...",
@@ -255,8 +301,11 @@ POST /api/admin/candidates
 
 **Requires `sourceId` (must have archived source):**
 
-```typescript
-POST /api/admin/candidates/[id]/affiliations
+```bash
+POST http://localhost:4000/api/admin/candidates/[id]/affiliations
+Content-Type: application/json
+Cookie: daleel-session=...
+
 {
   "type": "PARTY",
   "nameAr": "...",
@@ -272,8 +321,11 @@ POST /api/admin/candidates/[id]/affiliations
 
 **Requires `sourceId` (must have archived source):**
 
-```typescript
-POST /api/admin/candidates/[id]/statements
+```bash
+POST http://localhost:4000/api/admin/candidates/[id]/statements
+Content-Type: application/json
+Cookie: daleel-session=...
+
 {
   "topicId": "...",
   "kind": "QUOTE",
@@ -289,8 +341,8 @@ POST /api/admin/candidates/[id]/statements
 ### 5. Publish Profile Version
 
 1. Create a version snapshot:
-   ```typescript
-   POST /api/admin/candidates/[id]/versions
+   ```bash
+   POST http://localhost:4000/api/admin/candidates/[id]/versions
    {
      "changeNote": "...",
      "csrfToken": "..."
@@ -298,8 +350,8 @@ POST /api/admin/candidates/[id]/statements
    ```
 
 2. Review it:
-   ```typescript
-   POST /api/admin/versions/[versionId]/review
+   ```bash
+   POST http://localhost:4000/api/admin/versions/[versionId]/review
    {
      "publishStatus": "REVIEWED",
      "csrfToken": "..."
@@ -307,8 +359,8 @@ POST /api/admin/candidates/[id]/statements
    ```
 
 3. Publish:
-   ```typescript
-   POST /api/admin/versions/[versionId]/publish
+   ```bash
+   POST http://localhost:4000/api/admin/versions/[versionId]/publish
    {
      "publishStatus": "PUBLISHED",
      "csrfToken": "..."
@@ -327,17 +379,24 @@ POST /api/admin/candidates/[id]/statements
 
 ### Infrastructure
 
-- **Hosting**: Vercel, Cloudflare Pages, or similar
+- **Frontend**: Vercel, Cloudflare Pages, or similar
+- **Backend**: Railway, Render, Fly.io, or similar (Node.js hosting)
 - **Database**: Managed PostgreSQL (Supabase, Neon, AWS RDS)
 - **WAF**: Cloudflare or AWS WAF for DDoS protection
 - **CDN**: Cloudflare or similar for static assets
 
 ### Environment Variables
 
+**Backend:**
 - `DATABASE_URL`: Production PostgreSQL connection string
-- `NEXTAUTH_URL`: Production app URL
+- `PORT`: Backend server port (default: 4000)
+- `FRONTEND_URL`: Production frontend URL
+- `NODE_ENV`: `production`
+
+**Frontend:**
+- `API_URL`: Production backend API URL
+- `NEXTAUTH_URL`: Production frontend URL
 - `NEXTAUTH_SECRET`: Strong random secret
-- `UPSTASH_REDIS_URL`: Optional, for Redis rate limiting
 - `NODE_ENV`: `production`
 
 ### Database Backups
@@ -357,28 +416,76 @@ POST /api/admin/candidates/[id]/statements
 - [ ] Regular dependency updates
 - [ ] Database connection pooling
 - [ ] Enable database SSL/TLS
+- [ ] Configure CORS properly (backend)
+- [ ] Set secure cookie flags in production
 
 ## 🛠️ Development
 
 ### Scripts
 
-- `pnpm dev` - Start all dev servers
-- `pnpm build` - Build all packages and apps
-- `pnpm lint` - Lint all code
-- `pnpm format` - Format code with Prettier
-- `pnpm prisma:generate` - Generate Prisma client
-- `pnpm prisma:migrate` - Run migrations
-- `pnpm prisma:studio` - Open Prisma Studio
-- `pnpm seed` - Seed database
+**Root:**
+- `npm run dev` - Start both backend and frontend dev servers
+- `npm run dev:backend` - Start only backend server
+- `npm run dev:frontend` - Start only frontend server
+- `npm run build` - Build both backend and frontend
+- `npm run build:backend` - Build only backend
+- `npm run build:frontend` - Build only frontend
+- `npm run start` - Start both in production mode
+- `npm run lint` - Lint frontend code
+- `npm run format` - Format code with Prettier
+- `npm run prisma:generate` - Generate Prisma client
+- `npm run prisma:migrate` - Run migrations
+- `npm run prisma:migrate:deploy` - Deploy migrations (production)
+- `npm run prisma:studio` - Open Prisma Studio
+- `npm run seed` - Seed database
+- `npm run install:all` - Install all dependencies
+
+**Backend:**
+- `cd backend && npm run dev` - Start backend dev server
+- `cd backend && npm run build` - Build backend
+- `cd backend && npm run start` - Start backend in production
+
+**Frontend:**
+- `cd frontend && npm run dev` - Start frontend dev server
+- `cd frontend && npm run build` - Build frontend
+- `cd frontend && npm run start` - Start frontend in production
 
 ### Adding New Features
 
-1. **Schema changes**: Edit `packages/db/prisma/schema.prisma`
-2. **Create migration**: `pnpm prisma:migrate`
+1. **Schema changes**: Edit `backend/prisma/schema.prisma`
+2. **Create migration**: `npm run prisma:migrate`
 3. **Update types**: Types auto-generated from Prisma
-4. **Add validation**: Add Zod schemas in `packages/core/src/schemas.ts`
-5. **Create API route**: Add to `apps/web/src/app/api/`
-6. **Create page**: Add to `apps/web/src/app/[locale]/`
+4. **Add validation**: Add Zod schemas in `shared/schemas.ts`
+5. **Create API route**: Add to `backend/src/api/`
+6. **Create page**: Add to `frontend/src/app/[locale]/`
+7. **Update frontend queries**: Add fetch calls in `frontend/src/lib/queries/`
+
+### Project Structure
+
+```
+backend/
+├── prisma/              # Prisma schema and migrations
+├── src/
+│   ├── api/            # API routes (public, admin, auth)
+│   ├── db/             # Prisma client, middleware, seed
+│   ├── lib/            # Utilities (auth, csrf, rate-limit, audit)
+│   └── server.ts       # Express server entry point
+
+frontend/
+├── src/
+│   ├── app/            # Next.js App Router pages
+│   ├── components/     # React components
+│   ├── lib/            # Utilities (api-client, queries, auth)
+│   └── i18n/           # Internationalization config
+└── messages/           # Translation files
+
+shared/
+├── constants.ts         # Constants (locales, rate limits, headers)
+├── schemas.ts          # Zod validation schemas
+├── types.ts            # TypeScript types and utilities
+├── validation.ts       # Common validation patterns
+└── utils.ts            # Utility functions
+```
 
 ## 📄 License
 
@@ -391,4 +498,3 @@ POST /api/admin/candidates/[id]/statements
 ---
 
 **Daleel** - Independent, neutral, transparent election information.
-
