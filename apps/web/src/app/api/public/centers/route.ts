@@ -6,7 +6,6 @@
 import { NextRequest } from "next/server";
 import { prisma } from "@daleel/db";
 import { handleApiError, methodNotAllowedResponse } from "@/lib/api-utils";
-import type { Prisma } from "@daleel/db";
 
 export async function GET(request: NextRequest) {
   try {
