@@ -59,10 +59,10 @@ export function Navbar() {
             className="flex items-center gap-2 sm:gap-3 group"
             onClick={() => setMobileMenuOpen(false)}
           >
-            <div className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg bg-emerald-700 text-white font-bold text-sm sm:text-base transition-transform duration-200 group-hover:scale-105">
+            <div className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg bg-cedar text-white font-bold text-sm sm:text-base transition-transform duration-200 group-hover:scale-105 font-serif">
               د
             </div>
-            <span className="text-base sm:text-lg font-semibold text-gray-900">
+            <span className="text-base sm:text-lg font-semibold text-gray-900 font-serif">
               Daleel
             </span>
           </Link>
@@ -77,7 +77,7 @@ export function Navbar() {
                   href={link.href}
                   className={`px-3 lg:px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${
                     isActive
-                      ? "bg-emerald-50 text-emerald-700"
+                      ? "bg-cedar/10 text-cedar"
                       : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
                   }`}
                 >
@@ -165,7 +165,7 @@ export function Navbar() {
                   onClick={() => setMobileMenuOpen(false)}
                   className={`px-4 py-3.5 text-base font-medium rounded-xl transition-colors active:bg-gray-100 ${
                     isActive
-                      ? "bg-emerald-50 text-emerald-700"
+                      ? "bg-cedar/10 text-cedar"
                       : "text-gray-700 hover:text-gray-900 hover:bg-gray-50"
                   }`}
                 >

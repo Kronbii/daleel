@@ -129,13 +129,14 @@
 
 @layer base {
   :root {
-    /* New refined color palette - Cedar green inspired */
-    --color-cedar: 163 47 28;
-    --color-cedar-light: 163 42 38;
-    --color-cream: 45 30 96;
-    --color-warm-white: 40 25 99;
-    --color-charcoal: 220 15 15;
-    --color-slate: 220 10 40;
+    /* Refined color palette - Cedar green inspired */
+    /* HSL values: Hue Saturation Lightness */
+    --color-cedar: 163 47% 28%;
+    --color-cedar-light: 163 42% 38%;
+    --color-cream: 45 30% 96%;
+    --color-warm-white: 40 25% 99%;
+    --color-charcoal: 220 15% 15%;
+    --color-slate: 220 10% 40%;
     
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
@@ -148,6 +149,10 @@
   body {
     @apply bg-white text-gray-900 antialiased;
     font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+    background-image: 
+      radial-gradient(at 0% 0%, hsla(163, 47%, 96%, 0.3) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, hsla(45, 30%, 96%, 0.5) 0px, transparent 50%);
+    background-attachment: fixed;
   }
 
   /* Serif headings */

@@ -14,9 +14,9 @@ export function Footer() {
   };
 
   return (
-    <footer className="relative mt-auto bg-gradient-to-br from-gray-900 via-gray-800 to-emerald-900 text-gray-100">
+    <footer className="relative mt-auto bg-gradient-to-br from-gray-900 via-gray-800 to-cedar text-gray-100">
       {/* Decorative top wave */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-600"></div>
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cedar-light via-cedar to-cedar-light"></div>
       
       <div className="container mx-auto px-4 py-12 sm:py-16 md:py-20">
         <div className="max-w-6xl mx-auto">
@@ -25,10 +25,10 @@ export function Footer() {
             {/* Brand - Takes more space */}
             <div className="md:col-span-5 lg:col-span-6">
               <Link href={`/${locale}`} className="inline-flex items-center gap-3 mb-6 group">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 text-white font-bold text-xl shadow-lg shadow-emerald-900/30 group-hover:shadow-emerald-500/50 transition-all duration-300 group-hover:scale-110">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-cedar-light to-cedar text-white font-bold text-xl shadow-lg shadow-cedar/30 group-hover:shadow-cedar/50 transition-all duration-300 group-hover:scale-110 font-serif">
                   د
                 </div>
-                <span className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                <span className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent font-serif">
                   Daleel
                 </span>
               </Link>
@@ -50,7 +50,7 @@ export function Footer() {
                   .map((value, i) => (
                     <span
                       key={i}
-                      className="px-3 py-1 text-xs font-medium bg-emerald-500/20 text-emerald-300 rounded-full border border-emerald-500/30 backdrop-blur-sm"
+                      className="px-3 py-1 text-xs font-medium bg-cedar/20 text-cedar-light rounded-full border border-cedar/30 backdrop-blur-sm"
                     >
                       {value}
                     </span>
@@ -62,34 +62,34 @@ export function Footer() {
             <div className="md:col-span-7 lg:col-span-6 grid grid-cols-2 gap-8 sm:gap-12">
               <div>
                 <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4 flex items-center gap-2">
-                  <span className="w-1 h-4 bg-emerald-500 rounded-full"></span>
+                  <span className="w-1 h-4 bg-cedar rounded-full"></span>
                   {getContent("Explore", "استكشف", "Explorer")}
                 </h4>
                 <ul className="space-y-3">
                   <li>
                     <Link 
                       href={`/${locale}/candidates`} 
-                      className="text-sm text-gray-300 hover:text-emerald-400 transition-colors duration-200 inline-flex items-center gap-2 group"
+                      className="text-sm text-gray-300 hover:text-cedar-light transition-colors duration-200 inline-flex items-center gap-2 group"
                     >
-                      <span className="w-0 h-px bg-emerald-400 group-hover:w-4 transition-all duration-200"></span>
+                      <span className="w-0 h-px bg-cedar-light group-hover:w-4 transition-all duration-200"></span>
                       {t("candidates")}
                     </Link>
                   </li>
                   <li>
                     <Link 
                       href={`/${locale}/districts`} 
-                      className="text-sm text-gray-300 hover:text-emerald-400 transition-colors duration-200 inline-flex items-center gap-2 group"
+                      className="text-sm text-gray-300 hover:text-cedar-light transition-colors duration-200 inline-flex items-center gap-2 group"
                     >
-                      <span className="w-0 h-px bg-emerald-400 group-hover:w-4 transition-all duration-200"></span>
+                      <span className="w-0 h-px bg-cedar-light group-hover:w-4 transition-all duration-200"></span>
                       {t("districts")}
                     </Link>
                   </li>
                   <li>
                     <Link 
                       href={`/${locale}/lists`} 
-                      className="text-sm text-gray-300 hover:text-emerald-400 transition-colors duration-200 inline-flex items-center gap-2 group"
+                      className="text-sm text-gray-300 hover:text-cedar-light transition-colors duration-200 inline-flex items-center gap-2 group"
                     >
-                      <span className="w-0 h-px bg-emerald-400 group-hover:w-4 transition-all duration-200"></span>
+                      <span className="w-0 h-px bg-cedar-light group-hover:w-4 transition-all duration-200"></span>
                       {t("lists")}
                     </Link>
                   </li>
@@ -98,16 +98,16 @@ export function Footer() {
 
               <div>
                 <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4 flex items-center gap-2">
-                  <span className="w-1 h-4 bg-emerald-500 rounded-full"></span>
+                  <span className="w-1 h-4 bg-cedar rounded-full"></span>
                   {getContent("About", "حول", "À propos")}
                 </h4>
                 <ul className="space-y-3">
                   <li>
                     <Link 
                       href={`/${locale}/legal`} 
-                      className="text-sm text-gray-300 hover:text-emerald-400 transition-colors duration-200 inline-flex items-center gap-2 group"
+                      className="text-sm text-gray-300 hover:text-cedar-light transition-colors duration-200 inline-flex items-center gap-2 group"
                     >
-                      <span className="w-0 h-px bg-emerald-400 group-hover:w-4 transition-all duration-200"></span>
+                      <span className="w-0 h-px bg-cedar-light group-hover:w-4 transition-all duration-200"></span>
                       {t("legal")}
                     </Link>
                   </li>
@@ -135,8 +135,8 @@ export function Footer() {
 
       {/* Decorative background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-10">
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-emerald-500 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-emerald-600 rounded-full blur-3xl"></div>
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-cedar rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-cedar-light rounded-full blur-3xl"></div>
       </div>
     </footer>
   );

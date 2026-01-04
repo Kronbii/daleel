@@ -72,8 +72,8 @@ export default async function HomePage({
           <div className="max-w-3xl mx-auto text-center">
             {/* Logo/Title */}
             <h1 className="fade-in text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-normal tracking-tight text-gray-900 mb-4 sm:mb-6">
-              <span className="block">Daleel</span>
-              <span className="block text-emerald-700 mt-1">دليل</span>
+              <span className="block font-serif">Daleel</span>
+              <span className="block text-cedar mt-1 font-serif">دليل</span>
             </h1>
             
             {/* Tagline */}
@@ -88,15 +88,15 @@ export default async function HomePage({
             {/* Trust indicators */}
             <div className="fade-in fade-in-2 mt-6 sm:mt-8 md:mt-10 flex flex-wrap items-center justify-center gap-4 sm:gap-6 md:gap-10 text-xs sm:text-sm text-gray-500 font-medium">
               <span className="flex items-center gap-1.5 sm:gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                <span className="w-1.5 h-1.5 rounded-full bg-cedar"></span>
                 {getContent("Transparent", "شفاف", "Transparent")}
               </span>
               <span className="flex items-center gap-1.5 sm:gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                <span className="w-1.5 h-1.5 rounded-full bg-cedar"></span>
                 {getContent("Neutral", "محايد", "Neutre")}
               </span>
               <span className="flex items-center gap-1.5 sm:gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                <span className="w-1.5 h-1.5 rounded-full bg-cedar"></span>
                 {getContent("Independent", "مستقل", "Indépendant")}
               </span>
             </div>
@@ -120,25 +120,25 @@ export default async function HomePage({
                 href={card.href}
                 className={`fade-in fade-in-${index + 2}`}
               >
-                <div className="nav-card group h-full backdrop-blur-sm bg-white/70 p-5 sm:p-6 md:p-8">
+                <div className="nav-card group h-full backdrop-blur-md bg-white/80 border border-white/50 shadow-sm hover:shadow-xl hover:shadow-cedar/5 hover:border-cedar/20 p-5 sm:p-6 md:p-8 transition-all duration-300">
                   {/* Mobile: horizontal layout, Desktop: vertical */}
                   <div className="flex md:flex-col items-start gap-4 md:gap-0">
                     {/* Icon */}
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center flex-shrink-0 md:mb-5 transition-all duration-300 group-hover:bg-emerald-100 group-hover:scale-105">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-cedar/10 text-cedar flex items-center justify-center flex-shrink-0 md:mb-5 transition-all duration-300 group-hover:bg-cedar group-hover:text-white group-hover:scale-110 shadow-sm">
                       {card.icon}
                     </div>
 
                     {/* Content */}
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-base sm:text-lg md:text-xl font-semibold text-gray-900 mb-1 sm:mb-2 group-hover:text-emerald-700 transition-colors font-sans">
+                      <h3 className="text-base sm:text-lg md:text-xl font-serif font-medium text-gray-900 mb-1 sm:mb-2 group-hover:text-cedar transition-colors">
                         {card.title}
                       </h3>
-                      <p className="text-gray-500 text-sm leading-relaxed line-clamp-2 md:line-clamp-none">
+                      <p className="text-gray-500 text-sm leading-relaxed line-clamp-2 md:line-clamp-none group-hover:text-gray-600 transition-colors">
                         {card.description}
                       </p>
 
                       {/* Arrow indicator - visible on hover for desktop, always subtle on mobile */}
-                      <div className={`mt-3 md:mt-5 flex items-center gap-2 text-sm font-medium text-emerald-600 md:opacity-0 md:translate-x-0 transition-all duration-300 md:group-hover:opacity-100 ${isRTL ? 'md:group-hover:-translate-x-1' : 'md:group-hover:translate-x-1'}`}>
+                      <div className={`mt-3 md:mt-5 flex items-center gap-2 text-sm font-medium text-cedar md:opacity-0 md:translate-x-0 transition-all duration-300 md:group-hover:opacity-100 ${isRTL ? 'md:group-hover:-translate-x-1' : 'md:group-hover:translate-x-1'}`}>
                         {getContent("View all", "عرض الكل", "Voir tout")}
                         <svg 
                           className={`w-4 h-4 ${isRTL ? 'rotate-180' : ''}`} 
@@ -175,7 +175,7 @@ export default async function HomePage({
             </p>
             <Link 
               href={`/${locale}/legal`}
-              className="inline-flex items-center gap-2 text-sm font-medium text-emerald-600 hover:text-emerald-700 transition-colors py-2 px-4 rounded-lg hover:bg-emerald-50 active:bg-emerald-100"
+              className="inline-flex items-center gap-2 text-sm font-medium text-cedar hover:text-cedar-light transition-colors py-2 px-4 rounded-lg hover:bg-cedar/5 active:bg-cedar/10"
             >
               {t("learnMore")}
               <svg 
