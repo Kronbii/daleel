@@ -7,11 +7,11 @@
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
     "@daleel/db#build": {
-      "dependsOn": ["prisma:generate"],
-      "outputs": ["dist/**"]
+      "cache": false,
+      "outputs": ["node_modules/.prisma/client/**"]
     },
     "@daleel/web#build": {
-      "dependsOn": ["@daleel/db#build", "@daleel/db#prisma:generate"],
+      "dependsOn": ["@daleel/db#build"],
       "outputs": [".next/**", "!.next/cache/**"]
     },
     "dev": {

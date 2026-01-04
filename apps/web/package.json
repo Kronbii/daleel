@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "postinstall": "cd ../../packages/db && pnpm prisma:generate && cd ../../apps/web",
+    "postinstall": "prisma generate --schema=../../packages/db/prisma/schema.prisma",
     "dev": "next dev",
-    "build": "cd ../../packages/db && pnpm prisma:generate && cd ../../apps/web && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prisma:generate": "cd ../../packages/db && pnpm prisma:generate",
+    "prisma:generate": "prisma generate --schema=../../packages/db/prisma/schema.prisma",
     "prisma:migrate": "cd ../../packages/db && pnpm prisma:migrate",
     "prisma:studio": "cd ../../packages/db && pnpm prisma:studio",
     "seed": "cd ../../packages/db && pnpm seed"
