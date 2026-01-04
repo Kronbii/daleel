@@ -3,7 +3,8 @@
  * Bridges Next.js API routes to Express backend handlers
  */
 
-import type { NextRequest, NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import type { Request, Response, NextFunction } from "express";
 import { IncomingMessage, ServerResponse } from "http";
 import { Readable } from "stream";
@@ -50,29 +51,35 @@ async function createExpressRequest(nextReq: NextRequest, path: string): Promise
   incoming.method = nextReq.method;
   incoming.url = path + url.search;
   incoming.headers = Object.fromEntries(nextReq.headers.entries());
+  
+  // Extract IP address from headers (NextRequest doesn't have .ip property)
+  const forwardedFor = nextReq.headers.get("x-forwarded-for");
+  const realIp = nextReq.headers.get("x-real-ip");
+  const remoteAddress = forwardedFor?.split(",")[0]?.trim() || realIp || "unknown";
+  
   incoming.socket = {
-    remoteAddress: nextReq.ip || nextReq.headers.get("x-forwarded-for")?.split(",")[0] || "unknown",
+    remoteAddress,
   } as any;
   
   // Create Express Request by extending IncomingMessage
   const req = incoming as any as Request;
   
-  // Add Express-specific properties
-  req.path = path;
-  req.query = Object.fromEntries(searchParams.entries());
-  req.body = body;
-  req.cookies = Object.fromEntries(
+  // Add Express-specific properties (use defineProperty for read-only properties)
+  Object.defineProperty(req, "path", { value: path, writable: true, configurable: true });
+  Object.defineProperty(req, "query", { value: Object.fromEntries(searchParams.entries()), writable: true, configurable: true });
+  Object.defineProperty(req, "body", { value: body, writable: true, configurable: true });
+  Object.defineProperty(req, "cookies", { value: Object.fromEntries(
     nextReq.cookies.getAll().map(c => [c.name, c.value])
-  );
-  req.ip = nextReq.ip || nextReq.headers.get("x-forwarded-for")?.split(",")[0] || "unknown";
-  req.get = (name: string) => nextReq.headers.get(name) || undefined;
-  req.header = (name: string) => nextReq.headers.get(name) || undefined;
-  req.protocol = url.protocol.slice(0, -1);
-  req.hostname = url.hostname;
-  req.secure = url.protocol === "https:";
-  req.originalUrl = path + url.search;
-  req.baseUrl = "";
-  req.params = {};
+  ), writable: true, configurable: true });
+  Object.defineProperty(req, "ip", { value: remoteAddress, writable: true, configurable: true });
+  Object.defineProperty(req, "get", { value: (name: string) => nextReq.headers.get(name) || undefined, writable: true, configurable: true });
+  Object.defineProperty(req, "header", { value: (name: string) => nextReq.headers.get(name) || undefined, writable: true, configurable: true });
+  Object.defineProperty(req, "protocol", { value: url.protocol.slice(0, -1), writable: true, configurable: true });
+  Object.defineProperty(req, "hostname", { value: url.hostname, writable: true, configurable: true });
+  Object.defineProperty(req, "secure", { value: url.protocol === "https:", writable: true, configurable: true });
+  Object.defineProperty(req, "originalUrl", { value: path + url.search, writable: true, configurable: true });
+  Object.defineProperty(req, "baseUrl", { value: "", writable: true, configurable: true });
+  Object.defineProperty(req, "params", { value: {}, writable: true, configurable: true });
   
   return req;
 }

@@ -20,7 +20,7 @@ app.set("trust proxy", 1);
 app.use(helmet());
 
 // Set security headers
-app.use((req, res, next) => {
+app.use((_req, res, next) => {
   Object.entries(SECURITY_HEADERS).forEach(([key, value]) => {
     res.setHeader(key, value);
   });
@@ -56,7 +56,7 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 // Health check endpoint
-app.get("/health", (req, res) => {
+app.get("/health", (_req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
@@ -66,12 +66,12 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/auth", authRoutes);
 
 // 404 handler
-app.use((req, res) => {
+app.use((_req, res) => {
   res.status(404).json({ success: false, error: "Not found" });
 });
 
 // Error handler
-app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+app.use((err: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error("Unhandled error:", err);
   res.status(500).json({
     success: false,

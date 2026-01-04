@@ -25,10 +25,6 @@ const nextConfig = {
     }
     return config;
   },
-  // Experimental: Enable server components external packages
-  experimental: {
-    serverComponentsExternalPackages: [],
-  },
 };
 
 export default withNextIntl(nextConfig);

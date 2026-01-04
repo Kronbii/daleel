@@ -9,7 +9,7 @@ import {
   uuidSchema,
   paginationSchema,
   archiveMethodSchema,
-} from "./validation";
+} from "./validation.js";
 
 // ============================================================================
 // SOURCE SCHEMAS

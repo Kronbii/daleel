@@ -9,49 +9,55 @@ import { handleBackendRequest } from "../../../../backend-adapter";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { route: string[] } }
+  { params }: { params: Promise<{ route: string[] }> }
 ) {
-  const path = `/api/${params.route.join("/")}`;
+  const { route } = await params;
+  const path = `/api/${route.join("/")}`;
   return handleBackendRequest(request, path);
 }
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { route: string[] } }
+  { params }: { params: Promise<{ route: string[] }> }
 ) {
-  const path = `/api/${params.route.join("/")}`;
+  const { route } = await params;
+  const path = `/api/${route.join("/")}`;
   return handleBackendRequest(request, path);
 }
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { route: string[] } }
+  { params }: { params: Promise<{ route: string[] }> }
 ) {
-  const path = `/api/${params.route.join("/")}`;
+  const { route } = await params;
+  const path = `/api/${route.join("/")}`;
   return handleBackendRequest(request, path);
 }
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { route: string[] } }
+  { params }: { params: Promise<{ route: string[] }> }
 ) {
-  const path = `/api/${params.route.join("/")}`;
+  const { route } = await params;
+  const path = `/api/${route.join("/")}`;
   return handleBackendRequest(request, path);
 }
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { route: string[] } }
+  { params }: { params: Promise<{ route: string[] }> }
 ) {
-  const path = `/api/${params.route.join("/")}`;
+  const { route } = await params;
+  const path = `/api/${route.join("/")}`;
   return handleBackendRequest(request, path);
 }
 
 export async function OPTIONS(
   request: NextRequest,
-  { params }: { params: { route: string[] } }
+  { params }: { params: Promise<{ route: string[] }> }
 ) {
-  const path = `/api/${params.route.join("/")}`;
+  const { route } = await params;
+  const path = `/api/${route.join("/")}`;
   return handleBackendRequest(request, path);
 }
 

@@ -9,7 +9,7 @@ import { successResponse, handleApiError } from "../../lib/api-utils.js";
 
 const router = Router();
 
-router.get("/", async (req, res) => {
+router.get("/", async (_req, res) => {
   try {
     const cycles = await prisma.electionCycle.findMany({
       orderBy: { year: "desc" },

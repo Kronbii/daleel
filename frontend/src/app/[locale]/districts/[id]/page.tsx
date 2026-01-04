@@ -95,7 +95,7 @@ export default async function DistrictDetailPage({
             <span className="text-xs sm:text-sm font-normal text-gray-400">({district.lists.length})</span>
           </h2>
           <div className="grid gap-2 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-            {district.lists.map((list) => (
+            {district.lists.map((list: { id: string; nameAr: string | null; nameEn: string | null; nameFr: string | null; status: string; _count: { candidates: number } }) => (
               <Link
                 key={list.id}
                 href={`/${locale}/lists/${list.id}`}
@@ -106,9 +106,9 @@ export default async function DistrictDetailPage({
                     <h3 className="font-semibold text-gray-900 group-hover:text-emerald-600 transition-colors text-sm sm:text-base line-clamp-2">
                       {getLocalized(
                         {
-                          ar: list.nameAr,
-                          en: list.nameEn,
-                          fr: list.nameFr,
+                          ar: list.nameAr || "",
+                          en: list.nameEn || "",
+                          fr: list.nameFr || "",
                         },
                         locale as Locale
                       )}
@@ -136,15 +136,26 @@ export default async function DistrictDetailPage({
             <span className="text-xs sm:text-sm font-normal text-gray-400">({district.candidates.length})</span>
           </h2>
           <div className="grid gap-3 sm:gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-            {district.candidates.map((candidate) => (
+            {district.candidates.map((candidate: {
+              id: string;
+              slug: string;
+              fullNameAr: string | null;
+              fullNameEn: string | null;
+              fullNameFr: string | null;
+              status: string;
+              placeholderPhotoStyle: string;
+            }) => (
               <CandidateCard
                 key={candidate.id}
                 candidate={{
                   ...candidate,
+                  fullNameAr: candidate.fullNameAr || "",
+                  fullNameEn: candidate.fullNameEn || "",
+                  fullNameFr: candidate.fullNameFr || "",
                   district: {
-                    nameAr: district.nameAr,
-                    nameEn: district.nameEn,
-                    nameFr: district.nameFr,
+                    nameAr: district.nameAr || "",
+                    nameEn: district.nameEn || "",
+                    nameFr: district.nameFr || "",
                   },
                 }}
                 locale={locale as Locale}

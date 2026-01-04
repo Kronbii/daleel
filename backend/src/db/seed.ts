@@ -579,7 +579,7 @@ async function main() {
     const line = lines[i].trim();
     if (!line) continue;
     
-    const [pointNumber, latitude, longitude] = line.split(",");
+    const [_pointNumber, latitude, longitude] = line.split(",");
     if (latitude && longitude) {
       points.push({
         latitude: parseFloat(latitude),

@@ -5,6 +5,7 @@
 
 import { Router } from "express";
 import { prisma } from "../../db/index.js";
+import type { ArchiveMethod } from "@prisma/client";
 import { createSourceSchema } from "../../../../shared/schemas.js";
 import { RATE_LIMIT_CONFIG } from "../../../../shared/constants.js";
 import { logAuditEvent, getClientInfo } from "../../lib/audit.js";
@@ -43,7 +44,17 @@ router.post(
 
       // Create source
       const source = await prisma.source.create({
-        data: validated,
+        data: {
+          title: validated.title,
+          publisher: validated.publisher,
+          originalUrl: validated.originalUrl,
+          archivedUrl: validated.archivedUrl,
+          archivedAt: validated.archivedAt,
+          archiveMethod: validated.archiveMethod as ArchiveMethod,
+          contentType: validated.contentType ?? null,
+          checksum: validated.checksum ?? null,
+          notes: validated.notes ?? null,
+        },
       });
 
       // Audit log

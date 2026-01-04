@@ -138,10 +138,23 @@ export default async function ListDetailPage({
           </div>
               ) : (
           <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 justify-items-center">
-                  {list.candidates.map((candidate) => (
+                  {list.candidates.map((candidate: {
+                    id: string;
+                    slug: string;
+                    fullNameAr: string | null;
+                    fullNameEn: string | null;
+                    fullNameFr: string | null;
+                    status: string;
+                    placeholderPhotoStyle: string;
+                  }) => (
                     <CandidateCard
                       key={candidate.id}
-                      candidate={candidate}
+                      candidate={{
+                        ...candidate,
+                        fullNameAr: candidate.fullNameAr || "",
+                        fullNameEn: candidate.fullNameEn || "",
+                        fullNameFr: candidate.fullNameFr || "",
+                      }}
                       locale={locale as Locale}
                     />
                   ))}

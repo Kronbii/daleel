@@ -5,7 +5,7 @@
 
 import { prisma } from "../db/index.js";
 import bcryptjs from "bcryptjs";
-import { randomBytes, createHmac } from "crypto";
+import { randomBytes } from "crypto";
 
 const { compare, hash } = bcryptjs;
 import cookie from "cookie";
