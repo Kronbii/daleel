@@ -5,6 +5,8 @@
 
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import * as fs from "fs";
+import * as path from "path";
 
 const prisma = new PrismaClient();
 
@@ -535,23 +537,58 @@ async function main() {
     console.log(`Created right of reply for ${candidate.fullNameAr}`);
   }
 
-  // Generate ~1000 electoral centers distributed across all districts
-  console.log("\nGenerating electoral centers...");
+  // Generate electoral centers from CSV file
+  console.log("\nGenerating electoral centers from CSV...");
   
   // Delete existing centers to avoid duplicates
   const deletedCount = await prisma.electoralCenter.deleteMany({});
   console.log(`Deleted ${deletedCount.count} existing electoral centers`);
   
-  // Lebanese coordinate ranges by region (covering entire Lebanon with safe margins)
-  // Lebanon boundaries: Lat 33.05-34.69°N, Lng 35.10-36.61°E
-  // Expanded ranges to cover full Lebanon while maintaining safe margins from borders
-  const regionCoordinates: Record<string, { lat: [number, number], lng: [number, number] }> = {
-    beirut: { lat: [33.80, 33.95], lng: [35.40, 35.60] }, // Beirut and surrounding area
-    mountLebanon: { lat: [33.70, 34.15], lng: [35.45, 35.90] }, // Mount Lebanon - expanded range
-    north: { lat: [34.20, 34.55], lng: [35.70, 36.05] }, // North Lebanon - expanded (Tripoli area)
-    south: { lat: [33.20, 33.70], lng: [35.20, 35.50] }, // South Lebanon - expanded (Sidon, Tyre area)
-    bekaa: { lat: [33.65, 34.25], lng: [35.85, 36.15] }, // Bekaa Valley - expanded (Zahle, Baalbek area)
-  };
+  // Read CSV file - try multiple possible locations
+  // The CSV should be in the project root (daleel/random_points.csv)
+  const csvPaths = [
+    path.join(process.cwd(), "random_points.csv"),
+    path.join(process.cwd(), "..", "random_points.csv"),
+    path.join(process.cwd(), "..", "..", "random_points.csv"),
+    path.join(__dirname, "..", "..", "..", "random_points.csv"),
+    path.resolve(process.cwd(), "..", "..", "random_points.csv"), // From packages/db to root
+  ];
+
+  let csvContent: string | null = null;
+  for (const csvPath of csvPaths) {
+    try {
+      if (fs.existsSync(csvPath)) {
+        csvContent = fs.readFileSync(csvPath, "utf-8");
+        console.log(`Found CSV file at: ${csvPath}`);
+        break;
+      }
+    } catch (error) {
+      // Continue to next path
+    }
+  }
+
+  if (!csvContent) {
+    throw new Error("Could not find random_points.csv file. Please ensure it exists in the project root.");
+  }
+
+  // Parse CSV
+  const lines = csvContent.trim().split("\n");
+  const points: Array<{ latitude: number; longitude: number }> = [];
+  
+  for (let i = 1; i < lines.length; i++) { // Skip header
+    const line = lines[i].trim();
+    if (!line) continue;
+    
+    const [pointNumber, latitude, longitude] = line.split(",");
+    if (latitude && longitude) {
+      points.push({
+        latitude: parseFloat(latitude),
+        longitude: parseFloat(longitude),
+      });
+    }
+  }
+
+  console.log(`Parsed ${points.length} points from CSV`);
 
   // Center name templates
   const centerNameTemplates = [
@@ -587,36 +624,22 @@ async function main() {
 
   const streetNames = [
     { ar: "شارع الحمراء", en: "Hamra Street", fr: "Rue Hamra" },
-    { ar: "شارع الحمراء", en: "Hamra Street", fr: "Rue Hamra" },
     { ar: "شارع الكورنيش", en: "Corniche", fr: "Corniche" },
     { ar: "شارع المكحول", en: "Makdisi Street", fr: "Rue Makdisi" },
     { ar: "شارع بلس", en: "Bliss Street", fr: "Rue Bliss" },
     { ar: "شارع الجميزة", en: "Gemmayzeh Street", fr: "Rue Gemmayzeh" },
     { ar: "شارع مار مخايل", en: "Mar Mikhael Street", fr: "Rue Mar Mikhael" },
-    { ar: "شارع الحمراء", en: "Hamra Street", fr: "Rue Hamra" },
   ];
 
-  const totalCenters = 1000;
-  const centersPerDistrict = Math.ceil(totalCenters / districts.length);
+  // Distribute points evenly across districts
+  const pointsPerDistrict = Math.ceil(points.length / districts.length);
+  let pointIndex = 0;
   let centerCount = 0;
 
   for (const district of districts) {
-    // Determine region based on district name
-    let region: keyof typeof regionCoordinates = "mountLebanon";
-    const districtNameLower = district.nameAr.toLowerCase();
-    if (districtNameLower.includes("بيروت")) region = "beirut";
-    else if (districtNameLower.includes("الشمال")) region = "north";
-    else if (districtNameLower.includes("الجنوب")) region = "south";
-    else if (districtNameLower.includes("البقاع")) region = "bekaa";
-    else region = "mountLebanon";
-
-    const coords = regionCoordinates[region];
-    
-    for (let i = 0; i < centersPerDistrict && centerCount < totalCenters; i++) {
-      // Generate random coordinates within the region
-      const lat = coords.lat[0] + Math.random() * (coords.lat[1] - coords.lat[0]);
-      const lng = coords.lng[0] + Math.random() * (coords.lng[1] - coords.lng[0]);
-
+    for (let i = 0; i < pointsPerDistrict && pointIndex < points.length; i++) {
+      const point = points[pointIndex];
+      
       // Generate center name
       const template = centerNameTemplates[centerCount % centerNameTemplates.length];
       const location = locationNames[Math.floor(centerCount / 10) % locationNames.length];
@@ -645,14 +668,15 @@ async function main() {
           nameAr,
           nameEn,
           nameFr,
-          latitude: lat,
-          longitude: lng,
+          latitude: point.latitude,
+          longitude: point.longitude,
           addressAr,
           addressEn,
           addressFr,
         },
       });
 
+      pointIndex++;
       centerCount++;
       if (centerCount % 100 === 0) {
         console.log(`Created ${centerCount} electoral centers...`);
