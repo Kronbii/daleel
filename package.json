@@ -13,7 +13,8 @@
     "prisma:studio": "turbo run prisma:studio",
     "seed": "turbo run seed",
     "vercel:build": "pnpm install --frozen-lockfile && pnpm build",
-    "build:check": "pnpm install --frozen-lockfile && NODE_ENV=production pnpm build"
+    "build:check": "pnpm install --frozen-lockfile && NODE_ENV=production pnpm build",
+    "postinstall": "pnpm prisma:generate"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
