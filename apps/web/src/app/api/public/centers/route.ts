@@ -13,11 +13,8 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const districtId = searchParams.get("districtId") || undefined;
 
-    const where: Prisma.ElectoralCenterWhereInput = {};
-    if (districtId) where.districtId = districtId;
-
     const centers = await prisma.electoralCenter.findMany({
-      where,
+      where: districtId ? { districtId } : undefined,
       orderBy: { nameAr: "asc" },
       select: {
         id: true,
