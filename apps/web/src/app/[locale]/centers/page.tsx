@@ -18,7 +18,7 @@ async function CentersPageData({ locale }: { locale: Locale }) {
   ]);
 
   // Transform districts to match the expected format
-  const districtsList = districts.map((d) => ({
+  const districtsList = districts.map((d: Awaited<ReturnType<typeof getDistrictsList>>[number]) => ({
     id: d.id,
     nameAr: d.nameAr,
     nameEn: d.nameEn,
