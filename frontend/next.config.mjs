@@ -26,7 +26,6 @@ const nextConfig = {
         ...(config.resolve.modules || []),
         path.resolve(__dirname, ".."),
       ];
-      // Ignore backend/dist during build (it will exist at runtime)
       config.resolve.alias = {
         ...config.resolve.alias,
       };

@@ -2,9 +2,8 @@
  * Audit logging utilities
  */
 
-import { prisma } from "../db/index.js";
+import { prisma } from "../db";
 import type { AuditAction } from "@prisma/client";
-import type { Request } from "express";
 
 export async function logAuditEvent(params: {
   actorUserId: string;
@@ -34,10 +33,9 @@ export async function logAuditEvent(params: {
 }
 
 export function getClientInfo(req: Request): { ip?: string; userAgent?: string } {
-  const forwarded = req.headers["x-forwarded-for"];
-  const forwardedStr = Array.isArray(forwarded) ? forwarded[0] : forwarded;
-  const ip = forwardedStr ? forwardedStr.split(",")[0].trim() : req.ip;
-  const userAgent = req.headers["user-agent"] || undefined;
+  const forwarded = req.headers.get("x-forwarded-for");
+  const forwardedStr = forwarded ? forwarded.split(",")[0].trim() : null;
+  const ip = forwardedStr || req.headers.get("x-real-ip") || undefined;
+  const userAgent = req.headers.get("user-agent") || undefined;
   return { ip, userAgent };
 }
-

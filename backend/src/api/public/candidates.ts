@@ -3,87 +3,87 @@
  * GET only
  */
 
-import { Router } from "express";
-import { prisma } from "../../db/index.js";
+import { prisma } from "../../db";
 import type { Prisma } from "@prisma/client";
-import { candidateQuerySchema } from "../../../../shared/schemas.js";
-import { paginatedResponse, successResponse, errorResponse, handleApiError } from "../../lib/api-utils.js";
+import { candidateQuerySchema } from "../../../../shared/schemas";
+import { paginatedResponse, successResponse, errorResponse, handleApiError } from "../../lib/api-utils";
 
-const router = Router();
+export async function handleCandidates(req: Request, pathSegments: string[]): Promise<Response> {
+  if (req.method !== "GET") {
+    return new Response(
+      JSON.stringify({ success: false, error: "Method not allowed" }),
+      { status: 405, headers: { "Content-Type": "application/json" } }
+    );
+  }
 
-// GET /api/public/candidates
-router.get("/", async (req, res) => {
   try {
-    const query = candidateQuerySchema.parse({
-      page: req.query.page,
-      pageSize: req.query.pageSize,
-      cycleId: req.query.cycleId || undefined,
-      districtId: req.query.districtId || undefined,
-      listId: req.query.listId || undefined,
-      status: req.query.status || undefined,
-      q: req.query.q || undefined,
-    });
+    const url = new URL(req.url);
 
-    const where: Prisma.CandidateWhereInput = {};
-    if (query.cycleId) where.cycleId = query.cycleId;
-    if (query.districtId) where.districtId = query.districtId;
-    if (query.listId) where.currentListId = query.listId;
-    if (query.status) where.status = query.status;
-    if (query.q) {
-      where.OR = [
-        { fullNameAr: { contains: query.q, mode: "insensitive" } },
-        { fullNameEn: { contains: query.q, mode: "insensitive" } },
-        { fullNameFr: { contains: query.q, mode: "insensitive" } },
-        { slug: { contains: query.q, mode: "insensitive" } },
-      ];
+    if (pathSegments.length === 0) {
+      const query = candidateQuerySchema.parse({
+        page: url.searchParams.get("page"),
+        pageSize: url.searchParams.get("pageSize"),
+        cycleId: url.searchParams.get("cycleId") || undefined,
+        districtId: url.searchParams.get("districtId") || undefined,
+        listId: url.searchParams.get("listId") || undefined,
+        status: url.searchParams.get("status") || undefined,
+        q: url.searchParams.get("q") || undefined,
+      });
+
+      const where: Prisma.CandidateWhereInput = {};
+      if (query.cycleId) where.cycleId = query.cycleId;
+      if (query.districtId) where.districtId = query.districtId;
+      if (query.listId) where.currentListId = query.listId;
+      if (query.status) where.status = query.status;
+      if (query.q) {
+        where.OR = [
+          { fullNameAr: { contains: query.q, mode: "insensitive" } },
+          { fullNameEn: { contains: query.q, mode: "insensitive" } },
+          { fullNameFr: { contains: query.q, mode: "insensitive" } },
+          { slug: { contains: query.q, mode: "insensitive" } },
+        ];
+      }
+
+      const [candidates, total] = await Promise.all([
+        prisma.candidate.findMany({
+          where,
+          skip: (query.page - 1) * query.pageSize,
+          take: query.pageSize,
+          orderBy: { fullNameAr: "asc" },
+          select: {
+            id: true,
+            slug: true,
+            fullNameAr: true,
+            fullNameEn: true,
+            fullNameFr: true,
+            status: true,
+            placeholderPhotoStyle: true,
+            district: {
+              select: {
+                id: true,
+                nameAr: true,
+                nameEn: true,
+                nameFr: true,
+              },
+            },
+            currentList: {
+              select: {
+                id: true,
+                nameAr: true,
+                nameEn: true,
+                nameFr: true,
+              },
+            },
+            updatedAt: true,
+          },
+        }),
+        prisma.candidate.count({ where }),
+      ]);
+
+      return paginatedResponse(candidates, total, query.page, query.pageSize);
     }
 
-    const [candidates, total] = await Promise.all([
-      prisma.candidate.findMany({
-        where,
-        skip: (query.page - 1) * query.pageSize,
-        take: query.pageSize,
-        orderBy: { fullNameAr: "asc" },
-        select: {
-          id: true,
-          slug: true,
-          fullNameAr: true,
-          fullNameEn: true,
-          fullNameFr: true,
-          status: true,
-          placeholderPhotoStyle: true,
-          district: {
-            select: {
-              id: true,
-              nameAr: true,
-              nameEn: true,
-              nameFr: true,
-            },
-          },
-          currentList: {
-            select: {
-              id: true,
-              nameAr: true,
-              nameEn: true,
-              nameFr: true,
-            },
-          },
-          updatedAt: true,
-        },
-      }),
-      prisma.candidate.count({ where }),
-    ]);
-
-    return paginatedResponse(res, candidates, total, query.page, query.pageSize);
-  } catch (error) {
-    return handleApiError(res, error);
-  }
-});
-
-// GET /api/public/candidates/:slug
-router.get("/:slug", async (req, res) => {
-  try {
-    const { slug } = req.params;
+    const slug = pathSegments[0];
     const candidate = await prisma.candidate.findUnique({
       where: { slug },
       include: {
@@ -144,7 +144,7 @@ router.get("/:slug", async (req, res) => {
     });
 
     if (!candidate) {
-      return errorResponse(res, "Not found", 404);
+      return errorResponse("Not found", 404);
     }
 
     // Get all sources referenced
@@ -166,14 +166,11 @@ router.get("/:slug", async (req, res) => {
       },
     });
 
-    return successResponse(res, {
+    return successResponse({
       ...candidate,
       sources,
     });
   } catch (error) {
-    return handleApiError(res, error);
+    return handleApiError(error);
   }
-});
-
-export default router;
-
+}

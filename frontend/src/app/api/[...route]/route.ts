@@ -4,60 +4,32 @@
  * Note: /api/auth/[...nextauth] is handled by NextAuth route handler (Next.js routing precedence)
  */
 
-import { NextRequest, NextResponse } from "next/server";
-import { handleBackendRequest } from "../../../../backend-adapter";
+import { NextRequest } from "next/server";
+import { handleRequest } from "../../../../backend-adapter";
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ route: string[] }> }
-) {
-  const { route } = await params;
-  const path = `/api/${route.join("/")}`;
-  return handleBackendRequest(request, path);
+export const runtime = "nodejs";
+
+export async function GET(request: NextRequest) {
+  return handleRequest(request);
 }
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ route: string[] }> }
-) {
-  const { route } = await params;
-  const path = `/api/${route.join("/")}`;
-  return handleBackendRequest(request, path);
+export async function POST(request: NextRequest) {
+  return handleRequest(request);
 }
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ route: string[] }> }
-) {
-  const { route } = await params;
-  const path = `/api/${route.join("/")}`;
-  return handleBackendRequest(request, path);
+export async function PUT(request: NextRequest) {
+  return handleRequest(request);
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: Promise<{ route: string[] }> }
-) {
-  const { route } = await params;
-  const path = `/api/${route.join("/")}`;
-  return handleBackendRequest(request, path);
+export async function DELETE(request: NextRequest) {
+  return handleRequest(request);
 }
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: Promise<{ route: string[] }> }
-) {
-  const { route } = await params;
-  const path = `/api/${route.join("/")}`;
-  return handleBackendRequest(request, path);
+export async function PATCH(request: NextRequest) {
+  return handleRequest(request);
 }
 
-export async function OPTIONS(
-  request: NextRequest,
-  { params }: { params: Promise<{ route: string[] }> }
-) {
-  const { route } = await params;
-  const path = `/api/${route.join("/")}`;
-  return handleBackendRequest(request, path);
+export async function OPTIONS(request: NextRequest) {
+  return handleRequest(request);
 }
 

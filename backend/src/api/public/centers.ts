@@ -3,15 +3,20 @@
  * GET only
  */
 
-import { Router } from "express";
-import { prisma } from "../../db/index.js";
-import { handleApiError } from "../../lib/api-utils.js";
+import { prisma } from "../../db";
+import { successResponse, handleApiError } from "../../lib/api-utils";
 
-const router = Router();
+export async function handleCenters(req: Request): Promise<Response> {
+  if (req.method !== "GET") {
+    return new Response(
+      JSON.stringify({ success: false, error: "Method not allowed" }),
+      { status: 405, headers: { "Content-Type": "application/json" } }
+    );
+  }
 
-router.get("/", async (req, res) => {
   try {
-    const districtId = req.query.districtId as string | undefined;
+    const url = new URL(req.url);
+    const districtId = url.searchParams.get("districtId") || undefined;
 
     const centers = await prisma.electoralCenter.findMany({
       where: districtId ? { districtId } : undefined,
@@ -39,11 +44,8 @@ router.get("/", async (req, res) => {
       },
     });
 
-    return res.json({ data: centers });
+    return successResponse(centers);
   } catch (error) {
-    return handleApiError(res, error);
+    return handleApiError(error);
   }
-});
-
-export default router;
-
+}

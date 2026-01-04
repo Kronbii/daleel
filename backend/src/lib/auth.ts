@@ -3,13 +3,12 @@
  * Implements session-based authentication with JWT tokens
  */
 
-import { prisma } from "../db/index.js";
+import { prisma } from "../db";
 import bcryptjs from "bcryptjs";
 import { randomBytes } from "crypto";
 
 const { compare, hash } = bcryptjs;
 import cookie from "cookie";
-import type { Request, Response, NextFunction } from "express";
 import type { UserRole } from "@prisma/client";
 
 // Session store (in production, use Redis)
@@ -24,20 +23,6 @@ const sessions = new Map<string, Session>();
 
 const SESSION_COOKIE_NAME = "daleel-session";
 const SESSION_EXPIRY = 24 * 60 * 60 * 1000; // 24 hours
-
-// Extend Express Request type
-declare global {
-  namespace Express {
-    interface Request {
-      session?: Session;
-      user?: {
-        id: string;
-        email: string;
-        role: UserRole;
-      };
-    }
-  }
-}
 
 function generateSessionId(): string {
   return randomBytes(32).toString("hex");
@@ -79,34 +64,30 @@ export async function authenticateUser(
   return { success: true, session, sessionId };
 }
 
-export function createSessionCookie(res: Response, sessionId: string): void {
-  res.setHeader(
-    "Set-Cookie",
-    cookie.serialize(SESSION_COOKIE_NAME, sessionId, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: SESSION_EXPIRY / 1000,
-      path: "/",
-    })
-  );
+export function createSessionCookie(headers: Headers, sessionId: string): void {
+  const cookieValue = cookie.serialize(SESSION_COOKIE_NAME, sessionId, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    maxAge: SESSION_EXPIRY / 1000,
+    path: "/",
+  });
+  headers.append("Set-Cookie", cookieValue);
 }
 
-export function clearSessionCookie(res: Response): void {
-  res.setHeader(
-    "Set-Cookie",
-    cookie.serialize(SESSION_COOKIE_NAME, "", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 0,
-      path: "/",
-    })
-  );
+export function clearSessionCookie(headers: Headers): void {
+  const cookieValue = cookie.serialize(SESSION_COOKIE_NAME, "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    maxAge: 0,
+    path: "/",
+  });
+  headers.append("Set-Cookie", cookieValue);
 }
 
 export function getSession(req: Request): Session | null {
-  const cookies = cookie.parse(req.headers.cookie || "");
+  const cookies = cookie.parse(req.headers.get("cookie") || "");
   const sessionId = cookies[SESSION_COOKIE_NAME];
 
   if (!sessionId) {
@@ -127,7 +108,7 @@ export function getSession(req: Request): Session | null {
 }
 
 export function destroySession(req: Request): void {
-  const cookies = cookie.parse(req.headers.cookie || "");
+  const cookies = cookie.parse(req.headers.get("cookie") || "");
   const sessionId = cookies[SESSION_COOKIE_NAME];
 
   if (sessionId) {
@@ -135,48 +116,76 @@ export function destroySession(req: Request): void {
   }
 }
 
-// Middleware to require authentication
-export function requireAuth(req: Request, res: Response, next: NextFunction): void {
+export interface AuthContext {
+  session: Session;
+  user: {
+    id: string;
+    email: string;
+    role: UserRole;
+  };
+}
+
+export function requireAuth(req: Request): { success: false; response: Response } | { success: true; context: AuthContext } {
   const session = getSession(req);
 
   if (!session) {
-    res.status(401).json({ success: false, error: "Unauthorized" });
-    return;
+    return {
+      success: false,
+      response: new Response(
+        JSON.stringify({ success: false, error: "Unauthorized" }),
+        { status: 401, headers: { "Content-Type": "application/json" } }
+      ),
+    };
   }
 
-  req.session = session;
-  req.user = {
-    id: session.userId,
-    email: session.email,
-    role: session.role,
+  return {
+    success: true,
+    context: {
+      session,
+      user: {
+        id: session.userId,
+        email: session.email,
+        role: session.role,
+      },
+    },
   };
-
-  next();
 }
 
-// Middleware to require specific roles
 export function requireRole(allowedRoles: UserRole[]) {
-  return (req: Request, res: Response, next: NextFunction): void => {
+  return (req: Request): { success: false; response: Response } | { success: true; context: AuthContext } => {
     const session = getSession(req);
 
     if (!session) {
-      res.status(401).json({ success: false, error: "Unauthorized" });
-      return;
+      return {
+        success: false,
+        response: new Response(
+          JSON.stringify({ success: false, error: "Unauthorized" }),
+          { status: 401, headers: { "Content-Type": "application/json" } }
+        ),
+      };
     }
 
     if (!allowedRoles.includes(session.role)) {
-      res.status(403).json({ success: false, error: "Forbidden" });
-      return;
+      return {
+        success: false,
+        response: new Response(
+          JSON.stringify({ success: false, error: "Forbidden" }),
+          { status: 403, headers: { "Content-Type": "application/json" } }
+        ),
+      };
     }
 
-    req.session = session;
-    req.user = {
-      id: session.userId,
-      email: session.email,
-      role: session.role,
+    return {
+      success: true,
+      context: {
+        session,
+        user: {
+          id: session.userId,
+          email: session.email,
+          role: session.role,
+        },
+      },
     };
-
-    next();
   };
 }
 
@@ -194,4 +203,3 @@ setInterval(() => {
     }
   }
 }, 60 * 1000); // Every minute
-

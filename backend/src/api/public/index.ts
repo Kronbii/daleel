@@ -2,20 +2,38 @@
  * Public API routes index
  */
 
-import { Router } from "express";
-import cyclesRouter from "./cycles.js";
-import districtsRouter from "./districts.js";
-import listsRouter from "./lists.js";
-import candidatesRouter from "./candidates.js";
-import centersRouter from "./centers.js";
+import { handleCycles } from "./cycles";
+import { handleDistricts } from "./districts";
+import { handleLists } from "./lists";
+import { handleCandidates } from "./candidates";
+import { handleCenters } from "./centers";
 
-const router = Router();
+export async function handlePublicRoutes(req: Request, pathSegments: string[]): Promise<Response> {
+  const url = new URL(req.url);
+  const pathname = url.pathname;
 
-router.use("/cycles", cyclesRouter);
-router.use("/districts", districtsRouter);
-router.use("/lists", listsRouter);
-router.use("/candidates", candidatesRouter);
-router.use("/centers", centersRouter);
+  if (pathSegments[0] === "cycles") {
+    return handleCycles(req);
+  }
 
-export default router;
+  if (pathSegments[0] === "districts") {
+    return handleDistricts(req, pathSegments.slice(1));
+  }
 
+  if (pathSegments[0] === "lists") {
+    return handleLists(req, pathSegments.slice(1));
+  }
+
+  if (pathSegments[0] === "candidates") {
+    return handleCandidates(req, pathSegments.slice(1));
+  }
+
+  if (pathSegments[0] === "centers") {
+    return handleCenters(req);
+  }
+
+  return new Response(
+    JSON.stringify({ success: false, error: "Not found" }),
+    { status: 404, headers: { "Content-Type": "application/json" } }
+  );
+}

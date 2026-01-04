@@ -3,13 +3,17 @@
  * GET only
  */
 
-import { Router } from "express";
-import { prisma } from "../../db/index.js";
-import { successResponse, handleApiError } from "../../lib/api-utils.js";
+import { prisma } from "../../db";
+import { successResponse, handleApiError } from "../../lib/api-utils";
 
-const router = Router();
+export async function handleCycles(req: Request): Promise<Response> {
+  if (req.method !== "GET") {
+    return new Response(
+      JSON.stringify({ success: false, error: "Method not allowed" }),
+      { status: 405, headers: { "Content-Type": "application/json" } }
+    );
+  }
 
-router.get("/", async (_req, res) => {
   try {
     const cycles = await prisma.electionCycle.findMany({
       orderBy: { year: "desc" },
@@ -22,11 +26,8 @@ router.get("/", async (_req, res) => {
       },
     });
 
-    return successResponse(res, cycles);
+    return successResponse(cycles);
   } catch (error) {
-    return handleApiError(res, error);
+    return handleApiError(error);
   }
-});
-
-export default router;
-
+}

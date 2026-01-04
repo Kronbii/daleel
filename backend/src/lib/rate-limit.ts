@@ -89,11 +89,9 @@ export async function rateLimit(
 }
 
 // Helper to get client identifier (IP or user ID)
-export function getClientIdentifier(req: { headers: Record<string, string | string[] | undefined>; ip?: string }): string {
-  // In production, extract from headers (X-Forwarded-For, etc.)
-  const forwarded = req.headers["x-forwarded-for"];
-  const forwardedStr = Array.isArray(forwarded) ? forwarded[0] : forwarded;
-  const ip = forwardedStr ? forwardedStr.split(",")[0] : req.ip || "unknown";
+export function getClientIdentifier(req: Request): string {
+  const forwarded = req.headers.get("x-forwarded-for");
+  const forwardedStr = forwarded ? forwarded.split(",")[0].trim() : null;
+  const ip = forwardedStr || req.headers.get("x-real-ip") || "unknown";
   return ip;
 }
-

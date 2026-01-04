@@ -3,73 +3,76 @@
  * GET only
  */
 
-import { Router } from "express";
-import { prisma } from "../../db/index.js";
+import { prisma } from "../../db";
 import type { Prisma } from "@prisma/client";
-import { listQuerySchema } from "../../../../shared/schemas.js";
-import { paginatedResponse, handleApiError } from "../../lib/api-utils.js";
+import { listQuerySchema } from "../../../../shared/schemas";
+import { paginatedResponse, successResponse, handleApiError } from "../../lib/api-utils";
 
-const router = Router();
-
-router.get("/", async (req, res) => {
-  try {
-    const query = listQuerySchema.parse({
-      page: req.query.page,
-      pageSize: req.query.pageSize,
-      cycleId: req.query.cycleId || undefined,
-      districtId: req.query.districtId || undefined,
-      status: req.query.status || undefined,
-    });
-
-    const where: Prisma.ElectoralListWhereInput = {};
-    if (query.cycleId) where.cycleId = query.cycleId;
-    if (query.districtId) where.districtId = query.districtId;
-    if (query.status) where.status = query.status;
-
-    const [lists, total] = await Promise.all([
-      prisma.electoralList.findMany({
-        where,
-        skip: (query.page - 1) * query.pageSize,
-        take: query.pageSize,
-        orderBy: { nameAr: "asc" },
-        select: {
-          id: true,
-          cycleId: true,
-          districtId: true,
-          nameAr: true,
-          nameEn: true,
-          nameFr: true,
-          status: true,
-          announcedAt: true,
-          notes: true,
-          district: {
-            select: {
-              id: true,
-              nameAr: true,
-              nameEn: true,
-              nameFr: true,
-            },
-          },
-          _count: {
-            select: {
-              candidates: true,
-            },
-          },
-        },
-      }),
-      prisma.electoralList.count({ where }),
-    ]);
-
-    return paginatedResponse(res, lists, total, query.page, query.pageSize);
-  } catch (error) {
-    return handleApiError(res, error);
+export async function handleLists(req: Request, pathSegments: string[]): Promise<Response> {
+  if (req.method !== "GET") {
+    return new Response(
+      JSON.stringify({ success: false, error: "Method not allowed" }),
+      { status: 405, headers: { "Content-Type": "application/json" } }
+    );
   }
-});
 
-router.get("/:id", async (req, res) => {
   try {
+    const url = new URL(req.url);
+
+    if (pathSegments.length === 0) {
+      const query = listQuerySchema.parse({
+        page: url.searchParams.get("page"),
+        pageSize: url.searchParams.get("pageSize"),
+        cycleId: url.searchParams.get("cycleId") || undefined,
+        districtId: url.searchParams.get("districtId") || undefined,
+        status: url.searchParams.get("status") || undefined,
+      });
+
+      const where: Prisma.ElectoralListWhereInput = {};
+      if (query.cycleId) where.cycleId = query.cycleId;
+      if (query.districtId) where.districtId = query.districtId;
+      if (query.status) where.status = query.status;
+
+      const [lists, total] = await Promise.all([
+        prisma.electoralList.findMany({
+          where,
+          skip: (query.page - 1) * query.pageSize,
+          take: query.pageSize,
+          orderBy: { nameAr: "asc" },
+          select: {
+            id: true,
+            cycleId: true,
+            districtId: true,
+            nameAr: true,
+            nameEn: true,
+            nameFr: true,
+            status: true,
+            announcedAt: true,
+            notes: true,
+            district: {
+              select: {
+                id: true,
+                nameAr: true,
+                nameEn: true,
+                nameFr: true,
+              },
+            },
+            _count: {
+              select: {
+                candidates: true,
+              },
+            },
+          },
+        }),
+        prisma.electoralList.count({ where }),
+      ]);
+
+      return paginatedResponse(lists, total, query.page, query.pageSize);
+    }
+
+    const id = pathSegments[0];
     const list = await prisma.electoralList.findUnique({
-      where: { id: req.params.id },
+      where: { id },
       select: {
         id: true,
         cycleId: true,
@@ -110,14 +113,14 @@ router.get("/:id", async (req, res) => {
     });
 
     if (!list) {
-      return res.status(404).json({ success: false, error: "List not found" });
+      return new Response(
+        JSON.stringify({ success: false, error: "List not found" }),
+        { status: 404, headers: { "Content-Type": "application/json" } }
+      );
     }
 
-    return res.json({ success: true, data: list });
+    return successResponse(list);
   } catch (error) {
-    return handleApiError(res, error);
+    return handleApiError(error);
   }
-});
-
-export default router;
-
+}

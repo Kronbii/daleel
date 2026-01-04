@@ -3,7 +3,7 @@
  */
 
 import { PrismaClient } from "@prisma/client";
-import { createAppendOnlyMiddleware } from "./middleware.js";
+import { createAppendOnlyMiddleware } from "./middleware";
 
 // Prevent multiple instances in serverless (Vercel)
 // Use globalThis to reuse Prisma client across serverless function invocations
