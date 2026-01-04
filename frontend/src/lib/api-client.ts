@@ -1,11 +1,13 @@
+import { headers } from "next/headers";
+
 /**
  * API client for fetching data from the backend
  * 
- * In production (Vercel), uses VERCEL_URL for server-side requests.
+ * In production (Vercel), constructs URL from request headers for server-side requests.
  * Client-side requests can use relative URLs.
  * In development, defaults to http://localhost:3000
  */
-const getApiUrl = () => {
+const getApiUrl = async () => {
   // If explicitly set, use it
   if (process.env.NEXT_PUBLIC_API_URL) {
     return process.env.NEXT_PUBLIC_API_URL;
@@ -15,12 +17,22 @@ const getApiUrl = () => {
   const isServer = typeof window === "undefined";
   
   if (isServer) {
-    // Server-side: need absolute URL
-    // VERCEL_URL is automatically set by Vercel (without protocol)
+    // Try to get host from request headers (works in Server Components)
+    try {
+      const headersList = await headers();
+      const host = headersList.get("host");
+      const protocol = headersList.get("x-forwarded-proto") || "https";
+      if (host) {
+        return `${protocol}://${host}`;
+      }
+    } catch {
+      // headers() not available in this context
+    }
+    
+    // Fallback to Vercel environment variables
     if (process.env.VERCEL_URL) {
       return `https://${process.env.VERCEL_URL}`;
     }
-    // VERCEL_PROJECT_PRODUCTION_URL for production deployments
     if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
       return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
     }
@@ -73,7 +85,7 @@ async function request<T>(
   }
 
   // Get API URL at request time (not module load time) for proper Vercel env detection
-  const apiUrl = getApiUrl();
+  const apiUrl = await getApiUrl();
   const response = await fetch(`${apiUrl}${endpoint}`, fetchOptions);
 
   if (!response.ok) {
