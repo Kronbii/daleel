@@ -7,9 +7,18 @@ import type { NextRequest, NextResponse } from "next/server";
 import type { Request, Response, NextFunction } from "express";
 import { IncomingMessage, ServerResponse } from "http";
 import { Readable } from "stream";
-// Import backend Express app from compiled output
-// Backend is built before frontend, so we can import from dist
-import app from "../backend/dist/server.js";
+
+// Lazy load backend app to avoid build-time resolution issues
+// Use dynamic import with path relative to frontend directory
+let appPromise: Promise<any> | null = null;
+
+async function getBackendApp() {
+  if (!appPromise) {
+    // Path from frontend/backend-adapter.ts to backend/dist/server.js
+    appPromise = import("../backend/dist/server.js").then((mod) => mod.default);
+  }
+  return appPromise;
+}
 
 /**
  * Convert Next.js Request to Express-compatible Request
@@ -222,8 +231,9 @@ export async function handleBackendRequest(
     }
   };
   
-  // Dispatch to Express app
+  // Load backend app dynamically (runtime import to avoid build-time resolution)
   try {
+    const app = await getBackendApp();
     app(req, res, (err?: Error) => {
       if (err) {
         errorHandler(err);
