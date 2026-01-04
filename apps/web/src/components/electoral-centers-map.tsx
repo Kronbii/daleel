@@ -53,7 +53,7 @@ interface ElectoralCentersMapProps {
 }
 
 // Custom cluster icon function - creates colored circles based on count
-const createClusterCustomIcon = (cluster: L.MarkerCluster) => {
+const createClusterCustomIcon = (cluster: any) => {
   const count = cluster.getChildCount();
   
   // Determine color based on count
@@ -128,34 +128,51 @@ function MapViewUpdater({
     );
     map.setMaxBounds(lebanonBounds);
 
-    if (centers.length === 0) {
-      // Default to Lebanon center if no centers
-      map.setView([33.8547, 35.8623], 8);
-      return;
-    }
-
-    if (selectedDistrictId && centers.length > 0) {
-      // Fit bounds to selected district centers
-      const bounds = L.latLngBounds(
-        centers.map((center) => [center.latitude, center.longitude])
-      );
-      map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 });
-    } else if (userLocation) {
-      // Center on user location, but ensure it's within Lebanon bounds
-      const userLatLng = L.latLng(userLocation.lat, userLocation.lng);
-      if (lebanonBounds.contains(userLatLng)) {
-        map.setView([userLocation.lat, userLocation.lng], 12);
-      } else {
-        // If user location is outside Lebanon, just show Lebanon
-        map.fitBounds(lebanonBounds, { padding: [50, 50] });
+    // Debounce map updates to prevent blocking during rapid changes
+    let timeoutId: NodeJS.Timeout;
+    
+    const updateMap = () => {
+      if (centers.length === 0) {
+        // Default to Lebanon center if no centers
+        map.setView([33.8547, 35.8623], 8);
+        return;
       }
-    } else {
-      // Fit bounds to all centers
-      const bounds = L.latLngBounds(
-        centers.map((center) => [center.latitude, center.longitude])
-      );
-      map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 });
-    }
+
+      if (userLocation) {
+        // Prioritize user location - center on it if within Lebanon bounds
+        const userLatLng = L.latLng(userLocation.lat, userLocation.lng);
+        if (lebanonBounds.contains(userLatLng)) {
+          map.setView([userLocation.lat, userLocation.lng], 12, {
+            animate: true,
+          });
+        } else {
+          // If user location is outside Lebanon, just show Lebanon
+          map.fitBounds(lebanonBounds, { padding: [50, 50], animate: true });
+        }
+      } else if (selectedDistrictId && centers.length > 0) {
+        // Fit bounds to selected district centers
+        const bounds = L.latLngBounds(
+          centers.map((center) => [center.latitude, center.longitude])
+        );
+        map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15, animate: true });
+      } else {
+        // Fit bounds to all centers
+        const bounds = L.latLngBounds(
+          centers.map((center) => [center.latitude, center.longitude])
+        );
+        map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15, animate: true });
+      }
+    };
+
+    // Debounce map updates - wait 100ms before updating
+    // This prevents blocking when location changes rapidly
+    timeoutId = setTimeout(() => {
+      requestAnimationFrame(updateMap);
+    }, 100);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [map, centers, selectedDistrictId, userLocation]);
 
   return null;
