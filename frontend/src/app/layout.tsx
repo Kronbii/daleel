@@ -39,7 +39,7 @@ export default function RootLayout({
 }) {
   return (
     <html suppressHydrationWarning>
-      <body className={`${dmSerif.variable} ${outfit.variable} ${notoSansArabic.variable}`}>{children}</body>
+      <body suppressHydrationWarning className={`${dmSerif.variable} ${outfit.variable} ${notoSansArabic.variable}`}>{children}</body>
     </html>
   );
 }
