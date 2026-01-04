@@ -68,19 +68,19 @@ openssl rand -base64 32
 2. Import your Git repository
 3. **IMPORTANT**: Configure project settings:
    - **Framework Preset**: Next.js (you may need to select this manually)
-   - **Root Directory**: **Leave empty or set to `/` (repo root)** - DO NOT set to `backend` or `frontend`
-     - Vercel may auto-detect `backend` - you MUST change this to root (`/`)
-     - The root directory must be the repo root because:
-       - The `api/` folder (serverless functions) must be at root level
-       - The `frontend/` folder contains the Next.js app
-       - The `vercel.json` config file is at root
-   - **Build Command**: `cd frontend && npm run build` (or use the one from vercel.json)
-   - **Output Directory**: `frontend/.next` (or use the one from vercel.json)
-   - **Install Command**: `npm install` (or leave default)
+   - **Root Directory**: **Set to `frontend`** 
+     - Vercel may auto-detect `backend` - change it to `frontend`
+     - The `vercel.json` config file is now in the `frontend/` directory
+     - The serverless function is at `frontend/api/index.ts`
+   - **Build Command**: `npm run build` (auto-detected from vercel.json in frontend/)
+   - **Output Directory**: `.next` (auto-detected from vercel.json)
+   - **Install Command**: `cd .. && npm install` (installs from repo root to get all workspace dependencies)
 4. Add all environment variables
 5. Click "Deploy"
 
-**Note**: If Vercel shows "Root Directory" as `backend`, click on it and change it to `/` (root) or leave it empty.
+**Note**: 
+- If Vercel shows "Root Directory" as `backend`, change it to `frontend`
+- The install command runs from the parent directory to install all workspace dependencies (backend, frontend, shared)
 
 #### Option B: Via Vercel CLI
 
