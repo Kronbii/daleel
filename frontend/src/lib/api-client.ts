@@ -1,48 +1,9 @@
-import { headers } from "next/headers";
-
 /**
  * API client for fetching data from the backend
  * 
- * In production (Vercel), constructs URL from request headers for server-side requests.
- * Client-side requests can use relative URLs.
- * In development, defaults to http://localhost:3000
+ * On server-side (SSR), calls backend handlers directly for better performance.
+ * On client-side, uses fetch with relative URLs.
  */
-const getApiUrl = async () => {
-  // If explicitly set, use it
-  if (process.env.NEXT_PUBLIC_API_URL) {
-    return process.env.NEXT_PUBLIC_API_URL;
-  }
-  
-  // Check if we're on the server
-  const isServer = typeof window === "undefined";
-  
-  if (isServer) {
-    // Try to get host from request headers (works in Server Components)
-    try {
-      const headersList = await headers();
-      const host = headersList.get("host");
-      const protocol = headersList.get("x-forwarded-proto") || "https";
-      if (host) {
-        return `${protocol}://${host}`;
-      }
-    } catch {
-      // headers() not available in this context
-    }
-    
-    // Fallback to Vercel environment variables
-    if (process.env.VERCEL_URL) {
-      return `https://${process.env.VERCEL_URL}`;
-    }
-    if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
-      return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
-    }
-    // Fallback for local production testing
-    return "http://localhost:3000";
-  }
-  
-  // Client-side: can use relative URLs (empty string)
-  return "";
-};
 
 type RequestOptions = {
   method?: "GET" | "POST" | "PUT" | "DELETE";
@@ -61,6 +22,35 @@ async function request<T>(
   endpoint: string,
   options: RequestOptions = {}
 ): Promise<T> {
+  const isServer = typeof window === "undefined";
+  
+  // Server-side: call backend handlers directly
+  if (isServer) {
+    const { handleApiRequest } = await import("../../../backend/src/api/router");
+    
+    const url = `https://example.com${endpoint}`; // Domain doesn't matter, we just need the path
+    const { method = "GET", body, headers: customHeaders = {} } = options;
+    
+    const request = new Request(url, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        ...customHeaders,
+      },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+    
+    const response = await handleApiRequest(request);
+    
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ error: "Request failed" }));
+      throw new Error(error.error || `HTTP ${response.status}`);
+    }
+    
+    return response.json();
+  }
+  
+  // Client-side: use fetch with relative URLs
   const { method = "GET", body, headers = {}, cache, next } = options;
 
   const fetchOptions: RequestInit & { next?: NextFetchRequestConfig } = {
@@ -84,9 +74,7 @@ async function request<T>(
     fetchOptions.next = next;
   }
 
-  // Get API URL at request time (not module load time) for proper Vercel env detection
-  const apiUrl = await getApiUrl();
-  const response = await fetch(`${apiUrl}${endpoint}`, fetchOptions);
+  const response = await fetch(endpoint, fetchOptions);
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({ error: "Request failed" }));
