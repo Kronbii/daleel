@@ -21,8 +21,8 @@ export async function handleDistricts(req: Request, pathSegments: string[]): Pro
     
     if (pathSegments.length === 0) {
       const query = districtQuerySchema.parse({
-        page: url.searchParams.get("page"),
-        pageSize: url.searchParams.get("pageSize"),
+        page: url.searchParams.get("page") ?? undefined,
+        pageSize: url.searchParams.get("pageSize") ?? undefined,
         cycleId: url.searchParams.get("cycleId") || undefined,
       });
 

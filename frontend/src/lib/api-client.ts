@@ -1,20 +1,31 @@
 /**
  * API client for fetching data from the backend
  * 
- * In production (Vercel), if NEXT_PUBLIC_API_URL is not set, uses relative URLs
- * for same-origin requests (frontend and backend on same domain).
- * In development, defaults to http://localhost:4000
+ * In production (Vercel), uses VERCEL_URL or NEXT_PUBLIC_API_URL for server-side requests.
+ * Client-side requests can use relative URLs.
+ * In development, defaults to http://localhost:3000
  */
 const getApiUrl = () => {
+  // If explicitly set, use it
   if (process.env.NEXT_PUBLIC_API_URL) {
     return process.env.NEXT_PUBLIC_API_URL;
   }
-  // In production (Vercel), use relative URLs (empty string)
-  // In development, use localhost
-  if (process.env.NODE_ENV === "production") {
-    return "";
+  
+  // Check if we're on the server
+  const isServer = typeof window === "undefined";
+  
+  if (isServer) {
+    // Server-side: need absolute URL
+    // VERCEL_URL is automatically set by Vercel (without protocol)
+    if (process.env.VERCEL_URL) {
+      return `https://${process.env.VERCEL_URL}`;
+    }
+    // Fallback for local production testing
+    return "http://localhost:3000";
   }
-  return "http://localhost:4000";
+  
+  // Client-side: can use relative URLs (empty string)
+  return "";
 };
 
 const API_URL = getApiUrl();

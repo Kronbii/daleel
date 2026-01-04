@@ -21,8 +21,8 @@ export async function handleCandidates(req: Request, pathSegments: string[]): Pr
 
     if (pathSegments.length === 0) {
       const query = candidateQuerySchema.parse({
-        page: url.searchParams.get("page"),
-        pageSize: url.searchParams.get("pageSize"),
+        page: url.searchParams.get("page") ?? undefined,
+        pageSize: url.searchParams.get("pageSize") ?? undefined,
         cycleId: url.searchParams.get("cycleId") || undefined,
         districtId: url.searchParams.get("districtId") || undefined,
         listId: url.searchParams.get("listId") || undefined,

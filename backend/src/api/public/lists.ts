@@ -21,8 +21,8 @@ export async function handleLists(req: Request, pathSegments: string[]): Promise
 
     if (pathSegments.length === 0) {
       const query = listQuerySchema.parse({
-        page: url.searchParams.get("page"),
-        pageSize: url.searchParams.get("pageSize"),
+        page: url.searchParams.get("page") ?? undefined,
+        pageSize: url.searchParams.get("pageSize") ?? undefined,
         cycleId: url.searchParams.get("cycleId") || undefined,
         districtId: url.searchParams.get("districtId") || undefined,
         status: url.searchParams.get("status") || undefined,
