@@ -139,7 +139,7 @@ export function CustomSelect({
       {isOpen && !disabled && (
         <div
           className="absolute left-0 right-0 mt-2 bg-white rounded-xl border border-gray-200 shadow-xl overflow-hidden"
-          style={{ zIndex: 9999 }}
+          style={{ zIndex: 10000 }}
         >
           <ul
             ref={listRef}

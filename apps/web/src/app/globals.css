@@ -1,3 +1,128 @@
+/* Leaflet map styles - must be imported first */
+@import "leaflet/dist/leaflet.css";
+
+/* Ensure Leaflet map doesn't cover dropdowns */
+.leaflet-container {
+  z-index: 1 !important;
+}
+
+.leaflet-pane {
+  z-index: 1 !important;
+}
+
+.leaflet-map-pane {
+  z-index: 1 !important;
+}
+
+.leaflet-tile-pane {
+  z-index: 1 !important;
+}
+
+.leaflet-overlay-pane {
+  z-index: 2 !important;
+}
+
+.leaflet-shadow-pane {
+  z-index: 3 !important;
+}
+
+.leaflet-marker-pane {
+  z-index: 4 !important;
+}
+
+.leaflet-tooltip-pane {
+  z-index: 5 !important;
+}
+
+.leaflet-popup-pane {
+  z-index: 6 !important;
+}
+
+.leaflet-control-container {
+  z-index: 7 !important;
+}
+
+/* Custom marker cluster styles */
+.custom-cluster-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+.custom-marker-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+.user-location-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Ensure marker cluster popups show correctly */
+.marker-cluster {
+  background: transparent !important;
+}
+
+.marker-cluster div {
+  background: transparent !important;
+}
+
+/* Smooth cluster expansion animations */
+@keyframes clusterExpand {
+  from {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes markerAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.5) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Cluster icons - smooth expansion animation */
+.cluster-icon-container {
+  animation: clusterExpand 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cluster-icon-container:hover {
+  transform: scale(1.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+}
+
+/* Marker icons - smooth appearance when cluster expands */
+.marker-icon-container {
+  animation: markerAppear 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.marker-icon-container:hover {
+  transform: scale(1.15);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+}
+
+/* User location - only hover effects */
+.user-location-container {
+  /* No transition on creation */
+}
+
+.user-location-container:hover {
+  transform: scale(1.15);
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.5);
+  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

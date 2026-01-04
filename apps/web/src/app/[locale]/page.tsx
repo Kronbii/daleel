@@ -45,6 +45,17 @@ export default async function HomePage({
         </svg>
       ),
     },
+    {
+      title: t("centers"),
+      description: t("centersDesc"),
+      href: `/${locale}/centers`,
+      icon: (
+        <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+        </svg>
+      ),
+    },
   ];
 
   const getContent = (en: string, ar: string, fr: string) => {
@@ -101,8 +112,8 @@ export default async function HomePage({
             {getContent("Explore", "استكشف", "Explorer")}
           </p>
 
-          {/* Cards Grid - Stack on mobile, 3 columns on md+ */}
-          <div className="grid gap-3 sm:gap-4 md:gap-6 grid-cols-1 md:grid-cols-3">
+          {/* Cards Grid - Stack on mobile, 2 columns on md, 4 columns on lg+ */}
+          <div className="grid gap-3 sm:gap-4 md:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
             {navigationCards.map((card, index) => (
               <Link 
                 key={card.href} 
