@@ -28,23 +28,23 @@ app.use((req, res, next) => {
 });
 
 // CORS configuration
-// In Vercel, frontend and backend are on the same domain
-// Allow both the Vercel deployment URL and custom FRONTEND_URL if set
+// In Vercel, frontend and backend are on the same domain (same-origin)
+// In development, allow localhost
 const getCorsOrigin = () => {
-  if (process.env.FRONTEND_URL) {
-    return process.env.FRONTEND_URL;
+  // In Vercel/serverless, same origin - allow all or specific origin
+  if (process.env.VERCEL || process.env.VERCEL_ENV) {
+    // Same origin in Vercel, but allow explicit FRONTEND_URL if set
+    return process.env.FRONTEND_URL || true; // true allows same-origin
   }
-  if (process.env.VERCEL_URL) {
-    return `https://${process.env.VERCEL_URL}`;
-  }
-  return "http://localhost:3000";
+  // Development - use FRONTEND_URL or default to localhost
+  return process.env.FRONTEND_URL || "http://localhost:3000";
 };
 
 app.use(
   cors({
     origin: getCorsOrigin(),
     credentials: true, // Allow cookies
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization", "X-CSRF-Token"],
   })
 );
@@ -81,14 +81,15 @@ app.use((err: Error, req: express.Request, res: express.Response, next: express.
 
 // Start server only if not in serverless environment (Vercel)
 // In Vercel, the app is exported and handled by the serverless function
-if (process.env.VERCEL !== "1" && !process.env.VERCEL_ENV) {
+// DO NOT call app.listen() in serverless - it will cause errors
+if (process.env.VERCEL !== "1" && !process.env.VERCEL_ENV && typeof process.env.VERCEL === "undefined") {
   const PORT = process.env.PORT || 4000;
   const HOST = process.env.HOST || "0.0.0.0";
 
   app.listen(Number(PORT), HOST, () => {
     console.log(`🚀 Daleel Backend running on http://${HOST}:${PORT}`);
     console.log(`   Environment: ${process.env.NODE_ENV || "development"}`);
-    console.log(`   CORS origin: ${corsOrigin}`);
+    console.log(`   CORS origin: ${getCorsOrigin()}`);
   });
 }
 

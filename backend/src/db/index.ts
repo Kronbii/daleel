@@ -5,7 +5,8 @@
 import { PrismaClient } from "@prisma/client";
 import { createAppendOnlyMiddleware } from "./middleware.js";
 
-// Prevent multiple instances in development
+// Prevent multiple instances in serverless (Vercel)
+// Use globalThis to reuse Prisma client across serverless function invocations
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
@@ -16,12 +17,13 @@ export const prisma =
     log: process.env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
   });
 
-// Apply append-only middleware
+// Apply append-only middleware only once
 if (!globalForPrisma.prisma) {
   createAppendOnlyMiddleware(prisma);
 }
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+// Store in globalThis for serverless reuse (works in both dev and production)
+globalForPrisma.prisma = prisma;
 
 // Export Prisma types
 export * from "@prisma/client";

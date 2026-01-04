@@ -9,7 +9,19 @@ import Credentials from "next-auth/providers/credentials";
 // User role type
 export type UserRole = "ADMIN" | "EDITOR" | "VIEWER";
 
-const API_URL = process.env.API_URL || "http://localhost:3001";
+// Use relative URLs in production (same origin), localhost in development
+const getApiUrl = () => {
+  if (process.env.API_URL) {
+    return process.env.API_URL;
+  }
+  // In production (Vercel), use relative URLs
+  if (process.env.NODE_ENV === "production") {
+    return "";
+  }
+  return "http://localhost:4000";
+};
+
+const API_URL = getApiUrl();
 
 export const authConfig: NextAuthConfig = {
   providers: [
