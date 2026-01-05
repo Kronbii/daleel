@@ -64,8 +64,8 @@ export function Navbar() {
       <nav
         className={`fixed top-0 z-50 w-full transition-all duration-500 border-b ${
           scrolled || mobileMenuOpen
-            ? "bg-white/70 backdrop-blur-2xl backdrop-saturate-150 border-white/20 shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
-            : "bg-white/40 backdrop-blur-lg backdrop-saturate-100 border-transparent shadow-none"
+            ? "bg-white/50 backdrop-blur-2xl backdrop-saturate-150 border-white/20 shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
+            : "bg-white/25 backdrop-blur-lg backdrop-saturate-100 border-transparent shadow-none"
         }`}
       >
         <div className="container mx-auto px-4 sm:px-6">
