@@ -56,15 +56,14 @@ export function Navbar() {
           {/* Logo */}
           <Link
             href={`/${locale}`}
-            className="flex items-center gap-2 sm:gap-3 group"
+            className="flex items-center gap-2 sm:gap-3 group p-1.5 -ml-1.5 rounded-lg transition-all duration-200 hover:bg-gray-50 active:bg-gray-100 cursor-pointer"
             onClick={() => setMobileMenuOpen(false)}
           >
-            <div className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-lg bg-cedar text-white font-bold text-sm sm:text-base transition-transform duration-200 group-hover:scale-105 font-serif">
-              د
-            </div>
-            <span className="text-base sm:text-lg font-semibold text-gray-900 font-serif">
-              Daleel
-            </span>
+            <img 
+              src="/ar-k.svg" 
+              alt="دليل" 
+              className="h-8 sm:h-9 w-auto transition-all duration-200 group-hover:scale-105 group-hover:opacity-90" 
+            />
           </Link>
 
           {/* Desktop Navigation */}
