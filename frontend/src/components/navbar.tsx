@@ -84,20 +84,29 @@ export function Navbar() {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-1 bg-white/30 p-1 rounded-full border border-white/20 shadow-[inset_0_1px_4px_rgba(0,0,0,0.01)] backdrop-blur-md">
+            <div className="hidden md:flex items-center gap-2 bg-white/30 p-1.5 rounded-full border border-white/20 shadow-[inset_0_1px_4px_rgba(0,0,0,0.01)] backdrop-blur-md">
               {navLinks.map((link) => {
                 const isActive = pathname === link.href || pathname.startsWith(`${link.href}/`);
                 return (
                   <Link
                     key={link.href}
                     href={link.href}
-                    className={`relative px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ${
+                    className={`relative px-5 py-2.5 text-sm font-semibold rounded-full transition-all duration-300 group ${
                       isActive
-                        ? "text-black bg-white shadow-[0_2px_8px_rgba(0,0,0,0.08)]"
-                        : "text-gray-600 hover:text-black hover:bg-white/50"
+                        ? "text-black bg-white shadow-[0_2px_12px_rgba(0,0,0,0.12)] scale-105"
+                        : "text-gray-700 hover:text-black hover:bg-white/70 hover:shadow-[0_2px_8px_rgba(0,0,0,0.06)] hover:scale-105"
                     }`}
                   >
-                    <span className="relative z-10">{link.label}</span>
+                    <span className="relative z-10 flex items-center gap-1.5">
+                      {link.label}
+                      {isActive && (
+                        <span className="w-1.5 h-1.5 rounded-full bg-cedar shadow-[0_0_4px_currentColor] opacity-80" />
+                      )}
+                    </span>
+                    {/* Subtle glow effect on hover */}
+                    {!isActive && (
+                      <span className="absolute inset-0 rounded-full bg-white/0 group-hover:bg-white/20 transition-all duration-300 -z-0" />
+                    )}
                   </Link>
                 );
               })}
