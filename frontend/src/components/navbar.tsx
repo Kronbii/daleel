@@ -17,6 +17,16 @@ export function Navbar() {
   const locale = useLocale();
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Handle scroll effect for extra glass intensity when scrolling
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Close menu on route change or resize
   useEffect(() => {
@@ -50,174 +60,63 @@ export function Navbar() {
   ];
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-white/98 backdrop-blur-xl border-b border-gray-200/60 shadow-sm">
-      <div className="container mx-auto px-4 sm:px-6">
-        <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
-          <Link
-            href={`/${locale}`}
-            className="flex items-center gap-2 sm:gap-3 group p-2 -ml-2 rounded-xl transition-all duration-300 hover:bg-cedar/5 active:bg-cedar/10 cursor-pointer"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            <img 
-              src="/ar-k.svg" 
-              alt="دليل" 
-              className="h-1 sm:h-8 w-auto transition-all duration-300 group-hover:scale-110 group-hover:brightness-110" 
-            />
-          </Link>
+    <>
+      <nav
+        className={`fixed top-0 z-50 w-full transition-all duration-500 border-b ${
+          scrolled || mobileMenuOpen
+            ? "bg-white/70 backdrop-blur-2xl backdrop-saturate-150 border-white/20 shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
+            : "bg-white/40 backdrop-blur-lg backdrop-saturate-100 border-transparent shadow-none"
+        }`}
+      >
+        <div className="container mx-auto px-4 sm:px-6">
+          <div className="flex h-16 items-center justify-between">
+            {/* Logo */}
+            <Link
+              href={`/${locale}`}
+              className="flex items-center gap-2 sm:gap-3 group p-2 -ml-2 rounded-xl transition-all duration-300 hover:bg-white/40 active:scale-95 cursor-pointer"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <img
+                src="/ar-k.svg"
+                alt="دليل"
+                className="h-7 sm:h-8 md:h-9 w-auto transition-all duration-300 group-hover:drop-shadow-sm"
+              />
+            </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-1">
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href || pathname.startsWith(`${link.href}/`);
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`relative px-4 lg:px-5 py-2.5 text-sm font-medium transition-all duration-300 group ${
-                    isActive
-                      ? "text-cedar"
-                      : "text-gray-600 hover:text-gray-900"
-                  }`}
-                >
-                  <span className="relative z-10">{link.label}</span>
-                  {/* Underline indicator */}
-                  <span 
-                    className={`absolute bottom-1.5 left-1/2 -translate-x-1/2 h-0.5 bg-cedar transition-all duration-300 ${
-                      isActive 
-                        ? "w-3/4 opacity-100" 
-                        : "w-0 opacity-0 group-hover:w-3/4 group-hover:opacity-100"
-                    }`}
-                  />
-                  {/* Subtle background on hover */}
-                  <span className="absolute inset-0 rounded-lg bg-cedar/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-0" />
-                </Link>
-              );
-            })}
-          </div>
-
-          {/* Language Switcher & Mobile Menu Button */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            {/* Language Switcher - Desktop */}
-            <div className="hidden md:flex items-center gap-0.5 bg-gray-50/80 border border-gray-200/60 rounded-xl p-1 shadow-sm">
-              {SUPPORTED_LOCALES.map((loc) => {
-                const isActive = locale === loc;
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center gap-1 bg-white/30 p-1 rounded-full border border-white/20 shadow-[inset_0_1px_4px_rgba(0,0,0,0.01)] backdrop-blur-md">
+              {navLinks.map((link) => {
+                const isActive = pathname === link.href || pathname.startsWith(`${link.href}/`);
                 return (
                   <Link
-                    key={loc}
-                    href={`/${loc}`}
-                    className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all duration-300 ${
+                    key={link.href}
+                    href={link.href}
+                    className={`relative px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ${
                       isActive
-                        ? "bg-white text-cedar shadow-sm"
-                        : "text-gray-600 hover:text-cedar hover:bg-white/50"
+                        ? "text-black bg-white shadow-[0_2px_8px_rgba(0,0,0,0.08)]"
+                        : "text-gray-600 hover:text-black hover:bg-white/50"
                     }`}
                   >
-                    {localeNames[loc]?.native || loc.toUpperCase()}
+                    <span className="relative z-10">{link.label}</span>
                   </Link>
                 );
               })}
             </div>
 
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2.5 -mr-2 rounded-xl text-gray-700 hover:text-cedar hover:bg-cedar/5 transition-all duration-300 active:bg-cedar/10"
-              aria-label="Toggle menu"
-              aria-expanded={mobileMenuOpen}
-            >
-              <svg
-                className="h-5 w-5 transition-transform duration-300"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2.5"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                {mobileMenuOpen ? (
-                  <path d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  <path d="M4 6h16M4 12h16M4 18h16" />
-                )}
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Menu Overlay */}
-      {mobileMenuOpen && (
-        <div 
-          className="fixed inset-0 bg-black/30 backdrop-blur-sm md:hidden z-40 transition-opacity duration-300"
-          onClick={() => setMobileMenuOpen(false)}
-          style={{ top: "64px" }}
-        />
-      )}
-
-      {/* Mobile Menu */}
-      <div 
-        className={`md:hidden fixed left-0 right-0 bg-white/98 backdrop-blur-xl border-b border-gray-200/60 shadow-2xl z-50 transition-all duration-300 ease-out ${
-          mobileMenuOpen 
-            ? "opacity-100 translate-y-0" 
-            : "opacity-0 -translate-y-4 pointer-events-none"
-        }`}
-        style={{ top: "64px" }}
-      >
-        <div className="container mx-auto px-4 py-5">
-          <div className="flex flex-col gap-1.5">
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href || pathname.startsWith(`${link.href}/`);
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`relative px-4 py-3.5 text-base font-medium rounded-lg transition-all duration-300 active:scale-[0.98] group ${
-                    isActive
-                      ? "text-cedar"
-                      : "text-gray-700 hover:text-gray-900"
-                  }`}
-                >
-                  <span className="relative z-10 flex items-center gap-2">
-                    {link.label}
-                  </span>
-                  {/* Left border indicator */}
-                  <span 
-                    className={`absolute left-0 top-1/2 -translate-y-1/2 h-8 w-1 bg-cedar rounded-r-full transition-all duration-300 ${
-                      isActive 
-                        ? "opacity-100" 
-                        : "opacity-0 group-hover:opacity-50"
-                    }`}
-                  />
-                  {/* Subtle background */}
-                  <span 
-                    className={`absolute inset-0 rounded-lg transition-all duration-300 ${
-                      isActive 
-                        ? "bg-cedar/5" 
-                        : "bg-transparent group-hover:bg-gray-50/50"
-                    }`}
-                  />
-                </Link>
-              );
-            })}
-            
-            {/* Language Switcher - Mobile */}
-            <div className="mt-5 pt-5 border-t border-gray-200/60">
-              <p className="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
-                Language
-              </p>
-              <div className="flex items-center gap-2 px-4">
+            {/* Language Switcher & Mobile Menu Button */}
+            <div className="flex items-center gap-2 sm:gap-3">
+              {/* Language Switcher - Desktop (iOS Segmented Control Style) */}
+              <div className="hidden md:flex items-center p-0.5 bg-gray-200/40 border border-white/20 rounded-lg shadow-inner">
                 {SUPPORTED_LOCALES.map((loc) => {
                   const isActive = locale === loc;
                   return (
                     <Link
                       key={loc}
                       href={`/${loc}`}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className={`flex-1 px-4 py-3 text-sm font-semibold rounded-xl text-center transition-all duration-300 active:scale-[0.98] ${
+                      className={`px-3 py-1 text-xs font-semibold rounded-[6px] transition-all duration-300 ease-out ${
                         isActive
-                          ? "bg-cedar text-white shadow-md"
-                          : "text-gray-600 hover:text-cedar hover:bg-cedar/5 border border-gray-200/60"
+                          ? "bg-white text-black shadow-[0_2px_8px_rgba(0,0,0,0.12)]"
+                          : "text-gray-500 hover:text-gray-900 hover:bg-white/30"
                       }`}
                     >
                       {localeNames[loc]?.native || loc.toUpperCase()}
@@ -225,10 +124,105 @@ export function Navbar() {
                   );
                 })}
               </div>
+
+              {/* Mobile Menu Button */}
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className={`md:hidden p-2.5 -mr-2 rounded-full transition-all duration-300 active:scale-95 ${
+                  mobileMenuOpen 
+                    ? "bg-gray-100 text-gray-900" 
+                    : "text-gray-700 hover:bg-white/40"
+                }`}
+                aria-label="Toggle menu"
+                aria-expanded={mobileMenuOpen}
+              >
+                <div className="w-5 h-5 flex flex-col justify-center items-center gap-1.5">
+                  <span className={`block h-0.5 bg-current rounded-full transition-all duration-300 ${mobileMenuOpen ? "w-5 rotate-45 translate-y-2" : "w-4"}`} />
+                  <span className={`block h-0.5 bg-current rounded-full transition-all duration-300 ${mobileMenuOpen ? "opacity-0" : "w-5"}`} />
+                  <span className={`block h-0.5 bg-current rounded-full transition-all duration-300 ${mobileMenuOpen ? "w-5 -rotate-45 -translate-y-2" : "w-3 ml-auto"}`} />
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Mobile Menu Overlay */}
+      {mobileMenuOpen && (
+        <div
+          className="fixed inset-0 md:hidden z-40"
+          onClick={() => setMobileMenuOpen(false)}
+          style={{
+            top: "64px",
+            background: "rgba(0, 0, 0, 0.05)",
+            backdropFilter: "blur(2px)",
+          }}
+        />
+      )}
+
+      {/* Mobile Menu - Apple Sheet Style */}
+      <div
+        className={`md:hidden fixed inset-x-0 top-[64px] z-50 transition-all duration-500 cubic-bezier(0.32, 0.72, 0, 1) ${
+          mobileMenuOpen
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 -translate-y-4 pointer-events-none"
+        }`}
+      >
+        <div 
+          className="mx-4 mt-2 overflow-hidden rounded-3xl border border-white/40 shadow-[0_20px_40px_rgba(0,0,0,0.1)]"
+          style={{
+            background: "rgba(255, 255, 255, 0.75)",
+            backdropFilter: "blur(24px) saturate(180%)",
+            WebkitBackdropFilter: "blur(24px) saturate(180%)", // iOS Safari support
+          }}
+        >
+          <div className="p-2 flex flex-col gap-1">
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href || pathname.startsWith(`${link.href}/`);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`relative px-4 py-3.5 text-base font-medium rounded-2xl transition-all duration-200 active:scale-[0.98] ${
+                    isActive
+                      ? "bg-white text-black shadow-[0_2px_10px_rgba(0,0,0,0.06)]"
+                      : "text-gray-600 hover:bg-white/40 hover:text-gray-900"
+                  }`}
+                >
+                  <span className="flex items-center justify-between">
+                    {link.label}
+                    {isActive && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-cedar shadow-[0_0_8px_currentColor]" />
+                    )}
+                  </span>
+                </Link>
+              );
+            })}
+
+            {/* Mobile Language Switcher */}
+            <div className="mt-2 p-1 bg-gray-200/30 rounded-2xl flex gap-1">
+              {SUPPORTED_LOCALES.map((loc) => {
+                const isActive = locale === loc;
+                return (
+                  <Link
+                    key={loc}
+                    href={`/${loc}`}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`flex-1 py-2.5 text-sm font-semibold rounded-xl text-center transition-all duration-200 ${
+                      isActive
+                        ? "bg-white text-black shadow-sm"
+                        : "text-gray-500 hover:text-gray-900"
+                    }`}
+                  >
+                    {localeNames[loc]?.native || loc.toUpperCase()}
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </div>
       </div>
-    </nav>
+    </>
   );
 }
