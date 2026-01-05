@@ -71,9 +71,9 @@ export default async function HomePage({
         <div className="container mx-auto px-4 pt-12 pb-10 sm:pt-20 sm:pb-16 md:pt-28 md:pb-20">
           <div className="max-w-3xl mx-auto text-center">
             {/* Logo/Title */}
-            <h1 className="fade-in text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-normal tracking-tight text-gray-900 mb-4 sm:mb-6">
-              <span className="block font-serif">Daleel</span>
-              <span className="block text-cedar mt-1 font-serif">دليل</span>
+            <h1 className="fade-in font-normal tracking-tight text-gray-900 mb-4 sm:mb-6">
+              <img src="/en-k.svg" alt="Daleel" className="block h-auto w-48 sm:w-40 md:w-48 lg:w-56 mx-auto" />
+              <img src="/ar-g.svg" alt="دليل" className="block mt-4 h-auto w-48 sm:w-40 md:w-48 lg:w-56 mx-auto" />
             </h1>
             
             {/* Tagline */}
