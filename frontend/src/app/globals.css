@@ -147,12 +147,22 @@
   }
 
   body {
-    @apply bg-white text-gray-900 antialiased;
+    @apply text-gray-900 antialiased;
     font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+    background-color: #ffffff; /* Pure white base */
     background-image: 
-      radial-gradient(at 0% 0%, hsla(163, 47%, 96%, 0.3) 0px, transparent 50%),
-      radial-gradient(at 100% 0%, hsla(45, 30%, 96%, 0.5) 0px, transparent 50%);
-    background-attachment: fixed;
+      /* 1. The Noise Overlay (Kept exactly as you had it) */
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E"),
+      /* 2. Cedar gradient - Left side */
+      radial-gradient(circle at 15% 20%, hsla(163, 47%, 28%, 0.15) 0%, transparent 35%),
+      /* 3. Cedar gradient - Right side (symmetric) */
+      radial-gradient(circle at 85% 20%, hsla(163, 47%, 28%, 0.15) 0%, transparent 35%),
+      /* 4. Warm Glow - Left side */
+      radial-gradient(circle at 15% 10%, hsla(45, 70%, 85%, 0.5) 0%, transparent 35%),
+      /* 5. Warm Glow - Right side (symmetric) */
+      radial-gradient(circle at 85% 10%, hsla(45, 70%, 85%, 0.5) 0%, transparent 35%);
+    background-attachment: fixed !important;
+    background-repeat: repeat, no-repeat, no-repeat, no-repeat, no-repeat; /* Repeats noise, not gradients */
   }
 
   /* Serif headings */
