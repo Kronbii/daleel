@@ -37,7 +37,7 @@ yarn-error.log*
 .env
 .env*.local
 .env.local
-
+/.env
 # Vercel
 .vercel
 
@@ -67,3 +67,7 @@ Thumbs.db
 
 # Neon
 *.neon*
+
+
+/sessions
+scrape/sessions/
