@@ -71,3 +71,6 @@ Thumbs.db
 
 /sessions
 scrape/sessions/
+scrape/venv/
+*/venv/
+venv/
