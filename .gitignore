@@ -71,6 +71,14 @@ Thumbs.db
 
 /sessions
 scrape/sessions/
-# scrape/venv/
-# */venv/
-# venv/
+scrape/venv/
+*/venv/
+venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.DS_Store
+.env
+.env.local
+.env.*.local
+
