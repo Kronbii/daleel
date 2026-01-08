@@ -8,16 +8,34 @@
     "districts": "Circonscriptions",
     "lists": "Listes",
     "centers": "Centres électoraux",
+    "news": "Actualités",
     "legal": "Légal",
     "archive": "Archive",
     "candidatesDesc": "Parcourir tous les candidats",
     "districtsDesc": "Explorer les circonscriptions électorales",
     "listsDesc": "Voir les listes électorales",
     "centersDesc": "Trouver les centres de vote sur la carte",
+    "newsDesc": "Dernières mises à jour et annonces",
     "explore": "Explorer",
     "learnMore": "En savoir plus sur notre méthodologie",
     "tagline": "Transparent. Neutre. Indépendant.",
     "description": "Daleel s'engage à fournir des informations précises, archivées et vérifiables sur les élections parlementaires libanaises. Tout le contenu provient de documents publics et est correctement archivé pour la transparence."
+  },
+  "news": {
+    "title": "Actualités en Direct",
+    "subtitle": "Dernières Mises à Jour et Annonces",
+    "description": "Restez informé des dernières nouvelles et mises à jour concernant les élections parlementaires libanaises.",
+    "readMore": "Lire la suite",
+    "minutesAgo": "min",
+    "hoursAgo": "h",
+    "daysAgo": "j",
+    "justNow": "À l'instant",
+    "categories": {
+      "announcement": "Annonce",
+      "update": "Mise à jour",
+      "alert": "Alerte",
+      "general": "Général"
+    }
   },
   "candidate": {
     "status": "Statut",
@@ -32,4 +50,3 @@
     "profileHistory": "Historique du profil"
   }
 }
-

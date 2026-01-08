@@ -56,17 +56,17 @@ export function Navbar() {
     { href: `/${locale}/districts`, label: t("districts") },
     { href: `/${locale}/lists`, label: t("lists") },
     { href: `/${locale}/centers`, label: t("centers") },
+    { href: `/${locale}/news`, label: t("news") },
     { href: `/${locale}/legal`, label: t("legal") },
   ];
 
   return (
     <>
       <nav
-        className={`fixed top-0 z-50 w-full transition-all duration-500 border-b ${
-          scrolled || mobileMenuOpen
+        className={`fixed top-0 z-50 w-full transition-all duration-500 border-b ${scrolled || mobileMenuOpen
             ? "bg-white/50 backdrop-blur-2xl backdrop-saturate-150 border-white/20 shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
             : "bg-white/25 backdrop-blur-lg backdrop-saturate-100 border-transparent shadow-none"
-        }`}
+          }`}
       >
         <div className="container mx-auto px-4 sm:px-6">
           <div className="flex h-16 items-center justify-between">
@@ -91,11 +91,10 @@ export function Navbar() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className={`relative px-5 py-2.5 text-sm font-semibold rounded-full transition-all duration-300 group ${
-                      isActive
+                    className={`relative px-5 py-2.5 text-sm font-semibold rounded-full transition-all duration-300 group ${isActive
                         ? "text-black bg-white shadow-[0_2px_12px_rgba(0,0,0,0.12)] scale-105"
                         : "text-gray-700 hover:text-black hover:bg-white/70 hover:shadow-[0_2px_8px_rgba(0,0,0,0.06)] hover:scale-105"
-                    }`}
+                      }`}
                   >
                     <span className="relative z-10 flex items-center gap-1.5">
                       {link.label}
@@ -122,11 +121,10 @@ export function Navbar() {
                     <Link
                       key={loc}
                       href={`/${loc}`}
-                      className={`px-3 py-1 text-xs font-semibold rounded-[6px] transition-all duration-300 ease-out ${
-                        isActive
+                      className={`px-3 py-1 text-xs font-semibold rounded-[6px] transition-all duration-300 ease-out ${isActive
                           ? "bg-white text-black shadow-[0_2px_8px_rgba(0,0,0,0.12)]"
                           : "text-gray-500 hover:text-gray-900 hover:bg-white/30"
-                      }`}
+                        }`}
                     >
                       {localeNames[loc]?.native || loc.toUpperCase()}
                     </Link>
@@ -137,11 +135,10 @@ export function Navbar() {
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className={`md:hidden p-2.5 -mr-2 rounded-full transition-all duration-300 active:scale-95 ${
-                  mobileMenuOpen 
-                    ? "bg-gray-100 text-gray-900" 
+                className={`md:hidden p-2.5 -mr-2 rounded-full transition-all duration-300 active:scale-95 ${mobileMenuOpen
+                    ? "bg-gray-100 text-gray-900"
                     : "text-gray-700 hover:bg-white/40"
-                }`}
+                  }`}
                 aria-label="Toggle menu"
                 aria-expanded={mobileMenuOpen}
               >
@@ -171,13 +168,12 @@ export function Navbar() {
 
       {/* Mobile Menu - Apple Sheet Style */}
       <div
-        className={`md:hidden fixed inset-x-0 top-[64px] z-50 transition-all duration-500 cubic-bezier(0.32, 0.72, 0, 1) ${
-          mobileMenuOpen
+        className={`md:hidden fixed inset-x-0 top-[64px] z-50 transition-all duration-500 cubic-bezier(0.32, 0.72, 0, 1) ${mobileMenuOpen
             ? "opacity-100 translate-y-0"
             : "opacity-0 -translate-y-4 pointer-events-none"
-        }`}
+          }`}
       >
-        <div 
+        <div
           className="mx-4 mt-2 overflow-hidden rounded-3xl border border-white/40 shadow-[0_20px_40px_rgba(0,0,0,0.1)]"
           style={{
             background: "rgba(255, 255, 255, 0.75)",
@@ -193,11 +189,10 @@ export function Navbar() {
                   key={link.href}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`relative px-4 py-3.5 text-base font-medium rounded-2xl transition-all duration-200 active:scale-[0.98] ${
-                    isActive
+                  className={`relative px-4 py-3.5 text-base font-medium rounded-2xl transition-all duration-200 active:scale-[0.98] ${isActive
                       ? "bg-white text-black shadow-[0_2px_10px_rgba(0,0,0,0.06)]"
                       : "text-gray-600 hover:bg-white/40 hover:text-gray-900"
-                  }`}
+                    }`}
                 >
                   <span className="flex items-center justify-between">
                     {link.label}
@@ -218,11 +213,10 @@ export function Navbar() {
                     key={loc}
                     href={`/${loc}`}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`flex-1 py-2.5 text-sm font-semibold rounded-xl text-center transition-all duration-200 ${
-                      isActive
+                    className={`flex-1 py-2.5 text-sm font-semibold rounded-xl text-center transition-all duration-200 ${isActive
                         ? "bg-white text-black shadow-sm"
                         : "text-gray-500 hover:text-gray-900"
-                    }`}
+                      }`}
                   >
                     {localeNames[loc]?.native || loc.toUpperCase()}
                   </Link>
