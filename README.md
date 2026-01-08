@@ -1,6 +1,6 @@
 # Daleel - دليل
 
-![Daleel Hero Image](./hero.jpeg)
+![Daleel Hero Image](./showcase/hero.jpeg)
 
 **Independent, transparent, and security-first platform for Lebanese parliamentary election information.**
 
