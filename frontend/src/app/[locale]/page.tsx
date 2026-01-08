@@ -4,6 +4,7 @@
 
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import NewsPreview from "@/components/news-preview";
 
 export default async function HomePage({
   params,
@@ -75,7 +76,7 @@ export default async function HomePage({
               <img src="/en-k.svg" alt="Daleel" className="block h-auto w-40 sm:w-48 md:w-56 lg:w-64 mx-auto" />
               <img src="/ar-g.svg" alt="دليل" className="block mt-4 h-auto w-40 sm:w-48 md:w-56 lg:w-64 mx-auto" />
             </h1>
-            
+
             {/* Tagline */}
             <p className="fade-in fade-in-1 text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 font-light leading-relaxed max-w-2xl mx-auto px-2">
               {getContent(
@@ -115,8 +116,8 @@ export default async function HomePage({
           {/* Cards Grid - Stack on mobile, 2 columns on md, 4 columns on lg+ */}
           <div className="grid gap-3 sm:gap-4 md:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
             {navigationCards.map((card, index) => (
-              <Link 
-                key={card.href} 
+              <Link
+                key={card.href}
                 href={card.href}
                 className={`fade-in fade-in-${index + 2}`}
               >
@@ -140,11 +141,11 @@ export default async function HomePage({
                       {/* Arrow indicator - visible on hover for desktop, always subtle on mobile */}
                       <div className={`mt-3 md:mt-5 flex items-center gap-2 text-sm font-medium text-cedar md:opacity-0 md:translate-x-0 transition-all duration-300 md:group-hover:opacity-100 ${isRTL ? 'md:group-hover:-translate-x-1' : 'md:group-hover:translate-x-1'}`}>
                         {getContent("View all", "عرض الكل", "Voir tout")}
-                        <svg 
-                          className={`w-4 h-4 ${isRTL ? 'rotate-180' : ''}`} 
-                          fill="none" 
-                          viewBox="0 0 24 24" 
-                          strokeWidth={2} 
+                        <svg
+                          className={`w-4 h-4 ${isRTL ? 'rotate-180' : ''}`}
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={2}
                           stroke="currentColor"
                         >
                           <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
@@ -158,6 +159,9 @@ export default async function HomePage({
           </div>
         </div>
       </section>
+
+      {/* News Preview Section */}
+      <NewsPreview locale={locale} />
 
       {/* About Section */}
       <section className="border-t border-gray-100 bg-white/50 backdrop-blur-sm">
@@ -173,16 +177,16 @@ export default async function HomePage({
             <p className="text-sm sm:text-base text-gray-500 leading-relaxed mb-6 sm:mb-8">
               {t("description")}
             </p>
-            <Link 
+            <Link
               href={`/${locale}/legal`}
               className="inline-flex items-center gap-2 text-sm font-medium text-cedar hover:text-cedar-light transition-colors py-2 px-4 rounded-lg hover:bg-cedar/5 active:bg-cedar/10"
             >
               {t("learnMore")}
-              <svg 
-                className={`w-4 h-4 ${isRTL ? 'rotate-180' : ''}`} 
-                fill="none" 
-                viewBox="0 0 24 24" 
-                strokeWidth={2} 
+              <svg
+                className={`w-4 h-4 ${isRTL ? 'rotate-180' : ''}`}
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
                 stroke="currentColor"
               >
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
