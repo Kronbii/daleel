@@ -86,47 +86,54 @@ export default async function NewsPreview({ locale }: { locale: string }) {
 
         {/* News Grid */}
         <div className="grid gap-4 sm:gap-6">
-          {latestNews.map((item, index) => (
-            <Link
-              key={item.id}
-              href={`/${locale}/news`}
-              className={`block fade-in fade-in-${index + 1}`}
-            >
-              <article className="group relative bg-white border border-gray-100 rounded-2xl p-4 sm:p-5 hover:shadow-md hover:border-cedar/20 transition-all duration-300">
-                <div className="flex flex-col sm:flex-row gap-3 sm:gap-5">
-                  {/* Content */}
-                  <div className="flex-1 min-w-0">
-                    <div className={`flex flex-wrap items-center gap-2 mb-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold border ${getCategoryStyles(item.category)}`}>
-                        {t(`categories.${item.category}`)}
-                      </span>
-                      <span className="text-[10px] text-gray-400 flex items-center gap-1">
-                        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                        </svg>
-                        {getTimeAgo(item.timestamp)}
-                      </span>
+          {latestNews.map((item, index) => {
+            const isExternal = item.link.startsWith("http");
+            const href = isExternal ? item.link : `/${locale}${item.link}`;
+
+            return (
+              <Link
+                key={item.id}
+                href={href}
+                target={isExternal ? "_blank" : undefined}
+                rel={isExternal ? "noopener noreferrer" : undefined}
+                className={`block h-full relative z-10 fade-in fade-in-${index + 1}`}
+              >
+                <article className="group relative bg-white border border-gray-100 rounded-2xl p-4 sm:p-5 hover:shadow-md hover:border-cedar/20 transition-all duration-300">
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-5">
+                    {/* Content */}
+                    <div className="flex-1 min-w-0">
+                      <div className={`flex flex-wrap items-center gap-2 mb-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold border ${getCategoryStyles(item.category)}`}>
+                          {t(`categories.${item.category}`)}
+                        </span>
+                        <span className="text-[10px] text-gray-400 flex items-center gap-1">
+                          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                          </svg>
+                          {getTimeAgo(item.timestamp)}
+                        </span>
+                      </div>
+
+                      <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-1 group-hover:text-cedar transition-colors line-clamp-1">
+                        {getLocalizedText(item.headline)}
+                      </h3>
+
+                      <p className="text-sm text-gray-500 line-clamp-2 leading-relaxed">
+                        {getLocalizedText(item.summary)}
+                      </p>
                     </div>
 
-                    <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-1 group-hover:text-cedar transition-colors line-clamp-1">
-                      {getLocalizedText(item.headline)}
-                    </h3>
-
-                    <p className="text-sm text-gray-500 line-clamp-2 leading-relaxed">
-                      {getLocalizedText(item.summary)}
-                    </p>
+                    {/* Arrow Icon (Desktop) */}
+                    <div className={`hidden sm:flex items-center text-gray-300 group-hover:text-cedar transition-colors ${isRTL ? 'rotate-180' : ''}`}>
+                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                      </svg>
+                    </div>
                   </div>
-
-                  {/* Arrow Icon (Desktop) */}
-                  <div className={`hidden sm:flex items-center text-gray-300 group-hover:text-cedar transition-colors ${isRTL ? 'rotate-180' : ''}`}>
-                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                    </svg>
-                  </div>
-                </div>
-              </article>
-            </Link>
-          ))}
+                </article>
+              </Link>
+            );
+          })}
         </div>
       </div>
     </section>
