@@ -53,7 +53,7 @@ For a step-by-step guide, see [SETUP.md](./SETUP.md).
 
 ## 📄 License
 
-This project is open-source. [Specify License Type]
+This project is licensed under the [Apache License 2.0](./LICENSE).
 
 ---
 
