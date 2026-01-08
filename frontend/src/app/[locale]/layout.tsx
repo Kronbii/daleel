@@ -27,7 +27,7 @@ export default async function LocaleLayout({
       <div className="min-h-screen flex flex-col relative">
 
         <Navbar />
-        <main className="flex-1 relative pt-16">{children}</main>
+        <main className="flex-1 relative pt-20">{children}</main>
         <Footer />
       </div>
     </NextIntlClientProvider>

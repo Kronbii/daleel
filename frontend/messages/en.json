@@ -8,16 +8,34 @@
     "districts": "Districts",
     "lists": "Lists",
     "centers": "Electoral Centers",
+    "news": "News",
     "legal": "Legal",
     "archive": "Archive",
     "candidatesDesc": "Browse all candidates",
     "districtsDesc": "Explore electoral districts",
     "listsDesc": "See electoral lists",
     "centersDesc": "Find voting centers on the map",
+    "newsDesc": "Latest updates and announcements",
     "explore": "Explore",
     "learnMore": "Learn More About Our Methodology",
     "tagline": "Transparent. Neutral. Independent.",
     "description": "Daleel is committed to providing accurate, archived, and verifiable information about Lebanese parliamentary elections. All content is sourced from publicly available materials and properly archived for transparency."
+  },
+  "news": {
+    "title": "Live News",
+    "subtitle": "Latest Updates & Announcements",
+    "description": "Stay informed with the latest news and updates about the Lebanese parliamentary elections.",
+    "readMore": "Read More",
+    "minutesAgo": "min ago",
+    "hoursAgo": "h ago",
+    "daysAgo": "d ago",
+    "justNow": "Just now",
+    "categories": {
+      "announcement": "Announcement",
+      "update": "Update",
+      "alert": "Alert",
+      "general": "General"
+    }
   },
   "candidate": {
     "status": "Status",
@@ -32,4 +50,3 @@
     "profileHistory": "Profile History"
   }
 }
-

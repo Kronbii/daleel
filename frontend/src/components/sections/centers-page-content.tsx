@@ -87,7 +87,7 @@ export function CentersPageContent({
     // Use MessageChannel to post the geolocation call to the next event loop
     // This ensures the UI is completely responsive
     const channel = new MessageChannel();
-    
+
     channel.port1.onmessage = () => {
       // Now call geolocation - this happens after UI has updated
       navigator.geolocation.getCurrentPosition(
@@ -157,7 +157,7 @@ export function CentersPageContent({
         }
       );
     };
-    
+
     // Post message to defer geolocation call
     channel.port2.postMessage(null);
   };
@@ -187,7 +187,7 @@ export function CentersPageContent({
   return (
     <div className="space-y-4 sm:space-y-6">
       {/* Filters */}
-      <div className="relative bg-white/70 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-gray-100 p-4 sm:p-6 shadow-sm" style={{ zIndex: 1000 }}>
+      <div className="relative bg-white/70 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-gray-100 p-4 sm:p-6 shadow-sm" style={{ zIndex: 40 }}>
         <div className="space-y-4">
           {/* District Filter */}
           <div>
