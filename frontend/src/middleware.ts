@@ -16,6 +16,6 @@ export const config = {
   // Match all pathnames except for
   // - API routes
   // - Static files
-  // - Internal Next.js paths
-  matcher: ["/((?!api|_next|_vercel|.*\\..*).*)"],
+  // - Internal Next.js paths (including __server_sent_events__)
+  matcher: ["/((?!api|_next|_vercel|__.*|.*\\..*).*)",],
 };
