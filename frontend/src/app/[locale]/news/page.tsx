@@ -141,53 +141,54 @@ export default async function NewsPage({
 
   return (
     <div className="flex flex-col h-[calc(100dvh-64px)] overflow-hidden">
-      {/* Hero Section - Fixed and Compact on Mobile */}
-      <section className="flex-shrink-0 border-b border-gray-100 bg-gradient-to-b from-white/50 to-transparent backdrop-blur-sm z-10">
-        <div className="container mx-auto px-4 pt-4 pb-4 sm:pt-8 sm:pb-10 md:pt-12 md:pb-12">
-          <div className="max-w-3xl mx-auto text-center flex flex-col sm:block items-center">
-            {/* Header Content Wrapper for Mobile Layout */}
-            <div className="flex items-center gap-3 sm:block mb-2 sm:mb-6">
-              {/* Icon - Smaller on mobile and inline */}
-              <div className="fade-in flex-shrink-0">
-                <div className="w-10 h-10 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-gradient-to-br from-cedar/10 to-cedar/5 text-cedar flex items-center justify-center shadow-sm mx-auto">
-                  <svg className="w-5 h-5 sm:w-8 sm:h-8" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z" />
-                  </svg>
+      {/* Hero Section - Compact & Integrated */}
+      <section className="flex-shrink-0 border-b border-gray-100 bg-gradient-to-b from-white/50 to-transparent backdrop-blur-sm z-10" dir={isRTL ? "rtl" : "ltr"}>
+        <div className="container mx-auto px-4 py-3 sm:py-5">
+          <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center sm:items-center gap-4 sm:gap-6">
+            {/* Icon - Compact */}
+            <div className="flex-shrink-0">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br from-cedar/10 to-cedar/5 text-cedar flex items-center justify-center shadow-sm">
+                <svg className="w-6 h-6 sm:w-8 sm:h-8" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 0 1-2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V18a2.25 2.25 0 0 0 2.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 0 0 2.25 2.25h13.5M6 7.5h3v3H6v-3Z" />
+                </svg>
+              </div>
+            </div>
+
+            {/* Text Content */}
+            <div className={`flex-1 text-center ${isRTL ? 'sm:text-right' : 'sm:text-left'}`}>
+              <div className={`flex flex-wrap items-center justify-center ${isRTL ? 'sm:justify-start' : 'sm:justify-start'} gap-x-3 gap-y-1 mb-1.5`}>
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-serif font-medium text-gray-900">
+                  {t("title")}
+                </h1>
+
+                {/* Live Indicator - Integrated */}
+                <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-red-50 border border-red-100 self-center">
+                  <span className="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 bg-red-500"></span>
+                  </span>
+                  <span className="text-[10px] sm:text-xs font-bold text-red-600 uppercase tracking-wider">
+                    {locale === "ar" ? "مباشر" : locale === "fr" ? "En Direct" : "Live"}
+                  </span>
                 </div>
               </div>
 
-              {/* Title - Inline on mobile */}
-              <h1 className="fade-in fade-in-1 text-xl sm:text-4xl md:text-5xl font-serif font-medium text-gray-900 sm:mt-4 sm:mb-4 text-left sm:text-center">
-                {t("title")}
-              </h1>
-            </div>
+              <div className="flex flex-col gap-1">
+                <p className="text-sm sm:text-base text-cedar font-medium">
+                  {t("subtitle")}
+                </p>
 
-            {/* Subtitle - Hidden on very small screens if needed, or smaller */}
-            <p className="fade-in fade-in-2 text-sm sm:text-lg md:text-xl text-cedar font-medium mb-2 sm:mb-4 hidden sm:block">
-              {t("subtitle")}
-            </p>
-
-            {/* Description - Hidden on mobile to save space */}
-            <p className="fade-in fade-in-3 text-sm sm:text-base text-gray-600 max-w-2xl mx-auto leading-relaxed hidden sm:block">
-              {t("description")}
-            </p>
-
-            {/* Live indicator - Absolute on mobile or integrated */}
-            <div className="fade-in fade-in-4 sm:mt-6 inline-flex items-center gap-2 px-3 py-1 sm:px-4 sm:py-2 rounded-full bg-white/80 backdrop-blur-md border border-white/50 shadow-sm">
-              <span className="relative flex h-2 w-2 sm:h-2.5 sm:w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 sm:h-2.5 sm:w-2.5 bg-red-500"></span>
-              </span>
-              <span className="text-xs sm:text-sm font-medium text-gray-700">
-                {locale === "ar" ? "مباشر" : locale === "fr" ? "En Direct" : "Live"}
-              </span>
+                <p className="text-xs sm:text-sm text-gray-500 max-w-2xl hidden sm:block leading-relaxed">
+                  {t("description")}
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* News Feed Section - Scrollable Area */}
-      <section className="flex-1 overflow-y-auto min-h-0 bg-gray-50/30 custom-scrollbar">
+      <section className="flex-1 overflow-y-auto min-h-0 custom-scrollbar relative z-0">
         <div className="container mx-auto px-4 py-6 sm:py-12 md:py-16">
           <div className="max-w-4xl mx-auto">
             {/* News Grid */}
