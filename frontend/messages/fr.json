@@ -11,6 +11,7 @@
     "news": "Actualités",
     "legal": "Légal",
     "archive": "Archive",
+    "electoralLaws": "Lois électorales",
     "candidatesDesc": "Parcourir tous les candidats",
     "districtsDesc": "Explorer les circonscriptions électorales",
     "listsDesc": "Voir les listes électorales",
@@ -48,5 +49,27 @@
     "rightOfReply": "Droit de réponse",
     "sources": "Sources",
     "profileHistory": "Historique du profil"
+  },
+  "electoralLaws": {
+    "pageTitle": "Lois électorales",
+    "pageSubtitle": "Loi n° 44 / 2017",
+    "simulate": "Simuler",
+    "reset": "Réinitialiser",
+    "stepOf": "Étape {current} sur {total}",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "flipCard": "Retourner la carte",
+    "allowed": "Autorisé",
+    "notAllowed": "Interdit",
+    "rights": "Droits",
+    "duties": "Devoirs",
+    "showAltText": "Afficher la description",
+    "hideAltText": "Masquer la description",
+    "altTextTimeline": "Une frise chronologique montrant le processus électoral : inscription, période de campagne, jour du vote, dépouillement, et enfin annonce des résultats.",
+    "altTextPR": "Une métaphore visuelle montrant les votes comme des billes tombant dans des seaux représentant les listes électorales. Une barre de seuil indique le minimum de votes requis pour se qualifier. Les listes en dessous de ce seuil sont exclues de l'attribution des sièges.",
+    "altTextVoting": "Guide étape par étape du processus de vote : vérification d'identité, réception du bulletin, passage dans l'isoloir, dépôt du vote, et signature avec marquage à l'encre.",
+    "altTextEngine": "Une animation montrant comment les votes sont convertis en sièges : les barres représentent les votes des listes, et une grille montre l'attribution proportionnelle des sièges selon les résultats.",
+    "altTextRules": "Des cartes montrant les règles électorales - touchez chaque carte pour révéler si l'action est autorisée ou interdite.",
+    "altTextRights": "Vue divisée montrant les droits de l'électeur d'un côté et ses devoirs de l'autre."
   }
 }

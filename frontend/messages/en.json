@@ -11,6 +11,7 @@
     "news": "News",
     "legal": "Legal",
     "archive": "Archive",
+    "electoralLaws": "Electoral Laws",
     "candidatesDesc": "Browse all candidates",
     "districtsDesc": "Explore electoral districts",
     "listsDesc": "See electoral lists",
@@ -48,5 +49,27 @@
     "rightOfReply": "Right of Reply",
     "sources": "Sources",
     "profileHistory": "Profile History"
+  },
+  "electoralLaws": {
+    "pageTitle": "Electoral Laws",
+    "pageSubtitle": "Law No. 44 / 2017",
+    "simulate": "Simulate",
+    "reset": "Reset",
+    "stepOf": "Step {current} of {total}",
+    "previous": "Previous",
+    "next": "Next",
+    "flipCard": "Flip card",
+    "allowed": "Allowed",
+    "notAllowed": "Not allowed",
+    "rights": "Rights",
+    "duties": "Duties",
+    "showAltText": "Show text description",
+    "hideAltText": "Hide text description",
+    "altTextTimeline": "A timeline showing the electoral process: starting with registration, followed by campaign period, election day, vote counting, and finally the announcement of results.",
+    "altTextPR": "A visual metaphor showing votes as marbles falling into buckets representing electoral lists. A threshold bar shows the minimum votes needed to qualify. Lists below this threshold are excluded from seat allocation.",
+    "altTextVoting": "Step-by-step guide showing the voting process: identity verification, receiving ballot, entering the booth, casting the vote, and signing with ink marking.",
+    "altTextEngine": "An animation showing how votes are converted to seats: bars represent list votes, and a grid shows seats being allocated proportionally based on the voting results.",
+    "altTextRules": "Cards showing electoral rules - tap each card to reveal whether the action is allowed or not allowed.",
+    "altTextRights": "A split view showing voter rights on one side and voter duties on the other side."
   }
 }

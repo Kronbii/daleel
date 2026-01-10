@@ -419,4 +419,14 @@
     scrollbar-width: thin;
     scrollbar-color: hsla(163, 47%, 28%, 0.2) transparent;
   }
+
+  /* Hide scrollbar utility */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 }

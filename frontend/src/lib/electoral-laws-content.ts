@@ -1,0 +1,307 @@
+/**
+ * Electoral Laws Content - Law No. 44 (2017)
+ * This content is the source of truth for the electoral laws page.
+ * DO NOT alter facts or introduce political content.
+ */
+
+import type { Locale } from "@daleel/shared";
+
+// Type definitions
+export interface LocalizedText {
+  ar: string;
+  en: string;
+  fr: string;
+}
+
+export interface Milestone {
+  key: string;
+  label: LocalizedText;
+  micro: LocalizedText;
+}
+
+export interface VotingCard {
+  key: string;
+  label: LocalizedText;
+  micro: LocalizedText;
+}
+
+export interface SimulateStep {
+  ar: string;
+  en: string;
+  fr: string;
+}
+
+export interface RuleCard {
+  key: string;
+  action: LocalizedText;
+  verdict: LocalizedText;
+}
+
+export interface FAQItem {
+  key: string;
+  q: LocalizedText;
+  a_micro: LocalizedText;
+}
+
+export interface RightOrDuty {
+  ar: string;
+  en: string;
+  fr: string;
+}
+
+// Content data
+export const pageContent = {
+  slug: "electoral-laws",
+  scope: {
+    ar: "شرح قانون الانتخابات النيابية المُطبّق في آخر انتخابات (قانون 44/2017)",
+    en: "Explaining the parliamentary electoral law used in the last elections (Law 44/2017)",
+    fr: "Explication de la loi électorale législative appliquée lors des dernières élections (Loi 44/2017)",
+  } as LocalizedText,
+  principles: [
+    "Visuals > text",
+    "Progressive disclosure",
+    "Neutral, non-political",
+    "No legal article citations on-screen",
+  ],
+};
+
+export const sections = {
+  s1_overview_timeline: {
+    id: "s1_overview_timeline",
+    title: {
+      ar: "نظرة عامة: طريق يوم الانتخاب",
+      en: "Overview: The Road to Election Day",
+      fr: "Aperçu : Le chemin vers le jour du vote",
+    } as LocalizedText,
+    ui: "horizontal scroll-snap timeline with moving voter icon",
+    milestones: [
+      {
+        key: "registration",
+        label: { ar: "التسجيل والقوائم", en: "Registration & Lists", fr: "Inscription & listes" },
+        micro: { ar: "تتأكد من مركزك وتستعرض اللوائح.", en: "Check your polling info and review lists.", fr: "Vérifiez votre bureau et les listes." },
+      },
+      {
+        key: "campaign",
+        label: { ar: "الحملة الانتخابية", en: "Campaign", fr: "Campagne" },
+        micro: { ar: "التواصل مسموح ضمن قواعد.", en: "Outreach is allowed within rules.", fr: "Communication permise selon des règles." },
+      },
+      {
+        key: "election_day",
+        label: { ar: "يوم الانتخاب", en: "Election Day", fr: "Jour du vote" },
+        micro: { ar: "تصوّت بالاقتراع السري داخل المعزل.", en: "You vote secretly inside the booth.", fr: "Vote secret dans l'isoloir." },
+      },
+      {
+        key: "counting",
+        label: { ar: "الفرز", en: "Counting", fr: "Dépouillement" },
+        micro: { ar: "تُحتسب الأصوات وتُوزّع المقاعد.", en: "Votes are tallied and seats allocated.", fr: "Les voix sont comptées et les sièges attribués." },
+      },
+      {
+        key: "results",
+        label: { ar: "النتائج", en: "Results", fr: "Résultats" },
+        micro: { ar: "تظهر أسماء الفائزين حسب النظام.", en: "Winners appear based on the system.", fr: "Les élus selon le système." },
+      },
+    ] as Milestone[],
+  },
+
+  s2_pr_system: {
+    id: "s2_pr_system",
+    title: {
+      ar: "النظام النسبي: كيف تُحتسب قوة كل لائحة",
+      en: "Proportional Representation: How Lists Gain Power",
+      fr: "Représentation proportionnelle : comment les listes gagnent des sièges",
+    } as LocalizedText,
+    ui: "marble/ball physics + threshold bar + trap door",
+    must_teach: [
+      "Votes accumulate by list",
+      "There is a qualifying threshold (electoral quotient logic)",
+      "Lists below threshold don't enter seat allocation",
+    ],
+    labels: {
+      total_votes: { ar: "مجموع الأصوات الصحيحة", en: "Total valid votes", fr: "Total des votes valides" },
+      list_votes: { ar: "أصوات اللوائح", en: "List votes", fr: "Votes de listes" },
+      threshold: { ar: "الحدّ المؤهِّل", en: "Qualifying threshold", fr: "Seuil de qualification" },
+    },
+    content_rules: ["No formulas shown", "One-sentence tooltips only"],
+  },
+
+  s3_voting_day: {
+    id: "s3_voting_day",
+    title: {
+      ar: "يوم الانتخاب: خطوة بخطوة",
+      en: "Voting Day: Step by Step",
+      fr: "Jour du vote : étape par étape",
+    } as LocalizedText,
+    ui: "story-card carousel (mobile-first), 5 cards",
+    cards: [
+      {
+        key: "id_check",
+        label: { ar: "التحقق من الهوية", en: "Identity Check", fr: "Vérification d'identité" },
+        micro: { ar: "تُبرز هويتك ويُتأكد من اسمك على اللائحة.", en: "Show ID and confirm your name on the list.", fr: "Présentez votre pièce et confirmez votre nom." },
+      },
+      {
+        key: "receive_ballot",
+        label: { ar: "استلام ورقة الاقتراع", en: "Receive Ballot", fr: "Recevoir le bulletin" },
+        micro: { ar: "تستلم ورقة اقتراع ومغلفًا رسميًا.", en: "You receive an official ballot and envelope.", fr: "Vous recevez bulletin et enveloppe officiels." },
+      },
+      {
+        key: "behind_booth",
+        label: { ar: "الدخول إلى المعزل", en: "Go Behind the Booth", fr: "Aller à l'isoloir" },
+        micro: { ar: "تختار سريًا لائحتك وصوتك التفضيلي.", en: "Privately choose your list and preferential vote.", fr: "Choisissez votre liste et vote préférentiel en secret." },
+      },
+      {
+        key: "cast_ballot",
+        label: { ar: "وضع الصوت بالصندوق", en: "Cast Ballot", fr: "Déposer le vote" },
+        micro: { ar: "تضع الورقة داخل المغلف ثم في الصندوق.", en: "Insert it in the envelope, then the ballot box.", fr: "Dans l'enveloppe, puis l'urne." },
+      },
+      {
+        key: "ink_signature",
+        label: { ar: "توقيع وحبر", en: "Signature & Ink", fr: "Signature & encre" },
+        micro: { ar: "توقّع وتُوضع علامة حبر لمنع التصويت مرتين.", en: "You sign and get ink-marked to prevent double voting.", fr: "Signature et encre pour éviter le double vote." },
+      },
+    ] as VotingCard[],
+    verified_notes: [
+      "Booth use + secrecy",
+      "Ink + checklist signature",
+      "No proxy voting",
+      "Assistance for disability allowed",
+    ],
+  },
+
+  s4_votes_to_seats: {
+    id: "s4_votes_to_seats",
+    title: {
+      ar: "من الأصوات إلى المقاعد: المحرك",
+      en: "From Votes to Seats: The Engine",
+      fr: "Des voix aux sièges : le moteur",
+    } as LocalizedText,
+    ui: "split screen: bars (list votes) -> seat grid, with Simulate button",
+    must_teach: [
+      "Seats are distributed proportionally by list",
+      "Electoral quotient is the entry condition",
+      "Remaining seats use largest remainder",
+    ],
+    simulate_steps: [
+      { ar: "احسب الحدّ المؤهِّل", en: "Compute the qualifying threshold", fr: "Calculer le seuil" },
+      { ar: "استبعد اللوائح غير المؤهلة", en: "Exclude non-qualifying lists", fr: "Exclure les listes non qualifiées" },
+      { ar: "وزّع المقاعد المتبقية بالأكبر بقايا", en: "Allocate remaining seats by largest remainder", fr: "Attribuer par plus grand reste" },
+    ] as SimulateStep[],
+    tooltip_micro: {
+      ar: "الهدف: شرح الفكرة بصريًا بدون معادلات.",
+      en: "Goal: show the idea visually without equations.",
+      fr: "But : expliquer visuellement sans équations.",
+    } as LocalizedText,
+  },
+
+  s5_rules_cards: {
+    id: "s5_rules_cards",
+    title: {
+      ar: "قواعد أساسية: مسموح / ممنوع",
+      en: "Key Rules: Allowed / Not Allowed",
+      fr: "Règles clés : Autorisé / Interdit",
+    } as LocalizedText,
+    ui: "flippable cards",
+    card_template: {
+      front: "Icon + 2-3 word action",
+      back: "Big ✅/❌ + 1 short verdict line",
+    },
+    starter_deck: [
+      {
+        key: "secrecy_photo",
+        action: { ar: "تصوير الورقة", en: "Photo of ballot", fr: "Photo du bulletin" },
+        verdict: { ar: "ممنوع", en: "Not allowed", fr: "Interdit" },
+      },
+      {
+        key: "inside_center_campaign",
+        action: { ar: "دعاية داخل المركز", en: "Campaigning inside center", fr: "Campagne dans le centre" },
+        verdict: { ar: "ممنوع", en: "Not allowed", fr: "Interdit" },
+      },
+      {
+        key: "ask_help_disability",
+        action: { ar: "مساعدة لذوي الإعاقة", en: "Assistance for disability", fr: "Assistance handicap" },
+        verdict: { ar: "مسموح بشروط", en: "Allowed (with conditions)", fr: "Autorisé (conditions)" },
+      },
+    ] as RuleCard[],
+  },
+
+  s6_rights_duties: {
+    id: "s6_rights_duties",
+    title: {
+      ar: "حقوقك وواجباتك",
+      en: "Your Rights & Responsibilities",
+      fr: "Vos droits & responsabilités",
+    } as LocalizedText,
+    ui: "split-screen do/don't wall",
+    rights: [
+      { ar: "الاقتراع سري", en: "Secret ballot", fr: "Vote secret" },
+      { ar: "التصويت بنفسك فقط", en: "You vote personally", fr: "Vote personnel" },
+      { ar: "مساعدة لذوي الإعاقة", en: "Assistance for disability", fr: "Assistance handicap" },
+    ] as RightOrDuty[],
+    duties: [
+      { ar: "استخدم المعزل", en: "Use the booth", fr: "Utiliser l'isoloir" },
+      { ar: "لا تكشف خيارك", en: "Don't reveal your choice", fr: "Ne pas révéler son choix" },
+      { ar: "التزم بالنظام داخل المركز", en: "Respect order at the center", fr: "Respecter l'ordre" },
+    ] as RightOrDuty[],
+  },
+
+  s7_faq: {
+    id: "s7_faq",
+    title: {
+      ar: "أسئلة شائعة",
+      en: "FAQ",
+      fr: "FAQ",
+    } as LocalizedText,
+    ui: "accordion; others fade to 50% when one opens",
+    questions: [
+      {
+        key: "q_list_vs_pref",
+        q: {
+          ar: "هل الصوت التفضيلي يلغي صوت اللائحة؟",
+          en: "Does the preferential vote cancel the list vote?",
+          fr: "Le vote préférentiel annule-t-il le vote de liste ?",
+        },
+        a_micro: {
+          ar: "لا. الأساس هو صوت اللائحة، والتفضيلي يؤثر داخلها.",
+          en: "No. The list vote is the base; preferential affects ranking within it.",
+          fr: "Non. Le vote de liste est la base; le préférentiel classe les candidats.",
+        },
+      },
+      {
+        key: "q_wrong_pref",
+        q: {
+          ar: "ماذا لو أعطيت صوتًا تفضيليًا للائحة أخرى؟",
+          en: "What if I give a preferential vote to another list?",
+          fr: "Et si je donne un préférentiel à une autre liste ?",
+        },
+        a_micro: {
+          ar: "يُلغى التفضيلي ويُحتسب فقط صوت اللائحة.",
+          en: "The preferential is cancelled; only the list vote counts.",
+          fr: "Le préférentiel est annulé; seul le vote de liste compte.",
+        },
+      },
+      {
+        key: "q_no_pref",
+        q: {
+          ar: "هل صوتي صحيح إذا اخترت لائحة بدون تفضيلي؟",
+          en: "Is my vote valid if I pick a list without a preferential vote?",
+          fr: "Mon vote est-il valide si je choisis une liste sans préférentiel ?",
+        },
+        a_micro: {
+          ar: "نعم. صوت اللائحة يبقى صحيحًا.",
+          en: "Yes. The list vote remains valid.",
+          fr: "Oui. Le vote de liste reste valide.",
+        },
+      },
+    ] as FAQItem[],
+  },
+};
+
+// Helper function to get localized text
+export function getLocalizedText(text: LocalizedText, locale: Locale): string {
+  return text[locale] || text.en;
+}
+
+// Helper function to get section content with localized text
+export function getSectionTitle(sectionId: keyof typeof sections, locale: Locale): string {
+  const section = sections[sectionId];
+  return getLocalizedText(section.title, locale);
+}

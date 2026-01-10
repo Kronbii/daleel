@@ -56,6 +56,7 @@ export function Navbar() {
     { href: `/${locale}/districts`, label: t("districts") },
     { href: `/${locale}/lists`, label: t("lists") },
     { href: `/${locale}/centers`, label: t("centers") },
+    { href: `/${locale}/electoral-laws`, label: t("electoralLaws") },
     { href: `/${locale}/news`, label: t("news") },
     { href: `/${locale}/legal`, label: t("legal") },
   ];
