@@ -60,7 +60,7 @@ export function FilterableDistrictsList({
 
   if (filteredDistricts.length === 0) {
     return (
-      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-100 p-8 sm:p-12 text-center">
+      <div className="bg-white rounded-xl border border-gray-100 p-8 sm:p-12 text-center shadow-sm">
         <svg className="w-10 h-10 sm:w-12 sm:h-12 text-gray-300 mx-auto mb-3 sm:mb-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
           <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
@@ -74,8 +74,8 @@ export function FilterableDistrictsList({
     <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
       {filteredDistricts.map((district) => (
         <Link key={district.id} href={`/${locale}/districts/${district.id}`} className="block group">
-          <div className="bg-white/70 backdrop-blur-sm rounded-lg sm:rounded-xl border border-gray-100 p-3 sm:p-5 transition-all duration-300 hover:shadow-md hover:border-gray-200 active:scale-[0.98] h-full">
-            <h3 className="font-semibold text-gray-900 group-hover:text-emerald-600 transition-colors mb-1 sm:mb-2 text-sm sm:text-base">
+          <div className="bg-white rounded-lg sm:rounded-xl border border-gray-100 p-3 sm:p-5 transition-all duration-300 hover:shadow-md hover:border-cedar/20 active:scale-[0.98] h-full shadow-sm">
+            <h3 className="font-medium text-gray-900 group-hover:text-cedar transition-colors mb-1 sm:mb-2 text-sm sm:text-base">
               {getLocalized(
                 {
                   ar: district.nameAr,

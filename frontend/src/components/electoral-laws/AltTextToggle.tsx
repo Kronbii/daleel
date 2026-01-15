@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
 import { Eye, EyeOff } from "lucide-react";
 
 interface AltTextToggleProps {
@@ -20,9 +21,11 @@ export function AltTextToggle({ altText, className = "" }: AltTextToggleProps) {
 
   return (
     <div className={`${className}`}>
-      <button
+      <Button
         onClick={() => setIsVisible(!isVisible)}
-        className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 transition-colors px-3 py-1.5 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-cedar focus:ring-offset-2"
+        variant="ghost"
+        size="sm"
+        className="text-sm text-gray-500 hover:text-gray-700"
         aria-expanded={isVisible}
         aria-controls="alt-text-content"
       >
@@ -37,7 +40,7 @@ export function AltTextToggle({ altText, className = "" }: AltTextToggleProps) {
             <span>{t("showAltText")}</span>
           </>
         )}
-      </button>
+      </Button>
       
       {isVisible && (
         <div

@@ -33,8 +33,8 @@ export function SimpleSearchFilter({
         : "Search...";
 
   return (
-    <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-100 p-5 mb-6">
-      <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+    <div className="bg-white rounded-xl border border-gray-100 p-5 mb-6 shadow-sm">
+      <h3 className="font-medium text-gray-900 mb-3 flex items-center gap-2">
         <svg className="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
         </svg>

@@ -19,7 +19,7 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
     <nav className="flex items-center text-xs sm:text-sm rtl:flex-row-reverse overflow-x-auto" aria-label="Breadcrumb">
       <Link 
         href={`/${locale}`} 
-        className="text-gray-500 hover:text-emerald-600 transition-colors whitespace-nowrap flex-shrink-0"
+        className="text-gray-500 hover:text-cedar transition-colors whitespace-nowrap flex-shrink-0"
       >
         {locale === "ar" ? "الرئيسية" : locale === "fr" ? "Accueil" : "Home"}
       </Link>
@@ -37,7 +37,7 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
           {item.href ? (
             <Link 
               href={item.href} 
-              className="text-gray-500 hover:text-emerald-600 transition-colors whitespace-nowrap"
+              className="text-gray-500 hover:text-cedar transition-colors whitespace-nowrap"
             >
               {item.label}
             </Link>

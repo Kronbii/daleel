@@ -32,7 +32,7 @@ export function BackButton({ href, label, className = "" }: BackButtonProps) {
   return (
     <button
       onClick={handleClick}
-      className={`group inline-flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium text-gray-500 hover:text-emerald-600 transition-colors px-2 py-1.5 sm:px-3 sm:py-2 rounded-lg hover:bg-emerald-50 active:bg-emerald-100 flex-shrink-0 ${className}`}
+      className={`group inline-flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium text-gray-500 hover:text-cedar transition-colors px-2 py-1.5 sm:px-3 sm:py-2 rounded-lg hover:bg-cedar/5 active:bg-cedar/10 flex-shrink-0 ${className}`}
     >
       <svg
         className={`h-3.5 w-3.5 sm:h-4 sm:w-4 transition-transform duration-200 ${

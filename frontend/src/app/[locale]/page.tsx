@@ -6,6 +6,8 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import type { Locale } from "@daleel/shared";
 import { Compass, Info } from "lucide-react";
+import { SectionHeader } from "@/components/ui/section-header";
+import { LinkButton } from "@/components/ui/link-button";
 import NewsPreview from "@/components/news-preview";
 import ElectoralLawsPreview from "@/components/electoral-laws-preview";
 
@@ -110,18 +112,11 @@ export default async function HomePage({
 
       {/* Navigation Cards Section */}
       <section className="container mx-auto px-4 pb-16 sm:pb-20 md:pb-24">
-        <div className="max-w-4xl mx-auto">
-          {/* Section Header */}
-          <div className="flex items-center justify-center mb-8">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-cedar to-cedar-light text-white flex items-center justify-center shadow-lg">
-                <Compass className="w-6 h-6" />
-              </div>
-              <h2 className="text-2xl sm:text-3xl font-serif font-medium text-gray-900">
-                {getContent("Explore", "استكشف", "Explorer")}
-              </h2>
-            </div>
-          </div>
+        <div className="max-w-5xl mx-auto">
+          <SectionHeader
+            icon={Compass}
+            title={getContent("Explore", "استكشف", "Explorer")}
+          />
 
           {/* Cards Grid - Stack on mobile, 2 columns on md, 4 columns on lg+ */}
           <div className="grid gap-3 sm:gap-4 md:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
@@ -179,21 +174,14 @@ export default async function HomePage({
       {/* About Section */}
       <section className="container mx-auto px-4 pb-16 sm:pb-20 md:pb-24">
         <div className="max-w-5xl mx-auto">
-          {/* Section Header */}
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-2 sm:gap-3">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-br from-cedar to-cedar-light text-white flex items-center justify-center shadow-lg">
-                <Info className="w-5 h-5 sm:w-6 sm:h-6" />
-              </div>
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-serif font-medium text-gray-900">
-                {getContent(
-                  "Your Guide to Informed Voting",
-                  "دليلك للتصويت المستنير",
-                  "Votre guide pour un vote éclairé"
-                )}
-              </h2>
-            </div>
-          </div>
+          <SectionHeader
+            icon={Info}
+            title={getContent(
+              "Your Guide to Informed Voting",
+              "دليلك للتصويت المستنير",
+              "Votre guide pour un vote éclairé"
+            )}
+          />
 
           {/* Content Card */}
           <div>
@@ -230,21 +218,15 @@ export default async function HomePage({
 
               {/* CTA Button */}
               <div className="text-center">
-                <Link
+                <LinkButton
                   href={`/${locale}/legal`}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-medium bg-cedar text-white hover:bg-cedar-light shadow-md hover:shadow-lg transition-all"
+                  variant="primary"
+                  size="md"
+                  showArrow={true}
+                  isRTL={isRTL}
                 >
                   {t("learnMore")}
-                  <svg
-                    className={`w-4 h-4 transition-transform duration-300 ${isRTL ? 'rotate-180' : ''}`}
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={2}
-                    stroke="currentColor"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                  </svg>
-                </Link>
+                </LinkButton>
               </div>
             </div>
           </div>

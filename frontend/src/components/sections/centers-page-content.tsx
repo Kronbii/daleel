@@ -3,6 +3,7 @@
 import { useState, useEffect, useTransition } from "react";
 import dynamic from "next/dynamic";
 import { CustomSelect } from "@/components/ui/custom-select";
+import { Button } from "@/components/ui/button";
 import { getLocalized } from "@daleel/shared";
 import type { Locale } from "@daleel/shared";
 import { useLocale } from "next-intl";
@@ -187,7 +188,7 @@ export function CentersPageContent({
   return (
     <div className="space-y-4 sm:space-y-6">
       {/* Filters */}
-      <div className="relative bg-white/70 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-gray-100 p-4 sm:p-6 shadow-sm" style={{ zIndex: 40 }}>
+      <div className="relative bg-white rounded-xl sm:rounded-2xl border border-gray-100 p-4 sm:p-6 shadow-sm" style={{ zIndex: 40 }}>
         <div className="space-y-4">
           {/* District Filter */}
           <div>
@@ -208,10 +209,12 @@ export function CentersPageContent({
 
           {/* Location Button */}
           <div>
-            <button
+            <Button
               onClick={handleGetLocation}
               disabled={isLoadingLocation || isPending}
-              className="w-full sm:w-auto px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm font-medium"
+              variant="default"
+              size="default"
+              className="w-full sm:w-auto"
             >
               {isLoadingLocation ? (
                 <>
@@ -261,13 +264,13 @@ export function CentersPageContent({
                   {getContent("Use my location", "استخدم موقعي", "Utiliser ma position")}
                 </>
               )}
-            </button>
+            </Button>
             {locationError && (
               <p className="mt-2 text-sm text-red-600">{locationError}</p>
             )}
             {userLocation && (
               <div className="mt-2 flex items-center gap-2">
-                <p className="text-sm text-emerald-600">
+                <p className="text-sm text-cedar">
                   {getContent("Location found!", "تم العثور على الموقع!", "Position trouvée!")}
                 </p>
                 <button

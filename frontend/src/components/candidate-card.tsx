@@ -39,7 +39,7 @@ export function CandidateCard({ candidate, locale, className }: CandidateCardPro
       href={`/${locale}/candidates/${candidate.slug}`} 
       className={cn("block group w-full", className)}
     >
-      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-100 p-3 sm:p-4 transition-all duration-300 hover:shadow-md hover:border-gray-200 active:scale-[0.98] h-full">
+      <div className="bg-white rounded-xl border border-gray-100 p-3 sm:p-4 transition-all duration-300 hover:shadow-md hover:border-cedar/20 active:scale-[0.98] h-full shadow-sm">
         <div className="flex flex-col items-center text-center">
           {/* Photo */}
           <div className="mb-2 sm:mb-3 relative">
@@ -52,7 +52,7 @@ export function CandidateCard({ candidate, locale, className }: CandidateCardPro
           </div>
 
           {/* Name */}
-          <h3 className="font-semibold text-gray-900 text-xs sm:text-sm mb-1.5 sm:mb-2 leading-tight line-clamp-2 min-h-[2rem] sm:min-h-[2.5rem] flex items-center justify-center group-hover:text-emerald-600 transition-colors">
+          <h3 className="font-medium text-gray-900 text-xs sm:text-sm mb-1.5 sm:mb-2 leading-tight line-clamp-2 min-h-[2rem] sm:min-h-[2.5rem] flex items-center justify-center group-hover:text-cedar transition-colors">
             {getLocalized(
               {
                 ar: candidate.fullNameAr,

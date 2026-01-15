@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Locale } from "@daleel/shared";
 import { sections, getLocalizedText } from "@/lib/electoral-laws-content";
+import { Button } from "@/components/ui/button";
 import { AltTextToggle } from "./AltTextToggle";
 import { AnimationWrapper } from "./AnimationWrapper";
 import { useReducedMotion } from "@/lib/hooks/useReducedMotion";
@@ -224,25 +225,21 @@ export function PRSystemSection({ locale }: PRSystemSectionProps) {
 
             {/* Controls */}
             <div className="flex justify-center gap-3">
-              <button
+              <Button
                 onClick={startAnimation}
                 disabled={isAnimating}
-                className={`
-                  px-6 py-2.5 rounded-xl font-medium text-sm transition-all
-                  ${isAnimating
-                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                    : "bg-cedar text-white hover:bg-cedar-light shadow-sm hover:shadow-md"
-                  }
-                `}
+                variant="default"
+                size="default"
               >
                 {t("simulate")}
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={resetAnimation}
-                className="px-6 py-2.5 rounded-xl font-medium text-sm bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all"
+                variant="secondary"
+                size="default"
               >
                 {t("reset")}
-              </button>
+              </Button>
             </div>
 
             {/* Phase indicator */}

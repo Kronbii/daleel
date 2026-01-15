@@ -14,6 +14,7 @@ import {
   PlayCircle
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { SectionHeader } from "@/components/ui/section-header";
 
 interface ElectoralLawsPreviewProps {
   locale: Locale;
@@ -67,28 +68,22 @@ export default function ElectoralLawsPreview({ locale }: ElectoralLawsPreviewPro
   return (
     <section className="container mx-auto px-4 pb-16 sm:pb-20 md:pb-24">
       <div className="max-w-5xl mx-auto">
-        {/* Section Header */}
-        <div className="flex items-center justify-between mb-6 sm:mb-8">
-          <div className="flex items-center gap-2 sm:gap-3">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-br from-cedar to-cedar-light text-white flex items-center justify-center shadow-lg">
-              <BookOpen className="w-5 h-5 sm:w-6 sm:h-6" />
-            </div>
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-serif font-medium text-gray-900">
-              {tCommon("electoralLaws")}
-            </h2>
-          </div>
-
-          <Link
-            href={`/${locale}/electoral-laws`}
-            className="group flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium text-cedar hover:bg-cedar/5 transition-all"
-          >
-            <span className="hidden sm:inline">{getContent("Explore", "استكشف", "Explorer")}</span>
-            <span className="sm:hidden">{getContent("View", "عرض", "Voir")}</span>
-            <ArrowRight
-              className={`w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-300 ${isRTL ? 'rotate-180' : ''} group-hover:translate-x-1`}
-            />
-          </Link>
-        </div>
+        <SectionHeader
+          icon={BookOpen}
+          title={tCommon("electoralLaws")}
+          action={
+            <Link
+              href={`/${locale}/electoral-laws`}
+              className="group flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium text-cedar hover:bg-cedar/5 transition-all"
+            >
+              <span className="hidden sm:inline">{getContent("Explore", "استكشف", "Explorer")}</span>
+              <span className="sm:hidden">{getContent("View", "عرض", "Voir")}</span>
+              <ArrowRight
+                className={`w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-300 ${isRTL ? 'rotate-180' : ''} group-hover:translate-x-1`}
+              />
+            </Link>
+          }
+        />
 
         {/* Visual Preview Card */}
         <Link
@@ -147,11 +142,11 @@ export default function ElectoralLawsPreview({ locale }: ElectoralLawsPreviewPro
             {/* Minimal Text CTA */}
             <div className="text-center">
               <motion.div
-                className="inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-2 sm:py-3 bg-cedar text-white rounded-lg sm:rounded-xl font-medium shadow-lg text-xs sm:text-sm md:text-base"
+                className="inline-flex items-center gap-2 font-medium transition-all duration-300 rounded-xl bg-cedar text-white hover:bg-cedar-light shadow-md hover:shadow-lg px-6 py-3 text-sm"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <PlayCircle className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+                <PlayCircle className="w-4 h-4 flex-shrink-0" />
                 <span className="whitespace-nowrap">
                   <span className="hidden sm:inline">
                     {getContent("Explore Interactive Guide", "استكشف الدليل التفاعلي", "Explorer le guide interactif")}
