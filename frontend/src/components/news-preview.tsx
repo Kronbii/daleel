@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { mockNewsItems } from "@/lib/mock-data";
+import { Newspaper } from "lucide-react";
 
 export default async function NewsPreview({ locale }: { locale: string }) {
   const t = await getTranslations("news");
@@ -49,11 +50,14 @@ export default async function NewsPreview({ locale }: { locale: string }) {
 
   return (
     <section className="container mx-auto px-4 pb-16 sm:pb-20 md:pb-24">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         {/* Section Header */}
-        <div className="flex items-center justify-between mb-6 sm:mb-8">
+        <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <h2 className="text-xl sm:text-2xl font-serif font-medium text-gray-900">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-red-500 to-red-600 text-white flex items-center justify-center shadow-lg">
+              <Newspaper className="w-6 h-6" />
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-serif font-medium text-gray-900">
               {t("title")}
             </h2>
             <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-red-50 border border-red-100">
@@ -69,11 +73,11 @@ export default async function NewsPreview({ locale }: { locale: string }) {
 
           <Link
             href={`/${locale}/news`}
-            className="group flex items-center gap-1 text-sm font-medium text-cedar hover:text-cedar-dark transition-colors"
+            className="group flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-cedar hover:bg-cedar/5 transition-all"
           >
             <span>{getContent("View all", "عرض الكل", "Voir tout")}</span>
             <svg
-              className={`w-4 h-4 transition-transform duration-300 ${isRTL ? 'rotate-180 group-hover:-translate-x-1' : 'group-hover:translate-x-1'}`}
+              className={`w-4 h-4 transition-transform duration-300 ${isRTL ? 'rotate-180' : ''} group-hover:translate-x-1`}
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth={2}

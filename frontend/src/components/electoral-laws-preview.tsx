@@ -7,7 +7,6 @@ import type { Locale } from "@daleel/shared";
 import { 
   BookOpen, 
   Clock, 
-  Vote, 
   BarChart3, 
   Scale, 
   HelpCircle,
@@ -35,37 +34,32 @@ export default function ElectoralLawsPreview({ locale }: ElectoralLawsPreviewPro
   const sectionPreviews = [
     { 
       icon: Clock, 
-      color: "bg-blue-500", 
+      color: "bg-cedar", 
       label: getContent("Timeline", "الجدول الزمني", "Chronologie")
     },
     { 
       icon: BarChart3, 
-      color: "bg-emerald-500", 
+      color: "bg-cedar", 
       label: getContent("PR System", "النظام النسبي", "Système PR")
     },
     { 
-      icon: Vote, 
-      color: "bg-amber-500", 
-      label: getContent("Voting Day", "يوم الانتخاب", "Jour du vote")
-    },
-    { 
       icon: BarChart3, 
-      color: "bg-purple-500", 
+      color: "bg-cedar", 
       label: getContent("Votes to Seats", "الأصوات والمقاعد", "Voix aux sièges")
     },
     { 
       icon: Scale, 
-      color: "bg-red-500", 
+      color: "bg-cedar", 
       label: getContent("Rules", "القواعد", "Règles")
     },
     { 
       icon: Scale, 
-      color: "bg-indigo-500", 
+      color: "bg-cedar", 
       label: getContent("Rights", "الحقوق", "Droits")
     },
     { 
       icon: HelpCircle, 
-      color: "bg-cyan-500", 
+      color: "bg-cedar", 
       label: getContent("FAQ", "الأسئلة الشائعة", "FAQ")
     },
   ];
@@ -74,23 +68,24 @@ export default function ElectoralLawsPreview({ locale }: ElectoralLawsPreviewPro
     <section className="container mx-auto px-4 pb-16 sm:pb-20 md:pb-24">
       <div className="max-w-5xl mx-auto">
         {/* Section Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-cedar to-cedar-light text-white flex items-center justify-center shadow-lg">
-              <BookOpen className="w-6 h-6" />
+        <div className="flex items-center justify-between mb-6 sm:mb-8">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-br from-cedar to-cedar-light text-white flex items-center justify-center shadow-lg">
+              <BookOpen className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
-            <h2 className="text-2xl sm:text-3xl font-serif font-medium text-gray-900">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-serif font-medium text-gray-900">
               {tCommon("electoralLaws")}
             </h2>
           </div>
 
           <Link
             href={`/${locale}/electoral-laws`}
-            className="group flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-cedar hover:bg-cedar/5 transition-all"
+            className="group flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium text-cedar hover:bg-cedar/5 transition-all"
           >
-            <span>{getContent("Explore", "استكشف", "Explorer")}</span>
+            <span className="hidden sm:inline">{getContent("Explore", "استكشف", "Explorer")}</span>
+            <span className="sm:hidden">{getContent("View", "عرض", "Voir")}</span>
             <ArrowRight
-              className={`w-4 h-4 transition-transform duration-300 ${isRTL ? 'rotate-180' : ''} group-hover:translate-x-1`}
+              className={`w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-300 ${isRTL ? 'rotate-180' : ''} group-hover:translate-x-1`}
             />
           </Link>
         </div>
@@ -98,7 +93,7 @@ export default function ElectoralLawsPreview({ locale }: ElectoralLawsPreviewPro
         {/* Visual Preview Card */}
         <Link
           href={`/${locale}/electoral-laws`}
-          className="group block relative overflow-hidden rounded-3xl bg-gradient-to-br from-cedar/10 via-white to-cedar/5 border-2 border-cedar/20 hover:border-cedar/40 transition-all duration-500 hover:shadow-2xl hover:shadow-cedar/10"
+          className="group block relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-cedar/10 via-white to-cedar/5 border-2 border-cedar/20 hover:border-cedar/40 transition-all duration-500 hover:shadow-2xl hover:shadow-cedar/10"
         >
           {/* Background Pattern */}
           <div className="absolute inset-0 opacity-5">
@@ -108,29 +103,40 @@ export default function ElectoralLawsPreview({ locale }: ElectoralLawsPreviewPro
             }} />
           </div>
 
-          <div className="relative p-8 sm:p-12">
-            {/* Main Visual Grid */}
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-4 mb-8">
+          <div className="relative p-4 sm:p-6 md:p-8 lg:p-12">
+            {/* Main Visual Grid - Better responsive layout for 6 items */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 sm:gap-4 mb-6 sm:mb-8">
               {sectionPreviews.map((preview, index) => {
                 const Icon = preview.icon;
                 return (
                   <motion.div
                     key={index}
-                    className="flex flex-col items-center gap-2"
+                    className="flex flex-col items-center gap-2 sm:gap-1.5"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1, duration: 0.4 }}
+                    transition={{ delay: index * 0.05, duration: 0.4 }}
                     whileHover={{ scale: 1.1, y: -5 }}
                   >
-                    <div className={`
-                      w-16 h-16 sm:w-20 sm:h-20 rounded-2xl ${preview.color} 
-                      flex items-center justify-center text-white shadow-lg
-                      group-hover:shadow-xl transition-all duration-300
-                      group-hover:rotate-3
-                    `}>
-                      <Icon className="w-8 h-8 sm:w-10 sm:h-10" />
+                    <div 
+                      className={`
+                        rounded-xl sm:rounded-2xl bg-white border-2 border-cedar/20
+                        flex items-center justify-center text-cedar shadow-lg
+                        group-hover:shadow-xl group-hover:border-cedar/40 transition-all duration-300
+                        group-hover:rotate-3
+                      `}
+                      style={{
+                        width: 'clamp(3rem, 4vw + 2rem, 5rem)',
+                        height: 'clamp(3rem, 4vw + 2rem, 5rem)',
+                      }}
+                    >
+                      <Icon 
+                        style={{
+                          width: 'clamp(1.5rem, 2.5vw + 1rem, 2.5rem)',
+                          height: 'clamp(1.5rem, 2.5vw + 1rem, 2.5rem)',
+                        }}
+                      />
                     </div>
-                    <span className="text-xs text-gray-500 font-medium hidden sm:block text-center">
+                    <span className="text-xs sm:text-xs text-gray-600 sm:text-gray-500 font-medium text-center leading-tight px-1 sm:px-1">
                       {preview.label}
                     </span>
                   </motion.div>
@@ -138,83 +144,28 @@ export default function ElectoralLawsPreview({ locale }: ElectoralLawsPreviewPro
               })}
             </div>
 
-            {/* Visual Elements Row */}
-            <div className="flex items-center justify-center gap-6 mb-6">
-              {/* Timeline Preview */}
-              <div className="flex items-center gap-2">
-                <div className="flex gap-1">
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <motion.div
-                      key={i}
-                      className="w-2 h-2 rounded-full bg-cedar"
-                      animate={{
-                        scale: [1, 1.3, 1],
-                        opacity: [0.5, 1, 0.5],
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        delay: i * 0.2,
-                      }}
-                    />
-                  ))}
-                </div>
-                <span className="text-xs text-gray-400 hidden sm:inline">
-                  {getContent("Timeline", "الجدول الزمني", "Chronologie")}
-                </span>
-              </div>
-
-              {/* Vote Icon Animation */}
-              <motion.div
-                className="w-12 h-12 rounded-full bg-cedar/10 flex items-center justify-center"
-                animate={{
-                  scale: [1, 1.1, 1],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                }}
-              >
-                <Vote className="w-6 h-6 text-cedar" />
-              </motion.div>
-
-              {/* Bar Chart Preview */}
-              <div className="flex items-end gap-1 h-12">
-                {[0.6, 0.8, 1, 0.7, 0.9].map((height, i) => (
-                  <motion.div
-                    key={i}
-                    className="w-3 bg-cedar rounded-t"
-                    style={{ height: `${height * 100}%` }}
-                    animate={{
-                      height: [`${height * 100}%`, `${(height * 0.8) * 100}%`, `${height * 100}%`],
-                    }}
-                    transition={{
-                      duration: 1.5,
-                      repeat: Infinity,
-                      delay: i * 0.1,
-                    }}
-                  />
-                ))}
-              </div>
-            </div>
-
             {/* Minimal Text CTA */}
             <div className="text-center">
               <motion.div
-                className="inline-flex items-center gap-3 px-6 py-3 bg-cedar text-white rounded-xl font-medium shadow-lg"
+                className="inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-2 sm:py-3 bg-cedar text-white rounded-lg sm:rounded-xl font-medium shadow-lg text-xs sm:text-sm md:text-base"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <PlayCircle className="w-5 h-5" />
-                <span className="text-sm sm:text-base">
-                  {getContent("Explore Interactive Guide", "استكشف الدليل التفاعلي", "Explorer le guide interactif")}
+                <PlayCircle className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
+                <span className="whitespace-nowrap">
+                  <span className="hidden sm:inline">
+                    {getContent("Explore Interactive Guide", "استكشف الدليل التفاعلي", "Explorer le guide interactif")}
+                  </span>
+                  <span className="sm:hidden">
+                    {getContent("Explore Guide", "استكشف الدليل", "Explorer")}
+                  </span>
                 </span>
               </motion.div>
             </div>
 
-            {/* Floating Badge */}
+            {/* Floating Badge - Better mobile positioning */}
             <motion.div
-              className="absolute top-4 right-4 sm:top-6 sm:right-6 px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full text-xs font-semibold text-cedar border border-cedar/20 shadow-sm"
+              className="absolute top-3 right-3 sm:top-4 sm:right-4 md:top-6 md:right-6 px-2 sm:px-3 py-0.5 sm:py-1 bg-white/90 backdrop-blur-sm rounded-full text-[10px] sm:text-xs font-semibold text-cedar border border-cedar/20 shadow-sm"
               animate={{
                 y: [0, -5, 0],
               }}

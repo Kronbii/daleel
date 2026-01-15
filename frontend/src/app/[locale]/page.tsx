@@ -5,6 +5,7 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import type { Locale } from "@daleel/shared";
+import { Compass } from "lucide-react";
 import NewsPreview from "@/components/news-preview";
 import ElectoralLawsPreview from "@/components/electoral-laws-preview";
 
@@ -110,10 +111,17 @@ export default async function HomePage({
       {/* Navigation Cards Section */}
       <section className="container mx-auto px-4 pb-16 sm:pb-20 md:pb-24">
         <div className="max-w-4xl mx-auto">
-          {/* Section label */}
-          <p className="fade-in fade-in-2 text-center text-xs sm:text-sm font-medium text-gray-400 uppercase tracking-wider mb-6 sm:mb-8">
-            {getContent("Explore", "استكشف", "Explorer")}
-          </p>
+          {/* Section Header */}
+          <div className="flex items-center justify-center mb-8">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-cedar to-cedar-light text-white flex items-center justify-center shadow-lg">
+                <Compass className="w-6 h-6" />
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-serif font-medium text-gray-900">
+                {getContent("Explore", "استكشف", "Explorer")}
+              </h2>
+            </div>
+          </div>
 
           {/* Cards Grid - Stack on mobile, 2 columns on md, 4 columns on lg+ */}
           <div className="grid gap-3 sm:gap-4 md:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
