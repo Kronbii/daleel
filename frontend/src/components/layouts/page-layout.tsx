@@ -51,7 +51,7 @@ export function PageLayout({
 
         {/* Page Header */}
         <div className="mb-5 sm:mb-8">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-normal text-gray-900 mb-2 sm:mb-3">{title}</h1>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-serif font-normal text-gray-900 mb-2 sm:mb-3">{title}</h1>
           {description && (
             <p className="text-sm sm:text-base md:text-lg text-gray-500 leading-relaxed">{description}</p>
           )}

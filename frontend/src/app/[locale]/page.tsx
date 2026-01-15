@@ -4,7 +4,12 @@
 
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import type { Locale } from "@daleel/shared";
+import { Compass, Info } from "lucide-react";
+import { SectionHeader } from "@/components/ui/section-header";
+import { LinkButton } from "@/components/ui/link-button";
 import NewsPreview from "@/components/news-preview";
+import ElectoralLawsPreview from "@/components/electoral-laws-preview";
 
 export default async function HomePage({
   params,
@@ -107,11 +112,11 @@ export default async function HomePage({
 
       {/* Navigation Cards Section */}
       <section className="container mx-auto px-4 pb-16 sm:pb-20 md:pb-24">
-        <div className="max-w-4xl mx-auto">
-          {/* Section label */}
-          <p className="fade-in fade-in-2 text-center text-xs sm:text-sm font-medium text-gray-400 uppercase tracking-wider mb-6 sm:mb-8">
-            {getContent("Explore", "استكشف", "Explorer")}
-          </p>
+        <div className="max-w-5xl mx-auto">
+          <SectionHeader
+            icon={Compass}
+            title={getContent("Explore", "استكشف", "Explorer")}
+          />
 
           {/* Cards Grid - Stack on mobile, 2 columns on md, 4 columns on lg+ */}
           <div className="grid gap-3 sm:gap-4 md:gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
@@ -163,35 +168,67 @@ export default async function HomePage({
       {/* News Preview Section */}
       <NewsPreview locale={locale} />
 
+      {/* Electoral Laws Preview Section */}
+      <ElectoralLawsPreview locale={locale as Locale} />
+
       {/* About Section */}
-      <section className="border-t border-gray-100 bg-white/50 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-12 sm:py-16 md:py-20">
-          <div className="max-w-2xl mx-auto text-center px-2">
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-normal text-gray-900 mb-3 sm:mb-4">
-              {getContent(
-                "Your Guide to Informed Voting",
-                "دليلك للتصويت المستنير",
-                "Votre guide pour un vote éclairé"
-              )}
-            </h2>
-            <p className="text-sm sm:text-base text-gray-500 leading-relaxed mb-6 sm:mb-8">
-              {t("description")}
-            </p>
-            <Link
-              href={`/${locale}/legal`}
-              className="inline-flex items-center gap-2 text-sm font-medium text-cedar hover:text-cedar-light transition-colors py-2 px-4 rounded-lg hover:bg-cedar/5 active:bg-cedar/10"
-            >
-              {t("learnMore")}
-              <svg
-                className={`w-4 h-4 ${isRTL ? 'rotate-180' : ''}`}
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-              </svg>
-            </Link>
+      <section className="container mx-auto px-4 pb-16 sm:pb-20 md:pb-24">
+        <div className="max-w-5xl mx-auto">
+          <SectionHeader
+            icon={Info}
+            title={getContent(
+              "Your Guide to Informed Voting",
+              "دليلك للتصويت المستنير",
+              "Votre guide pour un vote éclairé"
+            )}
+          />
+
+          {/* Content Card */}
+          <div>
+            <div className="bg-gradient-to-br from-cedar/5 via-white to-cedar/5 rounded-2xl border border-cedar/10 p-8 sm:p-10 shadow-sm">
+              <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-8 text-center">
+                {t("description")}
+              </p>
+              
+              {/* Key Features Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                {[
+                  { 
+                    label: getContent("Transparent", "شفاف", "Transparent"),
+                    icon: "✓"
+                  },
+                  { 
+                    label: getContent("Neutral", "محايد", "Neutre"),
+                    icon: "✓"
+                  },
+                  { 
+                    label: getContent("Independent", "مستقل", "Indépendant"),
+                    icon: "✓"
+                  },
+                ].map((feature, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-center gap-2 p-3 bg-white/60 rounded-xl border border-gray-100"
+                  >
+                    <span className="text-cedar font-bold">{feature.icon}</span>
+                    <span className="text-sm font-medium text-gray-700">{feature.label}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* CTA Button */}
+              <div className="text-center">
+                <LinkButton
+                  href={`/${locale}/legal`}
+                  variant="primary"
+                  size="md"
+                  showArrow={true}
+                  isRTL={isRTL}
+                >
+                  {t("learnMore")}
+                </LinkButton>
+              </div>
+            </div>
           </div>
         </div>
       </section>

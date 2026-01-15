@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import { SearchFilter } from "./search-filter";
 import { CustomSelect } from "@/components/ui/custom-select";
+import { Button } from "@/components/ui/button";
 import { getLocalized } from "@daleel/shared";
 import type { Locale } from "@daleel/shared";
 
@@ -122,12 +123,12 @@ export function CandidateFilters({
   ];
 
   return (
-    <div className="bg-white/70 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-gray-100 p-4 sm:p-6 mb-4 sm:mb-6 shadow-sm overflow-visible relative" style={{ zIndex: 10 }}>
+    <div className="bg-white rounded-xl sm:rounded-2xl border border-gray-100 p-4 sm:p-6 mb-4 sm:mb-6 shadow-sm overflow-visible relative" style={{ zIndex: 10 }}>
       {/* Header */}
       <div className="flex items-center justify-between mb-4 sm:mb-5">
-        <h3 className="font-semibold text-gray-900 flex items-center gap-2 sm:gap-2.5 text-sm sm:text-base">
-          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0">
-            <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+        <h3 className="font-medium text-gray-900 flex items-center gap-2 sm:gap-2.5 text-sm sm:text-base">
+          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-cedar/10 flex items-center justify-center flex-shrink-0">
+            <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-cedar" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
             </svg>
           </div>
@@ -135,16 +136,18 @@ export function CandidateFilters({
           <span className="xs:hidden">{getContent("Filters", "تصفية", "Filtres")}</span>
         </h3>
         {hasActiveFilters && (
-          <button
+          <Button
             onClick={clearFilters}
-            className="text-xs sm:text-sm text-emerald-600 hover:text-emerald-700 flex items-center gap-1 sm:gap-1.5 transition-colors px-2 sm:px-3 py-1.5 rounded-lg hover:bg-emerald-50 active:bg-emerald-100"
+            variant="ghost"
+            size="sm"
+            className="text-xs sm:text-sm text-cedar hover:text-cedar-light"
           >
             <svg className="h-3.5 w-3.5 sm:h-4 sm:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
             <span className="hidden sm:inline">{getContent("Clear all", "مسح الكل", "Tout effacer")}</span>
             <span className="sm:hidden">{getContent("Clear", "مسح", "Effacer")}</span>
-          </button>
+          </Button>
         )}
       </div>
       

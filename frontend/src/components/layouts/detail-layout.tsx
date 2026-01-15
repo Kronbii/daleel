@@ -53,7 +53,7 @@ export function DetailLayout({
         <div className="mb-5 sm:mb-8">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
             <div className="flex-1 min-w-0">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-normal text-gray-900 mb-1 sm:mb-2 break-words">{title}</h1>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-serif font-normal text-gray-900 mb-1 sm:mb-2 break-words">{title}</h1>
               {subtitle && <div className="text-sm sm:text-base md:text-lg text-gray-500">{subtitle}</div>}
             </div>
             {headerActions && <div className="flex-shrink-0">{headerActions}</div>}

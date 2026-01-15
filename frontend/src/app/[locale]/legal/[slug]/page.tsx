@@ -37,7 +37,7 @@ export default async function LegalSlugPage({
       backHref={`/${locale}/legal`}
       maxWidth="2xl"
     >
-      <article className="bg-white/70 backdrop-blur-sm rounded-2xl border border-gray-100 p-6 sm:p-8 shadow-sm">
+      <article className="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 shadow-sm">
         <div className="prose prose-gray max-w-none">
           <div className="whitespace-pre-line text-gray-700 leading-relaxed text-sm sm:text-base">
             {content.content}
@@ -47,7 +47,7 @@ export default async function LegalSlugPage({
         <div className="mt-8 pt-6 border-t border-gray-100">
                 <Link
                   href={`/${locale}/legal`}
-            className="inline-flex items-center gap-2 text-emerald-600 hover:text-emerald-700 transition-colors text-sm font-medium"
+            className="inline-flex items-center gap-2 text-cedar hover:text-cedar-light transition-colors text-sm font-medium"
                 >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />

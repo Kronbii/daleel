@@ -171,9 +171,6 @@ export function RightsDutiesSection({ locale }: RightsDutiesSectionProps) {
               </div>
             </div>
           </div>
-
-          {/* Visual Divider - Center line for desktop */}
-          <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-gray-200 to-transparent" />
         </div>
 
         {/* Alt text toggle */}

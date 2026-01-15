@@ -77,7 +77,7 @@ export function FilterableListsList({
 
   if (filteredLists.length === 0) {
     return (
-      <div className="bg-white/70 backdrop-blur-sm rounded-xl border border-gray-100 p-8 sm:p-12 text-center">
+      <div className="bg-white rounded-xl border border-gray-100 p-8 sm:p-12 text-center shadow-sm">
         <svg className="w-10 h-10 sm:w-12 sm:h-12 text-gray-300 mx-auto mb-3 sm:mb-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
         </svg>
@@ -90,9 +90,9 @@ export function FilterableListsList({
     <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
       {filteredLists.map((list) => (
         <Link key={list.id} href={`/${locale}/lists/${list.id}`} className="block group">
-          <div className="bg-white/70 backdrop-blur-sm rounded-lg sm:rounded-xl border border-gray-100 p-3 sm:p-5 transition-all duration-300 hover:shadow-md hover:border-gray-200 active:scale-[0.98] h-full">
+          <div className="bg-white rounded-lg sm:rounded-xl border border-gray-100 p-3 sm:p-5 transition-all duration-300 hover:shadow-md hover:border-cedar/20 active:scale-[0.98] h-full shadow-sm">
             <div className="flex items-start justify-between gap-2 sm:gap-3 mb-2 sm:mb-3">
-              <h3 className="font-semibold text-gray-900 group-hover:text-emerald-600 transition-colors text-sm sm:text-base line-clamp-2">
+              <h3 className="font-medium text-gray-900 group-hover:text-cedar transition-colors text-sm sm:text-base line-clamp-2">
                 {getLocalized(
                   {
                     ar: list.nameAr,

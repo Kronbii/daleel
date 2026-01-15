@@ -54,19 +54,19 @@ export default async function DistrictDetailPage({
     >
       {/* Stats Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 mb-5 sm:mb-8">
-        <div className="bg-white/70 backdrop-blur-sm rounded-lg sm:rounded-xl border border-gray-100 p-3 sm:p-4 text-center">
-          <div className="text-xl sm:text-2xl font-semibold text-emerald-600">{district.seatCount}</div>
+        <div className="bg-white rounded-lg sm:rounded-xl border border-gray-100 p-3 sm:p-4 text-center shadow-sm">
+          <div className="text-xl sm:text-2xl font-semibold text-cedar">{district.seatCount}</div>
           <div className="text-xs sm:text-sm text-gray-500">{getContent("Seats", "مقاعد", "Sièges")}</div>
         </div>
-        <div className="bg-white/70 backdrop-blur-sm rounded-lg sm:rounded-xl border border-gray-100 p-3 sm:p-4 text-center">
-          <div className="text-xl sm:text-2xl font-semibold text-emerald-600">{district.candidates.length}</div>
+        <div className="bg-white rounded-lg sm:rounded-xl border border-gray-100 p-3 sm:p-4 text-center shadow-sm">
+          <div className="text-xl sm:text-2xl font-semibold text-cedar">{district.candidates.length}</div>
           <div className="text-xs sm:text-sm text-gray-500">{getContent("Candidates", "مرشحون", "Candidats")}</div>
         </div>
-        <div className="bg-white/70 backdrop-blur-sm rounded-lg sm:rounded-xl border border-gray-100 p-3 sm:p-4 text-center">
+        <div className="bg-white rounded-lg sm:rounded-xl border border-gray-100 p-3 sm:p-4 text-center shadow-sm">
           <div className="text-xl sm:text-2xl font-semibold text-emerald-600">{district.lists.length}</div>
           <div className="text-xs sm:text-sm text-gray-500">{getContent("Lists", "لوائح", "Listes")}</div>
         </div>
-        <div className="bg-white/70 backdrop-blur-sm rounded-lg sm:rounded-xl border border-gray-100 p-3 sm:p-4 text-center">
+        <div className="bg-white rounded-lg sm:rounded-xl border border-gray-100 p-3 sm:p-4 text-center shadow-sm">
           <div className="text-xl sm:text-2xl font-semibold text-emerald-600">{district.cycle.year}</div>
           <div className="text-xs sm:text-sm text-gray-500">{getContent("Year", "السنة", "Année")}</div>
         </div>
@@ -74,7 +74,7 @@ export default async function DistrictDetailPage({
 
       {/* Notes if any */}
       {district.notes && (
-        <div className="bg-amber-50/70 backdrop-blur-sm rounded-lg sm:rounded-xl border border-amber-100 p-3 sm:p-4 mb-5 sm:mb-8">
+        <div className="bg-amber-50 rounded-lg sm:rounded-xl border border-amber-100 p-3 sm:p-4 mb-5 sm:mb-8 shadow-sm">
           <div className="flex items-start gap-2 sm:gap-3">
             <svg className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
@@ -87,8 +87,8 @@ export default async function DistrictDetailPage({
       {/* Electoral Lists */}
       {district.lists.length > 0 && (
         <section className="mb-5 sm:mb-8">
-          <h2 className="text-base sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4 flex items-center gap-2">
-            <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+          <h2 className="text-lg sm:text-xl md:text-2xl font-serif font-medium text-gray-900 mb-3 sm:mb-4 flex items-center gap-2">
+            <svg className="w-4 h-4 sm:w-5 sm:h-5 text-cedar flex-shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
             </svg>
             <span className="truncate">{getContent("Electoral Lists", "اللوائح الانتخابية", "Listes électorales")}</span>
@@ -101,9 +101,9 @@ export default async function DistrictDetailPage({
                 href={`/${locale}/lists/${list.id}`}
                 className="block group"
               >
-                <div className="bg-white/70 backdrop-blur-sm rounded-lg sm:rounded-xl border border-gray-100 p-3 sm:p-5 transition-all duration-300 hover:shadow-md hover:border-gray-200 active:scale-[0.98]">
+                <div className="bg-white rounded-lg sm:rounded-xl border border-gray-100 p-3 sm:p-5 transition-all duration-300 hover:shadow-md hover:border-cedar/20 active:scale-[0.98] shadow-sm">
                   <div className="flex items-start justify-between gap-2 sm:gap-3 mb-2 sm:mb-3">
-                    <h3 className="font-semibold text-gray-900 group-hover:text-emerald-600 transition-colors text-sm sm:text-base line-clamp-2">
+                    <h3 className="font-medium text-gray-900 group-hover:text-cedar transition-colors text-sm sm:text-base line-clamp-2">
                       {getLocalized(
                         {
                           ar: list.nameAr || "",
@@ -128,8 +128,8 @@ export default async function DistrictDetailPage({
       {/* Candidates */}
       {district.candidates.length > 0 && (
         <section>
-          <h2 className="text-base sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4 flex items-center gap-2">
-            <svg className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+          <h2 className="text-lg sm:text-xl md:text-2xl font-serif font-medium text-gray-900 mb-3 sm:mb-4 flex items-center gap-2">
+            <svg className="w-4 h-4 sm:w-5 sm:h-5 text-cedar flex-shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
             </svg>
             {getContent("Candidates", "المرشحون", "Candidats")}

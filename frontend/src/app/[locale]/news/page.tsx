@@ -51,7 +51,7 @@ export default async function NewsPage({
   return (
     <div className="flex flex-col h-[calc(100dvh-64px)] overflow-hidden">
       {/* Hero Section - Compact & Integrated */}
-      <section className="flex-shrink-0 border-b border-gray-100 bg-gradient-to-b from-white/50 to-transparent backdrop-blur-sm z-10" dir={isRTL ? "rtl" : "ltr"}>
+      <section className="flex-shrink-0 border-b border-gray-100 bg-white z-10" dir={isRTL ? "rtl" : "ltr"}>
         <div className="container mx-auto px-4 py-3 sm:py-5">
           <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center sm:items-center gap-4 sm:gap-6">
             {/* Icon - Compact */}
@@ -66,7 +66,7 @@ export default async function NewsPage({
             {/* Text Content */}
             <div className={`flex-1 text-center ${isRTL ? 'sm:text-right' : 'sm:text-left'}`}>
               <div className={`flex flex-wrap items-center justify-center ${isRTL ? 'sm:justify-start' : 'sm:justify-start'} gap-x-3 gap-y-1 mb-1.5`}>
-                <h1 className="text-xl sm:text-2xl md:text-3xl font-serif font-medium text-gray-900">
+                <h1 className="text-2xl sm:text-3xl font-serif font-medium text-gray-900">
                   {t("title")}
                 </h1>
 
@@ -115,7 +115,7 @@ export default async function NewsPage({
                     className={`block h-full relative z-10 fade-in fade-in-${Math.min(index + 1, 4)}`}
                     style={{ animationDelay: `${index * 0.05}s` }}
                   >
-                    <article className="group h-full backdrop-blur-md bg-white/80 border border-white/50 shadow-sm hover:shadow-xl hover:shadow-cedar/5 hover:border-cedar/20 rounded-2xl p-4 sm:p-6 md:p-8 transition-all duration-300 hover:-translate-y-1">
+                    <article className="group h-full bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-cedar/20 rounded-2xl p-4 sm:p-6 md:p-8 transition-all duration-300 hover:-translate-y-1">
                       {/* Header */}
                       <div className={`flex flex-wrap items-center gap-2 sm:gap-3 mb-3 sm:mb-4 ${isRTL ? 'flex-row-reverse' : ''}`}>
                         {/* Category Badge */}
@@ -133,7 +133,7 @@ export default async function NewsPage({
                       </div>
 
                       {/* Headline */}
-                      <h2 className="text-lg sm:text-2xl font-serif font-medium text-gray-900 mb-2 sm:mb-3 group-hover:text-cedar transition-colors line-clamp-2">
+                      <h2 className="text-lg sm:text-xl md:text-2xl font-serif font-medium text-gray-900 mb-2 sm:mb-3 group-hover:text-cedar transition-colors line-clamp-2">
                         {getLocalizedText(item.headline)}
                       </h2>
 
