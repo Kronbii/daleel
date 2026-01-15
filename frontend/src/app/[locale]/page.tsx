@@ -4,7 +4,9 @@
 
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import type { Locale } from "@daleel/shared";
 import NewsPreview from "@/components/news-preview";
+import ElectoralLawsPreview from "@/components/electoral-laws-preview";
 
 export default async function HomePage({
   params,
@@ -162,6 +164,9 @@ export default async function HomePage({
 
       {/* News Preview Section */}
       <NewsPreview locale={locale} />
+
+      {/* Electoral Laws Preview Section */}
+      <ElectoralLawsPreview locale={locale as Locale} />
 
       {/* About Section */}
       <section className="border-t border-gray-100 bg-white/50 backdrop-blur-sm">
