@@ -67,3 +67,9 @@ Thumbs.db
 
 # Neon
 *.neon*
+
+# Shared package build output
+shared/*.js
+shared/*.js.map
+shared/*.d.ts
+shared/*.d.ts.map
