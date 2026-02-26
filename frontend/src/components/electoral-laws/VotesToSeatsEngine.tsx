@@ -15,8 +15,12 @@ interface VotesToSeatsEngineProps {
   locale: Locale;
 }
 
-// Simulated electoral data
-const mockData = {
+/**
+ * TODO [Developer]: These are hardcoded sample values for the votes-to-seats simulation.
+ * Consider fetching real electoral data from the API (GET /api/public/lists, GET /api/public/districts)
+ * once vote-count and seat-allocation fields are available, and deriving this dynamically.
+ */
+const SAMPLE_DATA = {
   totalSeats: 8,
   lists: [
     { id: "A", name: "List A", votes: 4500, color: "#3B82F6", pattern: "solid" },
@@ -48,8 +52,8 @@ export function VotesToSeatsEngine({ locale }: VotesToSeatsEngineProps) {
 
   // Calculate proportional seats (simplified for demonstration)
   const calculateSeats = () => {
-    const qualifyingLists = mockData.lists.filter(
-      (list) => list.votes >= mockData.threshold
+    const qualifyingLists = SAMPLE_DATA.lists.filter(
+      (list) => list.votes >= SAMPLE_DATA.threshold
     );
     
     const totalQualifyingVotes = qualifyingLists.reduce(
@@ -63,7 +67,7 @@ export function VotesToSeatsEngine({ locale }: VotesToSeatsEngineProps) {
     // First pass: allocate seats based on quotient
     qualifyingLists.forEach((list) => {
       const seatsWon = Math.floor(
-        (list.votes / totalQualifyingVotes) * mockData.totalSeats
+        (list.votes / totalQualifyingVotes) * SAMPLE_DATA.totalSeats
       );
       for (let i = 0; i < seatsWon; i++) {
         allocations.push({
@@ -75,13 +79,13 @@ export function VotesToSeatsEngine({ locale }: VotesToSeatsEngineProps) {
     });
 
     // Second pass: largest remainder for remaining seats
-    const remainingSeats = mockData.totalSeats - allocations.length;
+    const remainingSeats = SAMPLE_DATA.totalSeats - allocations.length;
     const remainders = qualifyingLists
       .map((list) => ({
         ...list,
         remainder:
-          (list.votes / totalQualifyingVotes) * mockData.totalSeats -
-          Math.floor((list.votes / totalQualifyingVotes) * mockData.totalSeats),
+          (list.votes / totalQualifyingVotes) * SAMPLE_DATA.totalSeats -
+          Math.floor((list.votes / totalQualifyingVotes) * SAMPLE_DATA.totalSeats),
       }))
       .sort((a, b) => b.remainder - a.remainder);
 
@@ -105,17 +109,17 @@ export function VotesToSeatsEngine({ locale }: VotesToSeatsEngineProps) {
 
     // Phase 1: Compute threshold (highlight all bars)
     setPhase(1);
-    setHighlightedBars(mockData.lists.map((l) => l.id));
+    setHighlightedBars(SAMPLE_DATA.lists.map((l) => l.id));
     await new Promise((r) => setTimeout(r, stepDuration));
 
     // Phase 2: Exclude non-qualifying lists
     setPhase(2);
-    const eliminated = mockData.lists
-      .filter((list) => list.votes < mockData.threshold)
+    const eliminated = SAMPLE_DATA.lists
+      .filter((list) => list.votes < SAMPLE_DATA.threshold)
       .map((list) => list.id);
     setEliminatedLists(eliminated);
     setHighlightedBars(
-      mockData.lists.filter((l) => l.votes >= mockData.threshold).map((l) => l.id)
+      SAMPLE_DATA.lists.filter((l) => l.votes >= SAMPLE_DATA.threshold).map((l) => l.id)
     );
     await new Promise((r) => setTimeout(r, stepDuration));
 
@@ -142,7 +146,7 @@ export function VotesToSeatsEngine({ locale }: VotesToSeatsEngineProps) {
   };
 
   // Calculate max votes for bar scaling
-  const maxVotes = Math.max(...mockData.lists.map((l) => l.votes));
+  const maxVotes = Math.max(...SAMPLE_DATA.lists.map((l) => l.votes));
 
   return (
     <section className="py-12 sm:py-16 bg-gradient-to-b from-transparent via-gray-50/50 to-transparent">
@@ -167,7 +171,7 @@ export function VotesToSeatsEngine({ locale }: VotesToSeatsEngineProps) {
               </h3>
 
               <div className="space-y-4">
-                {mockData.lists.map((list) => {
+                {SAMPLE_DATA.lists.map((list) => {
                   const isEliminated = eliminatedLists.includes(list.id);
                   const isHighlighted = highlightedBars.includes(list.id);
                   const barWidth = (list.votes / maxVotes) * 100;
@@ -219,7 +223,7 @@ export function VotesToSeatsEngine({ locale }: VotesToSeatsEngineProps) {
               <div className="mt-4 pt-4 border-t border-gray-100">
                 <div className="flex items-center justify-between text-xs text-gray-500">
                   <span>{getLocalizedText(sections.s2_pr_system.labels.threshold, locale)}</span>
-                  <span>{mockData.threshold.toLocaleString()}</span>
+                  <span>{SAMPLE_DATA.threshold.toLocaleString()}</span>
                 </div>
               </div>
             </div>
@@ -227,12 +231,12 @@ export function VotesToSeatsEngine({ locale }: VotesToSeatsEngineProps) {
             {/* Right Panel: Seat Grid */}
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
               <h3 className="text-sm font-medium text-gray-500 mb-4 text-center">
-                {mockData.totalSeats} {locale === "ar" ? "مقعد" : locale === "fr" ? "sièges" : "Seats"}
+                {SAMPLE_DATA.totalSeats} {locale === "ar" ? "مقعد" : locale === "fr" ? "sièges" : "Seats"}
               </h3>
 
               {/* Seat Grid */}
               <div className="grid grid-cols-4 gap-3">
-                {Array.from({ length: mockData.totalSeats }).map((_, index) => {
+                {Array.from({ length: SAMPLE_DATA.totalSeats }).map((_, index) => {
                   const seat = seats.find((s) => s.seatIndex === index);
                   
                   return (
@@ -269,7 +273,7 @@ export function VotesToSeatsEngine({ locale }: VotesToSeatsEngineProps) {
 
               {/* Legend */}
               <div className="mt-6 flex flex-wrap justify-center gap-3">
-                {mockData.lists
+                {SAMPLE_DATA.lists
                   .filter((l) => !eliminatedLists.includes(l.id))
                   .map((list) => {
                     const seatCount = seats.filter(

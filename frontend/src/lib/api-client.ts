@@ -205,6 +205,23 @@ export async function getCandidateBySlug(slug: string) {
   return response.data;
 }
 
+export async function getParties() {
+  const response = await request<{ success: true; data: any[] }>("/api/public/parties", {
+    next: { revalidate: 300 }, // Cache for 5 minutes
+  });
+  return response;
+}
+
+export async function getPartyBySlug(slug: string) {
+  const response = await request<{ success: true; data: any }>(
+    `/api/public/parties/${encodeURIComponent(slug)}`,
+    {
+      next: { revalidate: 300 }, // Cache for 5 minutes
+    }
+  );
+  return response.data;
+}
+
 export async function getCenters(params?: { districtId?: string }) {
   const searchParams = new URLSearchParams();
   if (params?.districtId) searchParams.set("districtId", params.districtId);

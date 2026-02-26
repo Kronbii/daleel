@@ -7,6 +7,7 @@ import { handleDistricts } from "./districts";
 import { handleLists } from "./lists";
 import { handleCandidates } from "./candidates";
 import { handleCenters } from "./centers";
+import { handleParties } from "./parties";
 
 export async function handlePublicRoutes(req: Request, pathSegments: string[]): Promise<Response> {
   const url = new URL(req.url);
@@ -30,6 +31,10 @@ export async function handlePublicRoutes(req: Request, pathSegments: string[]): 
 
   if (pathSegments[0] === "centers") {
     return handleCenters(req);
+  }
+
+  if (pathSegments[0] === "parties") {
+    return handleParties(req, pathSegments.slice(1));
   }
 
   return new Response(

@@ -14,10 +14,14 @@ interface PRSystemSectionProps {
   locale: Locale;
 }
 
-// Simulated list data for the marble animation
-const mockLists = [
+/**
+ * TODO [Developer]: These are hardcoded sample values for the PR system marble animation.
+ * Consider fetching real electoral list data from GET /api/public/lists once the
+ * backend has vote-count fields, and deriving vote percentages + colors dynamically.
+ */
+const SAMPLE_LISTS = [
   { id: "A", votes: 45, color: "#3B82F6" }, // Blue
-  { id: "B", votes: 30, color: "#10B981" }, // Green  
+  { id: "B", votes: 30, color: "#10B981" }, // Green
   { id: "C", votes: 15, color: "#F59E0B" }, // Amber
   { id: "D", votes: 10, color: "#EF4444" }, // Red (below threshold)
 ];
@@ -49,7 +53,7 @@ export function PRSystemSection({ locale }: PRSystemSectionProps) {
     const newMarbles: Marble[] = [];
     let marbleId = 0;
 
-    mockLists.forEach((list) => {
+    SAMPLE_LISTS.forEach((list) => {
       const marbleCount = Math.round((list.votes / 100) * TOTAL_MARBLES);
       for (let i = 0; i < marbleCount; i++) {
         newMarbles.push({
@@ -81,7 +85,7 @@ export function PRSystemSection({ locale }: PRSystemSectionProps) {
 
     // Phase 3: Eliminate lists below threshold
     setTimeout(() => {
-      const eliminated = mockLists
+      const eliminated = SAMPLE_LISTS
         .filter((list) => list.votes < THRESHOLD)
         .map((list) => list.id);
       setEliminatedLists(eliminated);
@@ -123,7 +127,7 @@ export function PRSystemSection({ locale }: PRSystemSectionProps) {
               <div className="absolute inset-x-4 bottom-0 h-48 border-2 border-gray-200 rounded-b-3xl bg-gray-50/50">
                 {/* List columns */}
                 <div className="absolute inset-0 flex">
-                  {mockLists.map((list, index) => {
+                  {SAMPLE_LISTS.map((list, index) => {
                     const isEliminated = eliminatedLists.includes(list.id);
                     return (
                       <div
@@ -258,7 +262,7 @@ export function PRSystemSection({ locale }: PRSystemSectionProps) {
 
           {/* Legend - Color blind safe with patterns */}
           <div className="mt-6 flex flex-wrap justify-center gap-4">
-            {mockLists.map((list) => {
+            {SAMPLE_LISTS.map((list) => {
               const isEliminated = eliminatedLists.includes(list.id);
               return (
                 <div
