@@ -237,7 +237,7 @@ This creates:
 - Sample districts, lists, candidates
 - Sample topics and sources
 
-See [SEEDING.md](./SEEDING.md) for more details.
+See [Seeding Guide](./seeding.md) for more details.
 
 ## Step 9: Start Development Servers
 
@@ -372,9 +372,9 @@ npm run install:all
 
 ## Next Steps
 
-- Read [SEEDING.md](./SEEDING.md) to learn about database seeding
-- Read [MIGRATE_TO_NEON.md](./MIGRATE_TO_NEON.md) to migrate to production
-- Check [README.md](./README.md) for development guidelines
+- Read [Seeding Guide](./seeding.md) to learn about database seeding
+- Read [Migration Guide](./migrate-to-neon.md) to migrate to production
+- Check [README](../README.md) for development guidelines
 
 ## Quick Reference
 

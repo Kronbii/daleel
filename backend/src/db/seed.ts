@@ -545,13 +545,13 @@ async function main() {
   console.log(`Deleted ${deletedCount.count} existing electoral centers`);
   
   // Read CSV file - try multiple possible locations
-  // The CSV should be in the project root (daleel/random_points.csv)
+  // The CSV should be in the data/ directory (daleel/data/random_points.csv)
   const csvPaths = [
+    path.join(process.cwd(), "data", "random_points.csv"),
+    path.join(process.cwd(), "..", "data", "random_points.csv"),
     path.join(process.cwd(), "random_points.csv"),
     path.join(process.cwd(), "..", "random_points.csv"),
-    path.join(process.cwd(), "..", "..", "random_points.csv"),
-    path.join(__dirname, "..", "..", "..", "random_points.csv"),
-    path.resolve(process.cwd(), "..", "random_points.csv"), // From backend to root
+    path.join(__dirname, "..", "..", "..", "data", "random_points.csv"),
   ];
 
   let csvContent: string | null = null;
@@ -568,7 +568,7 @@ async function main() {
   }
 
   if (!csvContent) {
-    throw new Error("Could not find random_points.csv file. Please ensure it exists in the project root.");
+    throw new Error("Could not find random_points.csv file. Please ensure it exists in the data/ directory.");
   }
 
   // Parse CSV

@@ -9,7 +9,7 @@ import { Compass, Info } from "lucide-react";
 import { SectionHeader } from "@/components/ui/section-header";
 import { LinkButton } from "@/components/ui/link-button";
 import NewsPreview from "@/components/news-preview";
-import ElectoralLawsPreview from "@/components/electoral-laws-preview";
+import ElectoralLawsPreview from "@/components/electoral-laws/electoral-laws-preview";
 
 export default async function HomePage({
   params,

@@ -13,7 +13,7 @@ This guide covers:
 
 ## Prerequisites
 
-- Local database is set up and contains data (see [SETUP.md](./SETUP.md))
+- Local database is set up and contains data (see [Setup Guide](./setup.md))
 - Neon account created (sign up at https://neon.tech)
 - PostgreSQL client tools installed (`psql`, `pg_dump`)
 - `DATABASE_URL` configured in `backend/.env`
@@ -351,8 +351,8 @@ See [Neon documentation](https://neon.tech/docs) for details.
 - Configure connection pooling
 - Set up database backups
 - Monitor database performance
-- Read [SETUP.md](./SETUP.md) for local development
-- Read [SEEDING.md](./SEEDING.md) for database seeding
+- Read [Setup Guide](./setup.md) for local development
+- Read [Seeding Guide](./seeding.md) for database seeding
 
 ## Quick Reference
 

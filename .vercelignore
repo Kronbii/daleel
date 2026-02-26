@@ -33,5 +33,7 @@ scripts/
 
 # Misc
 .DS_Store
-random_points.csv
+
+# Data files (not needed in deployment)
+data/
 

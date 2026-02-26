@@ -1,6 +1,6 @@
 # Daleel - دليل
 
-![Daleel Hero Image](./showcase/hero.jpeg)
+![Daleel Hero Image](./docs/images/hero.jpeg)
 
 **Independent, transparent, and security-first platform for Lebanese parliamentary election information.**
 
@@ -33,7 +33,7 @@ Daleel is engineered for reliability and transparency. Our stack includes:
 - **Security**: JWT Authentication, CSRF Protection, Rate Limiting, and Immutable Data Models.
 
 > [!TIP]
-> **Are you a developer?** Check out our [Technical Documentation](./TECHNICAL.md) for detailed architecture, API references, and setup instructions.
+> **Are you a developer?** Check out our [Technical Documentation](./docs/technical.md) for detailed architecture, API references, and setup instructions.
 
 ---
 
@@ -47,7 +47,7 @@ To get the project running locally, follow these quick steps:
 4. **Initialize DB**: `npm run prisma:migrate && npm run seed`
 5. **Launch**: `npm run dev`
 
-For a step-by-step guide, see [SETUP.md](./SETUP.md).
+For a step-by-step guide, see [Setup Guide](./docs/setup.md).
 
 ---
 

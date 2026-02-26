@@ -17,13 +17,13 @@ The seed script (`backend/src/db/seed.ts`) creates comprehensive fake data inclu
 - **Statements** (candidate statements by topic)
 - **Candidate submissions** (sample user submissions)
 - **Right of replies** (sample replies)
-- **Electoral centers** (from `random_points.csv` if available)
+- **Electoral centers** (from `data/random_points.csv` if available)
 
 ## Prerequisites
 
 Before seeding:
 
-1. **Database is set up** (see [SETUP.md](./SETUP.md))
+1. **Database is set up** (see [Setup Guide](./setup.md))
 2. **Migrations are applied**:
    ```bash
    npm run prisma:migrate
@@ -103,7 +103,7 @@ All 16 Lebanese electoral districts:
 - **20 Statements** (candidate statements by topic)
 - **5 Candidate Submissions** (pending/approved)
 - **3 Right of Replies** (published/received)
-- **Electoral Centers** (if `random_points.csv` exists in project root)
+- **Electoral Centers** (if `data/random_points.csv` exists)
 
 ## Electoral Centers from CSV
 
@@ -111,7 +111,7 @@ The seed script can generate electoral centers from a CSV file.
 
 ### CSV Format
 
-Create `random_points.csv` in the project root:
+Create `random_points.csv` in the `data/` directory:
 
 ```csv
 point_number,latitude,longitude
@@ -123,8 +123,8 @@ point_number,latitude,longitude
 ### CSV Location
 
 The script looks for `random_points.csv` in:
-1. Project root (`/daleel/random_points.csv`)
-2. Backend directory (`/daleel/backend/random_points.csv`)
+1. Data directory (`/daleel/data/random_points.csv`)
+2. Project root (`/daleel/random_points.csv`) (fallback)
 
 ### Generating Centers
 
@@ -304,7 +304,7 @@ npm run seed
 
 The script will continue without electoral centers. To add centers:
 
-1. Create `random_points.csv` in project root
+1. Create `random_points.csv` in the `data/` directory
 2. Format: `point_number,latitude,longitude`
 3. Re-run seed script
 
@@ -330,7 +330,7 @@ The seed script is for development only. In production:
 
 ## Next Steps
 
-- Read [SETUP.md](./SETUP.md) for initial setup
-- Read [MIGRATE_TO_NEON.md](./MIGRATE_TO_NEON.md) to migrate to production
-- Check [README.md](./README.md) for development guidelines
+- Read [Setup Guide](./setup.md) for initial setup
+- Read [Migration Guide](./migrate-to-neon.md) to migrate to production
+- Check [README](../README.md) for development guidelines
 
